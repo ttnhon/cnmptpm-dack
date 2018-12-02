@@ -7,7 +7,7 @@ class NewsDetail extends Component {
             <div className="container-fluid one-news-detail">
                 <div className="row one-news-header">
                     <div className="col-md-2 img-responsive">
-                    <img src="https://pbs.twimg.com/profile_images/1067855959270125568/QkiSTiCV_bigger.jpg" className="img-circle" alt />
+                    <img src="https://pbs.twimg.com/profile_images/1067855959270125568/QkiSTiCV_bigger.jpg" className="img-circle" alt="" />
                     </div>
                     <div className="col-md-7 news-owner-name">
                     <h4><strong>Nguyễn Văn Phúc</strong></h4>
@@ -26,22 +26,22 @@ class NewsDetail extends Component {
                     </div>
                     <div className="imgs">
                     {/* truong hop co 1 anh */}
-                    <img src="https://pbs.twimg.com/media/DtRAulKWwAYKani.jpg" className="img-responsive" alt />
+                    <img src="https://pbs.twimg.com/media/DtRAulKWwAYKani.jpg" className="img-responsive" alt="" />
                     {/* truong hop co 2 anh */}
                     <div className="col-md-6">
-                        <img src="https://pbs.twimg.com/media/DtRAulKWwAYKani.jpg" className="img-responsive" alt />
+                        <img src="https://pbs.twimg.com/media/DtRAulKWwAYKani.jpg" className="img-responsive" alt="" />
                     </div>
                     <div className="col-md-6">
-                        <img src="https://pbs.twimg.com/media/DtRAulKWwAYKani.jpg" className="img-responsive" alt />
+                        <img src="https://pbs.twimg.com/media/DtRAulKWwAYKani.jpg" className="img-responsive" alt="" />
                     </div>
                     <div className="col-md-9">
-                        <img src="https://pbs.twimg.com/media/DtRAulKWwAYKani.jpg" className="img-responsive" alt />
+                        <img src="https://pbs.twimg.com/media/DtRAulKWwAYKani.jpg" className="img-responsive" alt="" />
                     </div>
                     {/* truong hop nhieu hon 3 anh */}
                     <div className="col-md-3">
-                        <img src="https://pbs.twimg.com/media/DtRAulKWwAYKani.jpg" className="img-responsive" alt />
-                        <img src="https://pbs.twimg.com/media/DtRAulKWwAYKani.jpg" className="img-responsive" alt />
-                        <img src="https://pbs.twimg.com/media/DtRAulKWwAYKani.jpg" className="img-responsive" alt />
+                        <img src="https://pbs.twimg.com/media/DtRAulKWwAYKani.jpg" className="img-responsive" alt="" />
+                        <img src="https://pbs.twimg.com/media/DtRAulKWwAYKani.jpg" className="img-responsive" alt="" />
+                        <img src="https://pbs.twimg.com/media/DtRAulKWwAYKani.jpg" className="img-responsive" alt="" />
                     </div>
                     </div>
                     <div className="videos">
@@ -66,7 +66,7 @@ class NewsDetail extends Component {
                     <form className="form-inline" action="/action_page.php">
                     <div className="form-group">
                         <label htmlFor="email">
-                        <img src="https://pbs.twimg.com/profile_images/1067855959270125568/QkiSTiCV_bigger.jpg" className="img-circle" alt />
+                        <img src="https://pbs.twimg.com/profile_images/1067855959270125568/QkiSTiCV_bigger.jpg" className="img-circle" alt="" />
                         </label>
                         <input type="text" className="form-control" placeholder="Để lại bình luận của bạn" name="your_comment" />
                     </div>
@@ -74,7 +74,7 @@ class NewsDetail extends Component {
                 </div> {/* end one-new-reply */}
                 <div className="row one-news-comments">
                     <div className="col-md-2 img">
-                    <img src="https://pbs.twimg.com/profile_images/1067855959270125568/QkiSTiCV_bigger.jpg" className="img-circle" alt />
+                    <img src="https://pbs.twimg.com/profile_images/1067855959270125568/QkiSTiCV_bigger.jpg" className="img-circle" alt="" />
                     </div>
                     <div className="col-md-10 comment-content">
                     <pre><strong className="name">Phuc Nguyen</strong><i className="nickname"> @phucnguyen</i><i className="time">06:13 - 1 thg 12, 2018</i></pre>
@@ -92,7 +92,7 @@ class NewsDetail extends Component {
                 {/* truong hop comment co tra loi */}
                 <div className="row one-news-comments have-reply">
                     <div className="col-md-2 img">
-                    <img src="https://pbs.twimg.com/profile_images/1067855959270125568/QkiSTiCV_bigger.jpg" className="img-circle" alt />
+                    <img src="https://pbs.twimg.com/profile_images/1067855959270125568/QkiSTiCV_bigger.jpg" className="img-circle" alt="" />
                     </div>
                     <div className="col-md-10 comment-content">
                     <pre><strong className="name">Phuc Nguyen</strong><i className="nickname"> @phucnguyen</i><i className="time">06:13 - 1 thg 12, 2018</i></pre>
@@ -109,7 +109,7 @@ class NewsDetail extends Component {
                 </div> {/* end one-new-comments */}
                 <div className="row one-news-comments">
                     <div className="col-md-2 img">
-                    <img src="https://pbs.twimg.com/profile_images/1067855959270125568/QkiSTiCV_bigger.jpg" className="img-circle" alt />
+                    <img src="https://pbs.twimg.com/profile_images/1067855959270125568/QkiSTiCV_bigger.jpg" className="img-circle" alt="" />
                     </div>
                     <div className="col-md-10 comment-content">
                     <pre><strong className="name">Phuc Nguyen</strong><i className="nickname"> @phucnguyen</i><i className="time">06:13 - 1 thg 12, 2018</i></pre>

@@ -1,0 +1,82 @@
+.navbar-default {
+    border-bottom: 1px solid rgba(0,0,0,0.25);
+    margin-bottom: 0;
+}
+.navbar-default .navbar-nav li{
+    padding: 0;
+}
+.navbar-default .navbar-nav a {
+    font-weight: 700;
+    transition: all .15s ease-in-out;
+    border-bottom: 3px solid transparent;
+    outline: none;
+}
+
+.navbar-default .navbar-nav a:hover{
+    color: #1DA1F2!important;
+    border-bottom: 3px solid #1c94e0;
+}
+
+.form-control-nav{
+	background-color:#f5f8fa;
+    border: lightgrey solid 1px;
+    border-radius:15px;
+    outline: none;
+}
+
+.form-control-nav:focus{
+    box-shadow: 0 0 3px 1px #1da1f2;
+}
+
+.navbar-default .navbar-collapse, .navbar-default{
+    background-color: white;
+}
+
+.navbar-default .navbar-right{
+    display: flex;
+    align-items: center;
+}
+
+.navbar-default .navbar-right .user-dropdown{
+    margin-left: 20px;
+}
+
+.navbar-default .navbar-right .user-dropdown .dropdown-toggle{
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+}
+
+.navbar-default .navbar-right .user-dropdown .dropdown-toggle img{
+    height: 32px;
+}
+
+.navbar-default .navbar-right .user-dropdown .menu-user-acc h4{
+    font-weight: 700;
+}
+
+.navbar-default .navbar-right .user-dropdown .menu-user-acc h5{
+    color: #657786;
+}
+
+.navbar-default .navbar-right .btn-primary:focus {
+    
+    background-color: #1da1f2;
+    border-color: transparent;
+    outline: none;
+    box-shadow: 0 0 7px 1px #1da1f2;
+}
+
+.navbar-default .navbar-right .btn-primary{
+    font-weight: 700;
+    background-color: #4AB3F4;
+    border: 1px solid #4AB3F4;
+    border-radius: 100px;
+    margin-left: 20px;
+    transition: all .15s ease-in-out;
+}
+
+.navbar-default .navbar-right .btn-primary:hover{
+    background-color: #1da1f2;
+}
