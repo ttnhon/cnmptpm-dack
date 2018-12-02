@@ -266,3 +266,37 @@ div.panel-heading{
 	content: "\00b7";
 	margin-right: 5px;
 }
+
+.popup-content{
+	border-radius: 8px;
+}
+
+.modal-edit-profile{
+	text-align: left;
+	line-height: normal;
+	padding: 30px;
+	outline: 0;
+}
+
+.modal-edit-profile .modal-header-text{
+	text-align: center;
+	margin-top: 0;
+}
+
+.modal-edit-profile .modal-form-item input{
+	font-weight: 900;
+}
+
+.modal-edit-profile .modal-form-btn-group{
+	text-align: right;
+}
+
+.modal-edit-profile .modal-form-btn-group button{
+	margin-left: 5px;
+	border-radius: 100px;
+	font-weight: 700;
+}
+
+.modal-edit-profile .modal-form-btn-group button:focus{
+	outline: none;
+}

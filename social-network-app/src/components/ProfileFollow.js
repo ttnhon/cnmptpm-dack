@@ -1,11 +1,18 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import Popup from "reactjs-popup";
 
 class ProfileFollow extends Component {
     constructor(props) {
         super(props);
     }
+
+    handleChange(event) {
+        
+      }
+
     render() {
+        let input;
         return (
             <div className="profile-canopy">
                 <div className="profile-canopy-inner">
@@ -60,9 +67,34 @@ class ProfileFollow extends Component {
                                     </ul>
                                 </div>
                                 <div className="col-sm-3 col-md-3 col-lg-3 profile-nav-btn">
-                                    <button className="btn btn-edit-profile">
-                                        Edit profile
-                                    </button>
+                                <Popup
+                                    trigger={
+                                        <button className="btn btn-edit-profile">
+                                            Edit profile
+                                        </button>
+                                    } 
+                                    position="left center"
+                                    modal={true}>
+                                    <div className="modal-edit-profile">
+                                        <h3 className="modal-header-text">
+                                            Edit your profile
+                                        </h3>
+                                        <div className="form-group modal-form-item">
+                                            <label htmlFor="usr">Name:</label>
+                                            <input className="form-control" type="text" ref={node => input = node} defaultValue={"Phuc"} />
+                                        </div>
+                                        <div className="modal-form-btn-group">
+                                            <button className="btn btn-default">Cancel</button>
+                                            <button className="btn btn-primary" onClick={(e)=>{
+                                                if (!input.value.trim()) {
+                                                    return;
+                                                }
+                                                alert(input.value);
+                                            }
+                                            }>Save change</button>
+                                        </div>
+                                    </div>
+                                </Popup>
                                 </div>
                             </div>
                         </div>
