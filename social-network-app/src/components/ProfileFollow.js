@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 class ProfileFollow extends Component {
-
+    constructor(props) {
+        super(props);
+    }
     render() {
         return (
             <div className="profile-canopy">
@@ -25,22 +27,22 @@ class ProfileFollow extends Component {
                                 </div>
                                 <div className="col-sm-6 col-md-6 col-lg-6 profile-nav">
                                     <ul className="profile-nav-list">
-                                        <li className="profile-nav-item active">
+                                        <li className={this.props.activeId == 0 ? "profile-nav-item active" : "profile-nav-item"}>
                                             <a href="/">
                                                 <span className="profile-nav-label">Tweets</span>
                                                 <span className="profile-nav-value">1</span>
                                             </a>
                                         </li>
-                                        <li className="profile-nav-item">
-                                            <a href="/">
+                                        <li className={this.props.activeId == 1 ? "profile-nav-item active" : "profile-nav-item"}>
+                                            <a href="/following">
                                                 <span className="profile-nav-label">Following</span>
-                                                <span className="profile-nav-value">0</span>
+                                                <span className="profile-nav-value">3</span>
                                             </a>
                                         </li>
-                                        <li className="profile-nav-item">
-                                            <a href="/">
+                                        <li className={this.props.activeId == 2 ? "profile-nav-item active" : "profile-nav-item"}>
+                                            <a href="/followers">
                                                 <span className="profile-nav-label">Followers</span>
-                                                <span className="profile-nav-value">0</span>
+                                                <span className="profile-nav-value">2</span>
                                             </a>
                                         </li>
                                         <li className="profile-nav-item">

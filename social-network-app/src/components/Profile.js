@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import '../assets/css/Profile.css';
+import '../assets/css/profile.css';
 import Header from './Header';
 import ProfileFollow from './ProfileFollow';
 
@@ -10,7 +10,7 @@ class Profile extends Component {
         return (
             <div>
                 <Header />
-                <ProfileFollow />
+                <ProfileFollow activeId="0" />
                 <div className="container">
                     <div className="row">
                         <div className="col-sm-3 profile-info">
