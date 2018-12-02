@@ -33,6 +33,18 @@ class ProfileFollow extends Component {
                                         </li>
                                         <li className="profile-nav-item">
                                             <a href="/">
+                                                <span className="profile-nav-label">Following</span>
+                                                <span className="profile-nav-value">0</span>
+                                            </a>
+                                        </li>
+                                        <li className="profile-nav-item">
+                                            <a href="/">
+                                                <span className="profile-nav-label">Followers</span>
+                                                <span className="profile-nav-value">0</span>
+                                            </a>
+                                        </li>
+                                        <li className="profile-nav-item">
+                                            <a href="/">
                                                 <span className="profile-nav-label">Lists</span>
                                                 <span className="profile-nav-value">0</span>
                                             </a>
