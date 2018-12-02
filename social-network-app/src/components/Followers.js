@@ -1,20 +1,16 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import '../assets/css/Following.css';
-import Header from './Header';
-import ProfileFollow from './ProfileFollow';
 
 class Followers extends Component {
   render() {
     const users = this.props.followers;
     return (
       <div>
-        <Header />
-        <ProfileFollow activeId="2" />
         { users && users.map((user,index) => {
           return (
             <div key={index} className="twPc-div">
-            <a className="twPc-bg twPc-block"></a>
+            <a className="twPc-bg twPc-block">{null}</a>
 
           <div>
             <a title={user.name} href={user.url} className="twPc-avatarLink">

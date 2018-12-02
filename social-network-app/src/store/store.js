@@ -1,5 +1,5 @@
 import { createStore, applyMiddleware, combineReducers } from "redux";
-import Reducers from './reducers/index';
+import auth from './reducers/auth';
 import followingReducer from './reducers/followingReducer';
 import followersReducer from './reducers/followersReducer';
 import thunk from 'redux-thunk';
@@ -7,7 +7,7 @@ import thunk from 'redux-thunk';
 export default () => {
     //combine all reducers
     const rootReducer = combineReducers({
-        //reducers: Reducers,
+        auth: auth,
         following: followingReducer,
         followers: followersReducer
       })

@@ -3,15 +3,14 @@ import { connect } from 'react-redux';
 import Popup from "reactjs-popup";
 
 class ProfileFollow extends Component {
-    constructor(props) {
-        super(props);
-    }
-
     handleChange(event) {
         
       }
 
     render() {
+        //console.log(this.props);
+        let auth = this.props.auth;
+        let value = this.props.value;
         let input;
         return (
             <div className="profile-canopy">
@@ -34,32 +33,32 @@ class ProfileFollow extends Component {
                                 </div>
                                 <div className="col-sm-6 col-md-6 col-lg-6 profile-nav">
                                     <ul className="profile-nav-list">
-                                        <li className={this.props.activeId == 0 ? "profile-nav-item active" : "profile-nav-item"}>
+                                        <li className={value === "" ? "profile-nav-item active" : "profile-nav-item"}>
                                             <a href="/">
                                                 <span className="profile-nav-label">Tweets</span>
-                                                <span className="profile-nav-value">1</span>
+                                                <span className="profile-nav-value">{auth ? auth.tweets.length : 0}</span>
                                             </a>
                                         </li>
-                                        <li className={this.props.activeId == 1 ? "profile-nav-item active" : "profile-nav-item"}>
-                                            <a href="/following">
+                                        <li className={value === "following" ? "profile-nav-item active" : "profile-nav-item"}>
+                                            <a href={"/"+ auth.id +"/following"}>
                                                 <span className="profile-nav-label">Following</span>
-                                                <span className="profile-nav-value">3</span>
+                                                <span className="profile-nav-value">{this.props.following ? this.props.following : 0}</span>
                                             </a>
                                         </li>
-                                        <li className={this.props.activeId == 2 ? "profile-nav-item active" : "profile-nav-item"}>
-                                            <a href="/followers">
+                                        <li className={value === "followers" ? "profile-nav-item active" : "profile-nav-item"}>
+                                            <a href={"/"+ auth.id +"/followers"}>
                                                 <span className="profile-nav-label">Followers</span>
-                                                <span className="profile-nav-value">2</span>
+                                                <span className="profile-nav-value">{this.props.followers ? this.props.followers : 0}</span>
                                             </a>
                                         </li>
-                                        <li className="profile-nav-item">
-                                            <a href="/">
+                                        <li className={value === "lists" ? "profile-nav-item active" : "profile-nav-item"}>
+                                            <a href={"/"+ auth.id +"/lists"}>
                                                 <span className="profile-nav-label">Lists</span>
                                                 <span className="profile-nav-value">0</span>
                                             </a>
                                         </li>
-                                        <li className="profile-nav-item">
-                                            <a href="/">
+                                        <li className={value === "moments" ? "profile-nav-item active" : "profile-nav-item"}>
+                                            <a href={"/"+ auth.id +"/moments"}>
                                                 <span className="profile-nav-label">Moments</span>
                                                 <span className="profile-nav-value">0</span>
                                             </a>
@@ -107,7 +106,9 @@ class ProfileFollow extends Component {
 
 const mapStateToProps = state => {
     return {
-        auth: state.auth
+        auth: state.auth.auth,
+        followers: state.followers.users.length,
+        following: state.following.users.length
     }
 };
 
