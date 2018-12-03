@@ -1,7 +1,8 @@
 
 .one-news-detail {
     width: 50%;
-    background-color: #e5fffa;
+    background-color: #fff;
+    border-radius: 8px;
 }
 
 .comment-content .content, .comment-content .associate {
@@ -23,11 +24,19 @@
     margin: 0px 0px 5px;
 }
 
+.news-status{
+    text-align: right;
+}
+
 .news-status button.btn.btn-primary {
     border-radius: 60px;
     padding: 10px 15px;
     font-weight: 700;
     font-size: 15px;
+}
+
+.news-status button.btn.btn-primary:focus{
+    outline: none;
 }
 
 .one-news-content {
@@ -88,7 +97,7 @@ i.nickname {
     border: 2px solid #abeaff;
     top: 57px;
     left: 41px;
-    height: 108px;
+    height: 159%;
     z-index: 1;
 }
 

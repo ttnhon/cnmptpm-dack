@@ -11,7 +11,7 @@ class Following extends Component {
         { users && users.map((user,index) => {
           return (
             <div key={index} className="twPc-div">
-            <a className="twPc-bg twPc-block">{null}</a>
+            <i className="twPc-bg twPc-block"></i>
 
           <div>
             <a title={user.name} href={user.url} className="twPc-avatarLink">
@@ -36,13 +36,13 @@ class Following extends Component {
                   </a>
                 </li>
                 <li className="twPc-ArrangeSizeFit">
-                  <a href="#" title={user.following+" Following"}>
+                  <a href="#fake" title={user.following+" Following"}>
                     <span className="twPc-StatLabel twPc-block">Following</span>
                     <span className="twPc-StatValue">{user.following}</span>
                   </a>
                 </li>
                 <li className="twPc-ArrangeSizeFit">
-                  <a href="#" title={user.followers+" Followers"}>
+                  <a href="#fake" title={user.followers+" Followers"}>
                     <span className="twPc-StatLabel twPc-block">Followers</span>
                     <span className="twPc-StatValue">{user.followers}</span>
                   </a>

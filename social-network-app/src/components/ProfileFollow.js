@@ -90,8 +90,6 @@ class ProfileFollow extends Component {
                                         position="left center"
                                         modal={true}
                                         open={this.state.open}
-                                        closeOnDocumentClick
-                                        lockScroll={true}
                                         onClose={this.closeModal}>
                                         <div className="modal-edit-profile">
                                             <h3 className="modal-header-text">

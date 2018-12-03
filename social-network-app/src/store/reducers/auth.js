@@ -14,22 +14,132 @@ const INITIAL_STATE = {
     date: new Date(2018, 11, 0),
     tweets: [{
         content: 'this is the test 1 content',
-        date: new Date(2018, 11, 2, 23, 0)
+        date: new Date(2018, 11, 2, 23, 0),
+        like: 10,
+        retweet: 3,
+        replies: [{
+            owner: {
+                name: 'person1',
+                id: 'person1ID',
+                avtUrl: 'https://pbs.twimg.com/profile_images/1067855959270125568/QkiSTiCV_bigger.jpg'
+            },
+            content: 'this is a comment of person 1',
+            date: new Date(2018, 11, 2, 24, 0),
+            like: 3,
+            retweet: 5,
+            replies: [{
+                owner: {
+                name: 'person2',
+                id: 'person2ID',
+                avtUrl: 'https://mertskaplan.com/wp-content/plugins/msk-twprofilecard/img/mertskaplan.jpg'
+                },
+                content: 'this is a comment of person 2',
+                date: new Date(2018, 11, 3, 6, 0),
+                like: 1,
+                retweet: 2,
+                replies: []
+            }]
+        },{
+            owner: {
+                name: 'person1',
+                id: 'person1ID',
+                avtUrl: 'https://pbs.twimg.com/profile_images/1067855959270125568/QkiSTiCV_bigger.jpg'
+            },
+            content: 'this is another comment of person 1',
+            date: new Date(2018, 11, 3, 2, 0),
+            like: 1,
+            retweet: 1,
+            replies: []
+            }
+        ]
     },
     {
         content: 'this is the test 2 content',
-        date: new Date(2018, 10, 30, 12, 0)
+        date: new Date(2018, 10, 30, 12, 0),
+        like: 10,
+        retweet: 3,
+        replies: [{
+            owner: {
+                name: 'person1',
+                id: 'person1ID',
+                avtUrl: 'https://pbs.twimg.com/profile_images/1067855959270125568/QkiSTiCV_bigger.jpg'
+            },
+            content: 'this is a comment of person 1',
+            date: new Date(2018, 11, 2, 24, 0),
+            like: 3,
+            retweet: 5,
+            replies: [{
+                owner: {
+                name: 'person2',
+                id: 'person2ID',
+                avtUrl: 'https://mertskaplan.com/wp-content/plugins/msk-twprofilecard/img/mertskaplan.jpg'
+                },
+                content: 'this is a comment of person 2',
+                date: new Date(2018, 11, 3, 6, 0),
+                like: 1,
+                retweet: 2,
+                replies: []
+            }]
+        },{
+            owner: {
+                name: 'person1',
+                id: 'person1ID',
+                avtUrl: 'https://pbs.twimg.com/profile_images/1067855959270125568/QkiSTiCV_bigger.jpg'
+            },
+            content: 'this is another comment of person 1',
+            date: new Date(2018, 11, 2, 24, 0),
+            like: 1,
+            retweet: 1,
+            replies: []
+            }
+        ]
     },
     {
         content: 'this is the test 3 content',
-        date: new Date(2018, 10, 29, 7, 50)
+        date: new Date(2018, 10, 29, 7, 50),
+        like: 10,
+        retweet: 3,
+        replies: [{
+            owner: {
+                name: 'person1',
+                id: 'person1ID',
+                avtUrl: 'https://pbs.twimg.com/profile_images/1067855959270125568/QkiSTiCV_bigger.jpg'
+            },
+            content: 'this is a comment of person 1',
+            date: new Date(2018, 11, 2, 24, 0),
+            like: 3,
+            retweet: 5,
+            replies: [{
+                owner: {
+                name: 'person2',
+                id: 'person2ID',
+                avtUrl: 'https://mertskaplan.com/wp-content/plugins/msk-twprofilecard/img/mertskaplan.jpg'
+                },
+                content: 'this is a comment of person 2',
+                date: new Date(2018, 11, 3, 6, 0),
+                like: 1,
+                retweet: 2,
+                replies: []
+            }]
+        },{
+            owner: {
+                name: 'person1',
+                id: 'person1ID',
+                avtUrl: 'https://pbs.twimg.com/profile_images/1067855959270125568/QkiSTiCV_bigger.jpg'
+            },
+            content: 'this is another comment of person 1',
+            date: new Date(2018, 11, 2, 24, 0),
+            like: 1,
+            retweet: 1,
+            replies: []
+            }
+        ]
     }]
 };
 
 export default (state = INITIAL_STATE, action) => {
     switch (action.type) {
         case types.EDIT_PROFILE:
-        console.log(action);
             return {
                 ...state,
                 name: action.payload.name,

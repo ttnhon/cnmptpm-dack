@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import history from '../history';
 
 class Tweets extends Component {
     getTime(time) {
@@ -38,6 +39,10 @@ class Tweets extends Component {
         return t + " " + unit;
     }
 
+    ClickTweet(index) {
+        history.push('/' + this.props.auth.id + '/tweets/' + index);
+    }
+
     render() {
         let tweets = this.props.tweets;
         let media = null;
@@ -45,7 +50,7 @@ class Tweets extends Component {
             media = tweets.map((tweet, index) => {
                 let time = this.getTime(tweet.date);
                 return (
-                    <div className="media" href="#toDetail" key={index}>
+                    <div className="media" href="#toDetail" key={index} onClick={()=>this.ClickTweet(index)}>
                         <a className="media-left" href="#fake">
                             <img alt="" className="media-object img-circle" src="https://pbs.twimg.com/profile_images/1068915193982271488/5-DfGVRD_400x400.jpg" />
                         </a>
@@ -94,7 +99,7 @@ class Tweets extends Component {
                     <div className="panel-footer">
                         <div className="media">
                             <div className="media-body">
-                                <span>end</span>
+                                <span>Tweets</span>
                             </div>
                         </div>
                     </div>

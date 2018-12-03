@@ -5,6 +5,5 @@ export const LogOut = () => (dispatch, getState) => {
 };
 
 export const EditProfile = (profile) => (dispatch, getState) => {
-  console.log(profile);
   return dispatch({ type: types.EDIT_PROFILE, payload: profile });
 };

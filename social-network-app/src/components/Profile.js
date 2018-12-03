@@ -16,7 +16,7 @@ class Profile extends Component {
         if (this.props.match.params.value) {
             value = this.props.match.params.value;
         }
-        let page = <Tweets />;
+        let page = null;
         switch(value){
             case "":
                 page = <Tweets />;

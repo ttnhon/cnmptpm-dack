@@ -23,10 +23,10 @@ body{
 }
 
 .panel-footer{
-	background-color: lightcyan;
+	background-color: #fff;
 }
 .well{
-	background-color: lightcyan;
+	background-color: #fff;
 }
 a{
 	color:#1DA1F2;
@@ -247,6 +247,7 @@ div.panel-heading{
 
 .profile-tweets .profile-tweets-item .panel-footer{
 	border-top: none;
+	text-align: center;
 }
 
 .profile-tweets-user .user-name{

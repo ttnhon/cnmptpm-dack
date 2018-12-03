@@ -12,8 +12,8 @@ class App extends Component {
       <Router history={history}>
         <Switch>
         <Route exact path="/" component={Profile}/>
-        <Route exact path="/news-detail" component={NewsDetail}/>
-        <Route exact path="/:id/:value" component={Profile}/>
+        <Route path="/:id/tweets/:index" component={NewsDetail}/>
+        <Route path="/:id/:value" component={Profile}/>
         </Switch>
       </Router>
     );
