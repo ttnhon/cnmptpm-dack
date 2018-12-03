@@ -11,7 +11,7 @@ class Profile extends Component {
 
     render() {
         //console.log(this.props);
-        let auth = this.props.auth.auth;
+        let auth = this.props.auth;
         let value = "";
         if (this.props.match.params.value) {
             value = this.props.match.params.value;
@@ -45,10 +45,24 @@ class Profile extends Component {
                                     <h5 className="profile-info-acc">
                                         @<a href="/">{auth ? auth.id : ""}</a>
                                     </h5>
+                                    {auth.bio !== "" ? <h5 className="profile-info-bio">
+                                        <span>{auth.bio}</span>
+                                    </h5> : null}
+                                    {auth.location !== "" ? <div className="profile-info-date">
+                                    <i className="fas fa-map-marker-alt"></i>
+                                        <span> {auth.location}</span>
+                                    </div> : null}
+                                    {auth.website !== "" ? <h5 className="profile-info-acc">
+                                        <a href="/">{auth.website}</a>
+                                    </h5> : null}
                                     <div className="profile-info-date">
                                         <span className="glyphicon glyphicon-calendar" aria-hidden="true"></span>
-                                        <span>{auth ? " Joined " + auth.date : ""}</span>
+                                        <span>{auth ? " Joined " + auth.date.toDateString() : ""}</span>
                                     </div>
+                                    {auth.birthday ? <div className="profile-info-date">
+                                    <i className="fas fa-birthday-cake"></i>
+                                        <span>{" Born " + auth.birthday.toDateString()}</span>
+                                    </div> : null}
                                 </div>
                             </div>
                         </div>

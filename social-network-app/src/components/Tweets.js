@@ -106,8 +106,8 @@ class Tweets extends Component {
 
 const mapStateToProps = state => {
     return {
-        auth: state.auth.auth,
-        tweets: state.auth.auth.tweets
+        auth: state.auth,
+        tweets: state.auth.tweets
     }
 };
 

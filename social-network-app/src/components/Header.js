@@ -10,7 +10,7 @@ const Header = (props) => {
           <div className="navbar-collapse navbar-collapse-1 collapse" aria-expanded="true">
             <ul className="nav navbar-nav">
               <li>
-                <a href="#fake"><span className="glyphicon glyphicon-home"></span> Home</a>
+                <a href="/"><span className="glyphicon glyphicon-home"></span> Home</a>
               </li>
               <li>
                 <a href="#fake"><span className="glyphicon glyphicon-bell"></span> Notifications</a>
@@ -25,16 +25,16 @@ const Header = (props) => {
                 <span className="glyphicon glyphicon-search form-control-feedback" aria-hidden="true"></span>
               </div>
               <div className="dropdown user-dropdown">
-                <button className="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img className="img-circle" src="https://pbs.twimg.com/profile_images/1068915193982271488/5-DfGVRD_400x400.jpg" alt="" /></button>
+                <button className="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img className="img-circle" src={props.auth.avtUrl} alt="" /></button>
                 <ul className="dropdown-menu">
                   <li className="menu-user-acc">
                     <a href="#fake">
-                      <h4>Phuc</h4>
-                      <h5>@Phuc89286488</h5>
+                      <h4>{props.auth.name}</h4>
+                      <h5>@{props.auth.id}</h5>
                     </a>
                   </li>
                   <li role="separator" className="divider"></li>
-                  <li className="menu-user-profile"><a href="#fake">Profile</a></li>
+                  <li className="menu-user-profile"><a href="/">Profile</a></li>
                   <li role="separator" className="divider"></li>
                   <li className="menu-user-logout"><a href="#fake">Log out</a></li>
                 </ul>
@@ -49,8 +49,14 @@ const Header = (props) => {
     );
 }
 
+const mapStateToProps = state => {
+  return {
+      auth: state.auth
+  }
+};
+
 const mapDispatchToProps = (dispatch) => ({
     logout: () => dispatch()
 });
 
-export default connect(undefined, mapDispatchToProps)(Header);
+export default connect(mapStateToProps, mapDispatchToProps)(Header);
