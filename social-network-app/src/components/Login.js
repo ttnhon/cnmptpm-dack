@@ -23,12 +23,17 @@ class Login extends Component {
     }
     handleSubmit(e) {
         e.preventDefault();
+        if(this.state.secretKey === undefined || this.state.secretKey === null || this.state.secretKey === '') return;
         const { Keypair } = require('stellar-base');
-        const key = Keypair.fromSecret(this.state.secretKey);
-        //console.log(key.publicKey());
-        this.props.logIn({publicKey: key.publicKey(), secretKey: this.state.secretKey });
-        //console.log(this.state.secretKey);
-        history.push('/');
+        try{
+            const key = Keypair.fromSecret(this.state.secretKey);
+            //console.log(key.publicKey());
+            this.props.logIn({publicKey: key.publicKey(), secretKey: this.state.secretKey });
+            //console.log(this.state.secretKey);
+            history.push('/');
+        }catch(err){
+            console.log(err);
+        }
     }
   render() {
     return (
