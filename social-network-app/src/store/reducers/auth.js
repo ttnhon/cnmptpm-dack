@@ -3,6 +3,8 @@ import * as types from "../actions/types";
 const INITIAL_STATE = {
     name: 'Phuc',
     id: 'Phuc89286488',
+    publicKey: '',
+    secretKey: '',
     bio: 'this is some thing I want to say',
     location: 'Viet Nam',
     website: 'https://twitter.com/Phuc89286488',
@@ -147,6 +149,12 @@ export default (state = INITIAL_STATE, action) => {
                 location: action.payload.location,
                 website: action.payload.website,
                 birthday: action.payload.birthday,
+            };
+        case types.SET_KEY:
+            return {
+                ...state,
+                publicKey: action.payload.publicKey,
+                secretKey: action.payload.secretKey,
             };
         case types.LOGOUT:
             return INITIAL_STATE;

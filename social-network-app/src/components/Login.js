@@ -1,16 +1,18 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import '../assets/css/bootstrap4.css';
+//import '../assets/css/bootstrap4.css';
 import '../assets/css/login.css';
+import { LogIn } from '../store/actions/index';
+import history from '../history';
 
 class Login extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            username: '',
-            password: '' 
+            secretKey: ''
         };
         this.handleChange = this.handleChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     handleChange(event) {
@@ -19,37 +21,38 @@ class Login extends Component {
 
         this.setState({[state_name]: state_value});
     }
-    handleSubmit() {
-        console.log('handle Submit');
-        return false;
+    handleSubmit(e) {
+        e.preventDefault();
+        const { Keypair } = require('stellar-base');
+        const key = Keypair.fromSecret(this.state.secretKey);
+        //console.log(key.publicKey());
+        this.props.logIn({publicKey: key.publicKey(), secretKey: this.state.secretKey });
+        //console.log(this.state.secretKey);
+        history.push('/');
     }
   render() {
     return (
     <section className="login-block">
         <div className="container">
             <div className="row">
-                <div className="col-md-4 login-sec">
+                <div className="col-md-6 login-sec">
                     <h2 className="text-center">Login Now</h2>
                     <form className="login-form" onSubmit= {this.handleSubmit}>
                         <div className="form-group">
-                            <label htmlFor="exampleInputEmail1" className="text-uppercase">Username</label>
-                            <input type="text" name='username' value={this.state.username} onChange={this.handleChange} className="form-control" placeholder="" />
-                        </div>
-                        <div className="form-group">
-                            <label htmlFor="exampleInputPassword1" className="text-uppercase">Password</label>
-                            <input type="password" name='password' value={this.state.password} onChange={this.handleChange} className="form-control" placeholder="" />
+                            <label htmlFor="exampleInputEmail1" className="text-uppercase">Secret key</label>
+                            <input type="text" name='secretKey' value={this.state.secretKey} onChange={this.handleChange} className="form-control" placeholder="" />
                         </div>
                         <div className="form-check">
                             {/* <label className="form-check-label">
                             <input type="checkbox" className="form-check-input" />
                             <small>  Remember Me</small>
                             </label> */}
-                            <button onClick={this.handleSubmit} className="btn btn-login float-right">Submit</button>
                         </div>
+                            <button onClick={this.handleSubmit} className="btn btn-login float-right">Submit</button>
                     </form>
-                    <div className="copy-text">Created with <i className="fa fa-heart" /> by <a href="">N2P</a></div>
+                    <div className="copy-text">Created with <i className="fa fa-heart" /> by <a href="/">N2P</a></div>
                 </div>
-                <div className="col-md-8 banner-sec">
+                <div className="col-md-6 banner-sec">
                     <div id="carouselExampleIndicators" className="carousel slide" data-ride="carousel">
                     <ol className="carousel-indicators">
                         <li data-target="#carouselExampleIndicators" data-slide-to={0} className="active" />
@@ -99,5 +102,10 @@ const mapStatetoProps = (state) => {
     following: state.following.users
   }
 };
+const mapDispatchToProps = (dispatch) => {
+    return {
+        logIn: (key) => dispatch(LogIn(key))
+    }
+};
 
-export default connect(mapStatetoProps)(Login);
+export default connect(mapStatetoProps, mapDispatchToProps)(Login);

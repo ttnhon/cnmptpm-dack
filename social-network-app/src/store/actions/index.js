@@ -7,3 +7,7 @@ export const LogOut = () => (dispatch, getState) => {
 export const EditProfile = (profile) => (dispatch, getState) => {
   return dispatch({ type: types.EDIT_PROFILE, payload: profile });
 };
+
+export const LogIn = (key) => (dispatch, getState) => {
+  return dispatch({ type: types.SET_KEY, payload: key });
+};
