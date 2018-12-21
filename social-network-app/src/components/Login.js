@@ -42,7 +42,7 @@ class Login extends Component {
             //console.log(key.publicKey());
             this.props.logIn({ publicKey: key.publicKey(), secretKey: this.state.secretKey });
             //console.log(this.state.secretKey);
-            history.push('/');
+            history.push("/" + key.publicKey() + "/tweets");
         } catch (err) {
             console.log(err);
         }

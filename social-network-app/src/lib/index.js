@@ -22,6 +22,7 @@ function decode(data) {
   switch (versionTx.version) {
     case 1:
       return v1.decode(data);
+      break;
     default:
       throw Error('Unsupport version');
   }
