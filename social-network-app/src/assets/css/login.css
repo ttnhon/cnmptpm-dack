@@ -12,8 +12,8 @@ padding : 50px 0;
 .login-block .carousel-inner{border-radius:0 10px 10px 0;}
 .login-block .carousel-caption{text-align:left; left:5%;}
 .login-block .carousel-item img{width: 100%;}
-.login-block .login-sec{padding: 50px 30px; position:relative;}
-.login-block .login-sec .copy-text{position:absolute; width:80%; bottom:20px; font-size:13px; text-align:center;}
+.login-block .login-sec{padding: 50px 30px; position:relative; min-height: 500px;}
+.login-block .login-sec .copy-text{position:absolute; width:90%; bottom:20px; font-size:13px; text-align:center;}
 .login-block .login-sec .copy-text i{color:#FEB58A;}
 .login-block .login-sec .copy-text a{color:#E36262;}
 .login-block .login-sec h2{margin-bottom:30px; font-weight:800; font-size:30px; color: #DE6262;}
@@ -23,3 +23,33 @@ padding : 50px 0;
 .login-block .banner-text h2{color:#fff; font-weight:600;}
 .login-block .banner-text h2:after{content:" "; width:100px; height:5px; background:#FFF; display:block; margin-top:20px; border-radius:3px;}
 .login-block .banner-text p{color:#fff;}
+
+.login-block .form-submit{
+    text-align: center;
+}
+
+.login-block .form-signup{
+    text-align: center;
+    padding-top: 5px;
+    font-size: 15px;
+}
+
+.login-block .modal-close{
+    margin-bottom: 30px;
+    padding: 0 20px;
+    text-align: right;
+}
+
+.sign-up{
+    padding: 30px 20px 0 20px;
+}
+.sign-up .account{
+    min-height: 127px;
+}
+.sign-up .key{
+    margin: 10px 0;
+}
+.sign-up .key div{
+    padding: 5px 20px;
+    text-align: left;
+}

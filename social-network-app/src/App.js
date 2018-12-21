@@ -3,7 +3,7 @@ import { Router, Switch, Route } from 'react-router-dom';
 import history from './history';
 import Profile from './components/Profile';
 import NewsDetail from './components/NewsDetail';
-import Login from './components/Login'
+import Login from './components/Login';
 //import Following from './components/Following';
 //import Followers from './components/Followers';
 
