@@ -56,4 +56,4 @@ function hash(tx) {
     .toUpperCase();
 }
 
-export default { encode, decode, verify, sign, hash };
+export { encode, decode, verify, sign, hash };

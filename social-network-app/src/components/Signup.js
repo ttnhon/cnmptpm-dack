@@ -4,7 +4,7 @@ import '../assets/css/Following.css';
 import { LogIn } from '../store/actions/index';
 import history from '../history';
 import { sign, encode, decode } from '../lib/index';
-const vstruct = require('varstruct')
+import axios from 'axios';
 
 
 class Signup extends Component {
@@ -20,24 +20,25 @@ class Signup extends Component {
     }
     NextClick(e) {
         //console.log("next");
-        //var fetchUrl = require("fetch").fetchUrl;
-        const PlainTextContent = vstruct([
-            { name: 'type', type: vstruct.UInt8 },
-            { name: 'text', type: vstruct.VarString(vstruct.UInt16BE) },
-        ]);
-        var ct = PlainTextContent.encode({ type: 1, text: "abcde" })
         var tx = {
             version: 1,
             account: new Buffer(35),
             sequence: 1,
             memo: Buffer.alloc(0),
-            operation: 'post',
+            operation: 'create_account',
             params: {
-                content: ct,
-                keys: []
+                address: this.state.key.public
             },
             signature: new Buffer(64)
         };
+        sign(tx, 'SACE2PK3T76STIS44EBKE3Y4E7YOY7IT6HBE6JFXVIVB65X7HCJ2IR45');
+        //console.log(tx);
+        const txs = '0x'+ encode(tx).toString('hex');
+
+        axios.get('https://komodo.forest.network/broadcast_tx_commit?tx=' + txs)
+        .then(res => {
+            //console.log(res);
+        });
         this.props.logIn({ publicKey: this.state.key.public, secretKey: this.state.key.secret });
         history.push('/');
     }

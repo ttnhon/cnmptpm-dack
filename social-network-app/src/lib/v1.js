@@ -150,7 +150,7 @@ function decode(data) {
   };
 }
 
-export default {
+export {
   encode,
   decode,
 };
