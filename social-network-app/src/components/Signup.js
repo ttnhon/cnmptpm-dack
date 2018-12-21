@@ -20,27 +20,42 @@ class Signup extends Component {
     }
     NextClick(e) {
         //console.log("next");
-        var tx = {
-            version: 1,
-            account: new Buffer(35),
-            sequence: 1,
-            memo: Buffer.alloc(0),
-            operation: 'create_account',
-            params: {
-                address: this.state.key.public
-            },
-            signature: new Buffer(64)
+        const key = {
+            public: 'GDKJTGPHZET53YN6DFXXJAWMZH6ZZ5YO6T5ZGJZWBTAKUV3JVHGCESRI',
+            secret: 'SACE2PK3T76STIS44EBKE3Y4E7YOY7IT6HBE6JFXVIVB65X7HCJ2IR45'
         };
-        sign(tx, 'SACE2PK3T76STIS44EBKE3Y4E7YOY7IT6HBE6JFXVIVB65X7HCJ2IR45');
-        //console.log(tx);
-        const txs = '0x'+ encode(tx).toString('hex');
+        axios.get('https://komodo.forest.network/tx_search?query="account=\'' + key.public + '\'"')
+            .then(res => {
+                var s = 0;
+                var tx = {
+                    version: 1,
+                    account: new Buffer(35),
+                    sequence: 0,
+                    memo: Buffer.alloc(0),
+                    operation: 'create_account',
+                    params: {
+                        address: this.state.key.public
+                    },
+                    signature: new Buffer(64)
+                };
+                res.data.result.txs.map((t, index) => {
+                    let result = decode(Buffer.from(t.tx, 'base64'));
+                    if (result.account === key.public) s = s + 1;
+                    return result;
+                });
+                s = s + 1;
+                tx.sequence = s;
+                sign(tx, key.secret);
+                //console.log(tx);
+                const txs = '0x' + encode(tx).toString('hex');
 
-        axios.get('https://komodo.forest.network/broadcast_tx_commit?tx=' + txs)
-        .then(res => {
-            //console.log(res);
-        });
-        this.props.logIn({ publicKey: this.state.key.public, secretKey: this.state.key.secret });
-        history.push('/');
+                axios.get('https://komodo.forest.network/broadcast_tx_commit?tx=' + txs)
+                    .then(res => {
+                        //console.log(res);
+                        this.props.logIn({ publicKey: this.state.key.public, secretKey: this.state.key.secret });
+                        history.push("/" + this.state.key.public + "/tweets");
+                    });
+            });
     }
     render() {
         return (
