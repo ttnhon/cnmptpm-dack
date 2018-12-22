@@ -42,7 +42,11 @@ class Newfeed extends Component {
     }
 
     ClickTweet(index) {
-        history.push('/' + this.props.auth.publicKey + '/tweets/' + index);
+        //history.push('/' + this.props.auth.publicKey + '/tweets/' + index);
+    }
+
+    ClickPerson(key){
+        history.push('/' + key + '/tweets/');
     }
 
     componentWillMount() {
@@ -53,9 +57,10 @@ class Newfeed extends Component {
     }
 
     render() {
-        console.log(this.props);
+        //console.log(this.props);
         let inputPost;
-        let tweets = this.props.tweets;
+        let tweets = this.props.newfeed;
+        //console.log(tweets);
         let media = null;
         if (tweets) {
             media = tweets.map((tweet, index) => {
@@ -67,12 +72,15 @@ class Newfeed extends Component {
                         </a>
                         <div className="media-body">
                             <div className="profile-tweets-user-header">
-                                <a className="profile-tweets-user" href={this.props.auth ? "/" + this.props.auth.publicKey + "/tweets" : "#noUserId"}>
+                                <a className="profile-tweets-user" onClick={(e)=>{
+                                    e.preventDefault();
+                                    this.ClickPerson(tweet.account);
+                                }} href="/">
                                     <span className="user-name">
-                                        <span>{this.props.auth ? this.props.auth.name : null}</span>
+                                        <span>{tweet.name ? tweet.name : null}</span>
                                     </span>
                                     <div className="user-time">
-                                        <span>{time}</span>
+                                        <span>{tweet.height}</span>
                                     </div>
                                 </a>
                             </div>
@@ -132,7 +140,6 @@ class Newfeed extends Component {
 const mapStateToProps = state => {
     return {
         auth: state.auth,
-        tweets: state.auth.tweets,
         newfeed: state.auth.newfeed
     }
 };

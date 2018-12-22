@@ -105,7 +105,7 @@ export const LogIn = (key) => (dispatch, getState) => {
 
 export const GetNewfeed = (key) => (dispatch, getState) => {
   getNewFeed(key).then(res=>{
-    console.log(res);
+    //console.log(res);
     return dispatch({ type: types.GET_NEWFEED, payload: res });
   });
 };
