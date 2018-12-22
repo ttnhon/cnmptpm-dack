@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 //import '../assets/css/bootstrap4.css';
 import '../assets/css/login.css';
@@ -6,7 +7,7 @@ import { LogIn } from '../store/actions/index';
 import history from '../history';
 import Popup from "reactjs-popup";
 import Signup from './Signup';
-
+import * as account from './../lib/account.js';
 class Login extends Component {
     constructor(props) {
         super(props);
@@ -41,13 +42,19 @@ class Login extends Component {
             const key = Keypair.fromSecret(this.state.secretKey);
             //console.log(key.publicKey());
             this.props.logIn({ publicKey: key.publicKey(), secretKey: this.state.secretKey });
-            //console.log(this.state.secretKey);
+            
+            account.login(this.state.secretKey);
             history.push("/" + key.publicKey() + "/tweets");
         } catch (err) {
             console.log(err);
         }
     }
     render() {
+        const key = account.checkLogged();
+        if(key != false)
+        {
+            return <Redirect to={"/" + key.publicKey() + "/tweets"}/>
+        }
         return (
             <section className="login-block">
                 <div className="container">

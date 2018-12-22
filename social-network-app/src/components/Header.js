@@ -1,9 +1,16 @@
 import React from 'react';
 //import { logOut } from "../actions/index";
 import { connect } from 'react-redux';
-import '../assets/css/Header.css'
+import {Redirect} from 'react-router-dom';
+import * as account from './../lib/account.js';
+import '../assets/css/Header.css';
 
 const Header = (props) => {
+  const key = account.checkLogged();
+  if(key === false)
+  {
+      return <Redirect to={"/login"}/>
+  }
     return (
       <div className="navbar navbar-default navbar-static-top">
         <div className="container">
