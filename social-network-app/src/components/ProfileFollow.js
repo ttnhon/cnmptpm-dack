@@ -4,6 +4,7 @@ import Popup from "reactjs-popup";
 //import DatePicker from 'react-date-picker';
 import { EditProfile } from '../store/actions/index';
 import history from '../history';
+import * as account from './../lib/account.js';
 
 class ProfileFollow extends Component {
     constructor(props) {
@@ -35,6 +36,7 @@ class ProfileFollow extends Component {
         let value = this.props.value;
         let id = this.props.id;
         let inputName;
+        let isUser = account.checkLogged().publicKey() === auth.publicKey;
         return (
             <div className="profile-canopy">
                 <div className="profile-canopy-inner">
@@ -95,7 +97,7 @@ class ProfileFollow extends Component {
                                 </div>
                                 <div className="col-sm-3 col-md-3 col-lg-3 profile-nav-btn">
                                     {
-                                        auth.publicKey === id ?
+                                        isUser ?
                                             <div>
 
                                                 <button className="btn btn-edit-profile" onClick={this.openModal}>
