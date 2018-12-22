@@ -1,24 +1,30 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import '../assets/css/profile.css';
+import '../assets/css/Profile.css';
 import Header from './Header';
 import ProfileFollow from './ProfileFollow';
 import Tweets from './Tweets';
 import Following from './Following';
 import Followers from './Followers';
+import {GetProfile} from '../store/actions/index';
 
 class Profile extends Component {
 
     render() {
         //console.log(this.props);
-        let auth = this.props.auth;
+        let auth = this.props.auth === {} ? undefined : this.props.auth;
         let value = "";
+        let id = "";
         if (this.props.match.params.value) {
             value = this.props.match.params.value;
         }
+        if (this.props.match.params.id) {
+            id = this.props.match.params.id;
+            this.props.GetProfile(id);
+        }
         let page = null;
         switch(value){
-            case "":
+            case "tweets":
                 page = <Tweets />;
                 break;
             case "following":
@@ -33,7 +39,7 @@ class Profile extends Component {
         return (
             <div>
                 <Header />
-                <ProfileFollow value={value} />
+                <ProfileFollow value={value} id={id} />
                 <div className="container">
                     <div className="row">
                         <div className="col-sm-3 profile-info">
@@ -45,19 +51,18 @@ class Profile extends Component {
                                     <h5 className="profile-info-acc">
                                         @<a href="/">{auth ? auth.id : ""}</a>
                                     </h5>
-                                    {auth.bio !== "" ? <h5 className="profile-info-bio">
-                                        <span>{auth.bio}</span>
-                                    </h5> : null}
-                                    {auth.location !== "" ? <div className="profile-info-date">
-                                    <i className="fas fa-map-marker-alt"></i>
-                                        <span> {auth.location}</span>
-                                    </div> : null}
+                                    <h5 className="profile-info-bio">
+                                        <span>Balance: {auth.balance}</span>
+                                    </h5>
+                                    <h5 className="profile-info-bio">
+                                        <span>Sequence: {auth.sequence}</span>
+                                    </h5>
                                     {auth.website !== "" ? <h5 className="profile-info-acc">
                                         <a href="/">{auth.website}</a>
                                     </h5> : null}
                                     <div className="profile-info-date">
                                         <span className="glyphicon glyphicon-calendar" aria-hidden="true"></span>
-                                        <span>{auth ? " Joined " + auth.date.toDateString() : ""}</span>
+                                        <span>{auth.date ? " Joined " + auth.date.toDateString() : ""}</span>
                                     </div>
                                     {auth.birthday ? <div className="profile-info-date">
                                     <i className="fas fa-birthday-cake"></i>
@@ -162,7 +167,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-
+        GetProfile: (key) => GetProfile(key)
     }
 };
 
