@@ -26,6 +26,9 @@ class ProfileFollow extends Component {
     linkClick(id, s) {
         history.push("/" + id + "/" + s);
     }
+    submitPicture() {
+        console.log(document.getElementById("myPicture").value);
+    }
 
     render() {
         let auth = this.props.auth;
@@ -94,6 +97,7 @@ class ProfileFollow extends Component {
                                     {
                                         auth.publicKey === id ?
                                             <div>
+
                                                 <button className="btn btn-edit-profile" onClick={this.openModal}>
                                                     Edit profile
                                         </button>
@@ -105,12 +109,16 @@ class ProfileFollow extends Component {
                                                     <div className="modal-edit-profile">
                                                         <h3 className="modal-header-text">
                                                             Edit your profile
-                                            </h3>
+                                                        </h3>
                                                         <div className="form-group modal-form-item">
                                                             <label htmlFor="usr">Name:</label>
                                                             <input className="form-control" type="text" ref={node => inputName = node} defaultValue={this.props.auth.name} />
                                                         </div>
 
+                                                        <form onSubmit={this.submitPicture}>
+                                                            <input type="file" name="myPicture" id="myPicture" />
+                                                            <input type="submit" />
+                                                        </form>
                                                         <div className="modal-form-btn-group">
                                                             <button className="btn btn-default" onClick={this.closeModal}>Cancel</button>
                                                             <button className="btn btn-primary" onClick={(e) => {
