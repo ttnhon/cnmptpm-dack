@@ -26,7 +26,6 @@ class Signup extends Component {
         };
         axios.get('https://komodo.forest.network/tx_search?query="account=\'' + key.public + '\'"')
             .then(res => {
-                var s = 0;
                 var tx = {
                     version: 1,
                     account: new Buffer(35),

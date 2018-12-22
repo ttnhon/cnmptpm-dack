@@ -145,13 +145,8 @@ export default (state = {}, action) => {
             return {
                 ...state,
                 name: action.payload.name,
-                bio: action.payload.bio,
-                location: action.payload.location,
-                website: action.payload.website,
-                birthday: action.payload.birthday,
                 balance: action.payload.balance,
                 sequence: action.payload.sequence
-
             };
         case types.SET_KEY:
             return {

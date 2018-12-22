@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Popup from "reactjs-popup";
-import DatePicker from 'react-date-picker';
+//import DatePicker from 'react-date-picker';
 import { EditProfile } from '../store/actions/index';
 import history from '../history';
 
@@ -32,22 +32,9 @@ class ProfileFollow extends Component {
         let value = this.props.value;
         let id = this.props.id;
         let inputName;
-        let inputBio;
-        let inputLocation;
-        let inputWebsite;
         return (
             <div className="profile-canopy">
                 <div className="profile-canopy-inner">
-                    <div className="profile-canopy-header">
-                        <div className="profile-canopy-header-img">
-                            <img src="https://pbs.twimg.com/profile_banners/1068876238993801216/1543684186/1500x500" alt="" />
-                        </div>
-                        <div className="container">
-                            <div className="profile-canopy-avatar">
-                                <img src="https://pbs.twimg.com/profile_images/1068915193982271488/5-DfGVRD_400x400.jpg" alt="" />
-                            </div>
-                        </div>
-                    </div>
                     <div className="profile-canopy-navbar">
                         <div className="container">
                             <div className="row">
@@ -60,7 +47,7 @@ class ProfileFollow extends Component {
                                             <a href="#link" onClick={(e) => {
                                                 e.preventDefault();
                                                 this.linkClick(id, "tweets");
-                                                }}>
+                                            }}>
                                                 <span className="profile-nav-label">Tweets</span>
                                                 <span className="profile-nav-value">{auth.tweets ? auth.tweets.length : 0}</span>
                                             </a>
@@ -69,7 +56,7 @@ class ProfileFollow extends Component {
                                             <a href="#link" onClick={(e) => {
                                                 e.preventDefault();
                                                 this.linkClick(id, "following");
-                                                }}>
+                                            }}>
                                                 <span className="profile-nav-label">Following</span>
                                                 <span className="profile-nav-value">{this.props.following ? this.props.following : 0}</span>
                                             </a>
@@ -78,7 +65,7 @@ class ProfileFollow extends Component {
                                             <a href="#link" onClick={(e) => {
                                                 e.preventDefault();
                                                 this.linkClick(id, "followers");
-                                                }}>
+                                            }}>
                                                 <span className="profile-nav-label">Followers</span>
                                                 <span className="profile-nav-value">{this.props.followers ? this.props.followers : 0}</span>
                                             </a>
@@ -87,7 +74,7 @@ class ProfileFollow extends Component {
                                             <a href="#link" onClick={(e) => {
                                                 e.preventDefault();
                                                 this.linkClick(id, "lists");
-                                                }}>
+                                            }}>
                                                 <span className="profile-nav-label">Lists</span>
                                                 <span className="profile-nav-value">0</span>
                                             </a>
@@ -96,7 +83,7 @@ class ProfileFollow extends Component {
                                             <a href="#link" onClick={(e) => {
                                                 e.preventDefault();
                                                 this.linkClick(id, "moments");
-                                                }}>
+                                            }}>
                                                 <span className="profile-nav-label">Moments</span>
                                                 <span className="profile-nav-value">0</span>
                                             </a>
@@ -123,28 +110,7 @@ class ProfileFollow extends Component {
                                                             <label htmlFor="usr">Name:</label>
                                                             <input className="form-control" type="text" ref={node => inputName = node} defaultValue={this.props.auth.name} />
                                                         </div>
-                                                        <div className="form-group modal-form-item">
-                                                            <span className="modal-user-id">@{this.props.auth.id}</span>
-                                                        </div>
-                                                        <div className="form-group modal-form-item">
-                                                            <label htmlFor="usr">Birthday:</label>
-                                                            <DatePicker
-                                                                onChange={this.onChange}
-                                                                value={this.state.date}
-                                                            />
-                                                        </div>
-                                                        <div className="form-group modal-form-item">
-                                                            <label htmlFor="usr">Bio:</label>
-                                                            <input className="form-control" type="text" ref={node => inputBio = node} defaultValue={this.props.auth.bio} />
-                                                        </div>
-                                                        <div className="form-group modal-form-item">
-                                                            <label htmlFor="usr">Location:</label>
-                                                            <input className="form-control" type="text" ref={node => inputLocation = node} defaultValue={this.props.auth.location} />
-                                                        </div>
-                                                        <div className="form-group modal-form-item">
-                                                            <label htmlFor="usr">Website:</label>
-                                                            <input className="form-control" type="text" ref={node => inputWebsite = node} defaultValue={this.props.auth.website} />
-                                                        </div>
+
                                                         <div className="modal-form-btn-group">
                                                             <button className="btn btn-default" onClick={this.closeModal}>Cancel</button>
                                                             <button className="btn btn-primary" onClick={(e) => {
@@ -152,11 +118,7 @@ class ProfileFollow extends Component {
                                                                     return;
                                                                 }
                                                                 let profile = {
-                                                                    name: inputName.value,
-                                                                    bio: inputBio.value,
-                                                                    location: inputLocation.value,
-                                                                    website: inputWebsite.value,
-                                                                    birthday: this.state.date
+                                                                    name: inputName.value
                                                                 };
                                                                 this.props.editProfile(profile);
                                                                 this.closeModal();

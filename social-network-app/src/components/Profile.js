@@ -6,7 +6,7 @@ import ProfileFollow from './ProfileFollow';
 import Tweets from './Tweets';
 import Following from './Following';
 import Followers from './Followers';
-import {GetProfile} from '../store/actions/index';
+import { GetProfile } from '../store/actions/index';
 
 class Profile extends Component {
 
@@ -23,7 +23,7 @@ class Profile extends Component {
             this.props.GetProfile(id);
         }
         let page = null;
-        switch(value){
+        switch (value) {
             case "tweets":
                 page = <Tweets />;
                 break;
@@ -43,31 +43,24 @@ class Profile extends Component {
                 <div className="container">
                     <div className="row">
                         <div className="col-sm-3 profile-info">
+                            <div className="profile-canopy-header">
+                                <div className="container">
+                                    <div className="profile-canopy-avatar">
+                                        <img src="https://pbs.twimg.com/profile_images/1068915193982271488/5-DfGVRD_400x400.jpg" alt="" />
+                                    </div>
+                                </div>
+                            </div>
                             <div className="panel panel-default">
                                 <div className="panel-body">
                                     <h2 className="profile-info-name">
                                         <a href="/">{auth ? auth.name : ""}</a>
                                     </h2>
-                                    <h5 className="profile-info-acc">
-                                        @<a href="/">{auth ? auth.id : ""}</a>
-                                    </h5>
                                     <h5 className="profile-info-bio">
                                         <span>Balance: {auth.balance}</span>
                                     </h5>
                                     <h5 className="profile-info-bio">
                                         <span>Sequence: {auth.sequence}</span>
                                     </h5>
-                                    {auth.website !== "" ? <h5 className="profile-info-acc">
-                                        <a href="/">{auth.website}</a>
-                                    </h5> : null}
-                                    <div className="profile-info-date">
-                                        <span className="glyphicon glyphicon-calendar" aria-hidden="true"></span>
-                                        <span>{auth.date ? " Joined " + auth.date.toDateString() : ""}</span>
-                                    </div>
-                                    {auth.birthday ? <div className="profile-info-date">
-                                    <i className="fas fa-birthday-cake"></i>
-                                        <span>{" Born " + auth.birthday.toDateString()}</span>
-                                    </div> : null}
                                 </div>
                             </div>
                         </div>
