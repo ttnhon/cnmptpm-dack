@@ -20,7 +20,7 @@ var sendMoney = async(public_key, secret_key, receiver_account,sequence, amount 
  return await txs;
 };
 
-
+//return public_key and name
 var getFollowings = async(account) =>{
  var arr_following = [];
  var result = await axios('https://komodo.forest.network/tx_search?query=%22account=%27'+account+'%27%22');
@@ -31,32 +31,52 @@ var getFollowings = async(account) =>{
    one_transaction = decode(Buffer.from(tx.tx, 'base64'));
    if(one_transaction.operation == 'update_account' && one_transaction.params.name == 'followings')
    {
-       arr_following = Followings.decode(one_transaction.params.value).addresses;
+      let public_key = base32.encode(Followings.decode(one_transaction.params.value).addresses);
+      let name = await getName(public_key);
+      let one_following = {
+        name: name,
+        public_key: public_key
+      };
+       arr_following = arr_following.concat(one_following);
    }
  });
 
- if(arr_following.length > 0)
- {
-   arr_following =  arr_following.map(value => ( base32.encode(value) ));
- }
  return arr_following;
 };
 
-var getPosts = async(account) =>{
+var getName = async(account) =>{
+  var name = 'Unknown Person';
   var result = await axios('https://komodo.forest.network/tx_search?query=%22account=%27'+account+'%27%22');
- const res = result.data;
- console.log('thuc hien get post');
- var list_post = [];
- res.result.txs.map((tx) => {
-   one_transaction = decode(Buffer.from(tx.tx, 'base64'));
-   if(one_transaction.operation == 'post')
-   {
-     let one_post = PlainTextContent.decode(one_transaction.params.content);
-     one_post['height'] = tx.height;
-     list_post = list_post.concat(one_post);
-   }
- });
- return list_post;
+  const res = result.data;
+
+  res.result.txs.map((tx) => {
+    one_transaction = decode(Buffer.from(tx.tx, 'base64'));
+    if(one_transaction.operation == 'update_account' && one_transaction.params.key == 'name')
+    {
+      name = one_transaction.params.value;
+    }
+  });
+
+  return name;
+
+}
+
+var getPosts = async(account) =>{
+  var result = await axios('https://komodo.forest.network/tx_search?query=%22account=%27'+account.public_key+'%27%22');
+  const res = result.data;
+  console.log('thuc hien get post');
+  var list_post = [];
+  res.result.txs.map((tx) => {
+    one_transaction = decode(Buffer.from(tx.tx, 'base64'));
+    if(one_transaction.operation == 'post')
+    {
+      let one_post = PlainTextContent.decode(one_transaction.params.content);
+      one_post['name'] = account.name;
+      one_post['height'] = tx.height;
+      list_post = list_post.concat(one_post);
+    }
+  });
+  return list_post;
 };
 
 var getNewFeed = async(account) => {
@@ -69,7 +89,7 @@ var getNewFeed = async(account) => {
      let posts = await getPosts(one_account);
      all_posts = all_posts.concat(posts);
    });
-
+   all_posts.sort(function(a, b){return b.height - a.height});
    return all_posts;
 };
 
