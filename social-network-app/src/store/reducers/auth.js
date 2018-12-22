@@ -158,6 +158,11 @@ export default (state = {}, action) => {
                 ...state,
                 secretKey: action.payload
             };
+        case types.SET_USER_PROFILE:
+            return {
+                ...state,
+                user: action.payload
+            };
         case types.LOGOUT:
             return {};
         default:

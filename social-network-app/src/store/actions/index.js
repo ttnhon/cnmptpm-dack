@@ -6,6 +6,27 @@ export const LogOut = () => (dispatch, getState) => {
   return dispatch({ type: types.LOGOUT });
 };
 
+export const SetUserProfile = (key) => (dispatch, getState) => {
+  axios.get('https://komodo.forest.network/tx_search?query="account=\'' + key + '\'"')
+    .then(res => {
+      //console.log(res);
+      const txs = res.data.result.txs.map((tx, index) => {
+        return decode(Buffer.from(tx.tx, 'base64'));
+      });
+      //console.log(txs);
+      var auth = {};
+      for (let i = txs.length - 1; i >= 0 ; i++) {
+        if(txs[i].operation === "update_account"){
+          if(txs[i].params.key === "name") {
+            auth.name = txs[i].params.value.toString('utf-8');
+            break;
+          };
+        }
+      }
+      return dispatch({ type: types.SET_USER_PROFILE, payload: auth });
+    });
+};
+
 export const EditProfile = (profile) => (dispatch, getState) => {
   return dispatch({ type: types.EDIT_PROFILE, payload: profile });
 };
@@ -62,6 +83,7 @@ export const LogIn = (key) => (dispatch, getState) => {
   //       return result;
   //     });
   //   });
-  dispatch(GetProfile(key.publicKey));
+  //dispatch(GetProfile(key.publicKey));
+  dispatch(SetUserProfile(key.publicKey));
   return dispatch({ type: types.SET_SECRET_KEY, payload: key.secretKey });
 };

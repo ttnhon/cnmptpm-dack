@@ -1,5 +1,5 @@
 import React from 'react';
-//import { logOut } from "../actions/index";
+import { SetUserProfile } from "../store/actions/index";
 import { connect } from 'react-redux';
 import {Redirect} from 'react-router-dom';
 import * as account from './../lib/account.js';
@@ -9,10 +9,15 @@ import history from '../history';
 
 const Header = (props) => {
   const key = account.checkLogged();
-  console.log(key);
+  //console.log(key);
   if(key === false)
   {
       return <Redirect to={"/login"}/>
+  }else{
+    if(props.auth.user === undefined || props.auth.user === null){
+      console.log(props.auth.user);
+      props.SetUserProfile(key.publicKey());
+    }
   }
     return (
       <div className="navbar navbar-default navbar-static-top">
@@ -39,7 +44,7 @@ const Header = (props) => {
                 <ul className="dropdown-menu">
                   <li className="menu-user-acc">
                     <a href={"/"+key.publicKey()+"/tweets"}>
-                      <h4>{props.auth.name ? props.auth.name :"No Name"}</h4>
+                      <h4>{props.auth.user ? props.auth.user.name :"No Name"}</h4>
                     </a>
                   </li>
                   <li role="separator" className="divider"></li>
@@ -70,7 +75,8 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = (dispatch) => ({
-    logout: () => logout()
+    logout: () => logout(),
+    SetUserProfile: (key) => dispatch(SetUserProfile(key))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Header);
