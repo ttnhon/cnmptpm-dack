@@ -15,7 +15,7 @@ const Header = (props) => {
       return <Redirect to={"/login"}/>
   }else{
     if(props.auth.user === undefined || props.auth.user === null){
-      console.log(props.auth.user);
+      //console.log(props.auth.user);
       props.SetUserProfile(key.publicKey());
     }
   }

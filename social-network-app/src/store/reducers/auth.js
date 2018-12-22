@@ -163,6 +163,11 @@ export default (state = {}, action) => {
                 ...state,
                 user: action.payload
             };
+        case types.GET_POST:
+            return {
+                ...state,
+                tweets: action.payload
+            };
         case types.LOGOUT:
             return {};
         default:

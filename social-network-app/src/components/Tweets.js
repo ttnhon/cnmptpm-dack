@@ -40,7 +40,7 @@ class Tweets extends Component {
     }
 
     ClickTweet(index) {
-        history.push('/' + this.props.auth.id + '/tweets/' + index);
+        history.push('/' + this.props.auth.publicKey + '/tweets/' + index);
     }
 
     render() {
@@ -56,19 +56,16 @@ class Tweets extends Component {
                         </a>
                         <div className="media-body">
                             <div className="profile-tweets-user-header">
-                                <a className="profile-tweets-user" href={this.props.auth ? "/" : "#noUserId"}>
+                                <a className="profile-tweets-user" href={this.props.auth ? "/"+ this.props.auth.publicKey+"/tweets" : "#noUserId"}>
                                     <span className="user-name">
                                         <span>{this.props.auth ? this.props.auth.name : null}</span>
-                                    </span>
-                                    <span className="user-acc">
-                                        <span>@{this.props.auth ? this.props.auth.id : null}</span>
                                     </span>
                                     <div className="user-time">
                                         <span>{time}</span>
                                     </div>
                                 </a>
                             </div>
-                            <p>{tweet.content}</p>
+                            <p>{tweet.content.text}</p>
                             <ul className="nav nav-pills nav-pills-custom">
                                 <li><a href="#fake"><i className="far fa-comment"></i></a></li>
                                 <li><a href="#fake"><span className="glyphicon glyphicon-retweet"></span></a></li>

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import '../assets/css/profile.css';
+import '../assets/css/Profile.css';
 import Header from './Header';
 import ProfileFollow from './ProfileFollow';
 import Tweets from './Tweets';
@@ -18,7 +18,7 @@ class Profile extends Component {
         }
     }
     render() {
-        console.log(this.props);
+        //console.log(this.props);
         let auth = this.props.auth === {} ? undefined : this.props.auth;
         let value = "";
         let id = auth.publicKey;

@@ -1,6 +1,7 @@
 import * as types from "./types";
 import { sign, encode, decode } from '../../lib/index';
 import axios from 'axios';
+//import { getPosts } from '../../lib/helper';
 
 export const LogOut = () => (dispatch, getState) => {
   return dispatch({ type: types.LOGOUT });
@@ -39,7 +40,7 @@ export const GetProfile = (key) => (dispatch, getState) => {
         return decode(Buffer.from(tx.tx, 'base64'));
       });
       //console.log(txs);
-      var auth = { balance: 0, sequence: 0 };
+      var auth = { balance: 0, sequence: 0, tweets: [] };
       for (let i = 0; i < txs.length; i++) {
         //console.log(txs[i].operation);
         if(key === txs[i].account) auth.sequence++;
@@ -62,12 +63,26 @@ export const GetProfile = (key) => (dispatch, getState) => {
               auth.balance = auth.balance + txs[i].params.amount;
             }
             break;
+          case "post":
+            //console.log(txs[i].params.content.toString('utf-8'));
+            const vstruct = require('varstruct');
+            const PlainTextContent = vstruct([
+              { name: 'type', type: vstruct.UInt8 },
+              { name: 'text', type: vstruct.VarString(vstruct.UInt16BE) },
+            ]);
+            let one_post = {};
+            one_post = {content: PlainTextContent.decode(txs[i].params.content)};
+            console.log(one_post);
+            auth.tweets = [...auth.tweets, one_post];
+            break;
           default:
             break;
         }
       }
       //console.log(auth);
-      dispatch({ type: types.SET_PUBLIC_KEY, payload: key })
+      //var posts = getPosts(key);
+      dispatch({ type: types.GET_POST, payload: auth.tweets });
+      dispatch({ type: types.SET_PUBLIC_KEY, payload: key });
       return dispatch(EditProfile(auth));
     });
 };
