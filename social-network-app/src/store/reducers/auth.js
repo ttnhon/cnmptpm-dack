@@ -168,6 +168,12 @@ export default (state = {}, action) => {
                 ...state,
                 tweets: action.payload
             };
+        case types.GET_NEWFEED:
+        return {
+            ...state,
+            newfeed: action.payload
+        };
+            break;
         case types.LOGOUT:
             return {};
         default:

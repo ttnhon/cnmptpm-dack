@@ -4,3 +4,4 @@ export const SET_USER_PROFILE = "SET_USER_PROFILE";
 export const SET_SECRET_KEY = "SET_SECRET_KEY";
 export const SET_PUBLIC_KEY = "SET_PUBLIC_KEY";
 export const GET_POST = "GET_POST";
+export const GET_NEWFEED = "GET_NEWFEED";

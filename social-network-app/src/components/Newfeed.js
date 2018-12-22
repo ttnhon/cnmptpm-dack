@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import history from '../history';
+import { GetNewfeed } from '../store/actions/index';
+import * as account from './../lib/account.js';
 
 class Newfeed extends Component {
     getTime(time) {
@@ -43,7 +45,15 @@ class Newfeed extends Component {
         history.push('/' + this.props.auth.publicKey + '/tweets/' + index);
     }
 
+    componentWillMount() {
+        if (this.props.newfeed === undefined || this.props.newfeed === null) {
+            let key = account.checkLogged().publicKey();
+            this.props.GetNewfeed(key);
+        }
+    }
+
     render() {
+        console.log(this.props);
         let inputPost;
         let tweets = this.props.tweets;
         let media = null;
@@ -122,13 +132,14 @@ class Newfeed extends Component {
 const mapStateToProps = state => {
     return {
         auth: state.auth,
-        tweets: state.auth.tweets
+        tweets: state.auth.tweets,
+        newfeed: state.auth.newfeed
     }
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
-
+        GetNewfeed: (key) => dispatch(GetNewfeed(key))
     }
 };
 

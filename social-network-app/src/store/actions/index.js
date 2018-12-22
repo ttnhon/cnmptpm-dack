@@ -1,7 +1,7 @@
 import * as types from "./types";
 import { sign, encode, decode } from '../../lib/index';
 import axios from 'axios';
-//import { getPosts } from '../../lib/helper';
+import { getNewFeed } from '../../lib/helper';
 
 export const LogOut = () => (dispatch, getState) => {
   return dispatch({ type: types.LOGOUT });
@@ -101,4 +101,11 @@ export const LogIn = (key) => (dispatch, getState) => {
   //dispatch(GetProfile(key.publicKey));
   dispatch(SetUserProfile(key.publicKey));
   return dispatch({ type: types.SET_SECRET_KEY, payload: key.secretKey });
+};
+
+export const GetNewfeed = (key) => (dispatch, getState) => {
+  getNewFeed(key).then(res=>{
+    console.log(res);
+    return dispatch({ type: types.GET_NEWFEED, payload: res });
+  });
 };
