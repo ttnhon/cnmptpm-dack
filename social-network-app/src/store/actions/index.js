@@ -16,7 +16,7 @@ export const SetUserProfile = (key) => (dispatch, getState) => {
       });
       //console.log(txs);
       var auth = {};
-      for (let i = txs.length - 1; i >= 0 ; i++) {
+      for (let i = txs.length - 1; i >= 0 ; i--) {
         if(txs[i].operation === "update_account"){
           if(txs[i].params.key === "name") {
             auth.name = txs[i].params.value.toString('utf-8');

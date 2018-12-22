@@ -44,7 +44,7 @@ const Header = (props) => {
                 <ul className="dropdown-menu">
                   <li className="menu-user-acc">
                     <a href={"/"+key.publicKey()+"/tweets"}>
-                      <h4>{props.auth.user ? props.auth.user.name :"No Name"}</h4>
+                      <h4>{props.auth.user ? props.auth.user.name ? props.auth.user.name : "No name" :"No name"}</h4>
                     </a>
                   </li>
                   <li role="separator" className="divider"></li>
