@@ -17,10 +17,10 @@ export const GetProfile = (key) => (dispatch, getState) => {
       const txs = res.data.result.txs.map((tx, index) => {
         return decode(Buffer.from(tx.tx, 'base64'));
       });
-      console.log(txs);
+      //console.log(txs);
       var auth = { balance: 0, sequence: 0 };
       for (let i = 0; i < txs.length; i++) {
-        console.log(txs[i].params.key);
+        //console.log(txs[i].operation);
         if(key === txs[i].account) auth.sequence++;
         switch (txs[i].operation) {
           case "update_account":

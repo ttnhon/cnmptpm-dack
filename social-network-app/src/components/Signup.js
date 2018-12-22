@@ -40,11 +40,10 @@ class Signup extends Component {
                 };
                 res.data.result.txs.map((t, index) => {
                     let result = decode(Buffer.from(t.tx, 'base64'));
-                    if (result.account === key.public) s = s + 1;
+                    if (result.account === key.public) tx.sequence++;
                     return result;
                 });
-                s = s + 1;
-                tx.sequence = s;
+                tx.sequence++;
                 sign(tx, key.secret);
                 //console.log(tx);
                 const txs = '0x' + encode(tx).toString('hex');
