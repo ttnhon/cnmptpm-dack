@@ -1,7 +1,7 @@
 import * as types from "./types";
-import { sign, encode, decode } from '../../lib/index';
+import { decode } from '../../lib/index';
 import axios from 'axios';
-import { getNewFeed } from '../../lib/helper';
+import { getNewFeed, getFollowings } from '../../lib/helper';
 
 export const LogOut = () => (dispatch, getState) => {
   return dispatch({ type: types.LOGOUT });
@@ -72,7 +72,7 @@ export const GetProfile = (key) => (dispatch, getState) => {
             ]);
             let one_post = {};
             one_post = {content: PlainTextContent.decode(txs[i].params.content)};
-            console.log(one_post);
+            //console.log(one_post);
             auth.tweets = [...auth.tweets, one_post];
             break;
           default:
@@ -83,6 +83,7 @@ export const GetProfile = (key) => (dispatch, getState) => {
       //var posts = getPosts(key);
       dispatch({ type: types.GET_POST, payload: auth.tweets });
       dispatch({ type: types.SET_PUBLIC_KEY, payload: key });
+      dispatch(GetFollowing(key));
       return dispatch(EditProfile(auth));
     });
 };
@@ -107,5 +108,12 @@ export const GetNewfeed = (key) => (dispatch, getState) => {
   getNewFeed(key).then(res=>{
     //console.log(res);
     return dispatch({ type: types.GET_NEWFEED, payload: res });
+  });
+};
+
+export const GetFollowing = (key) => (dispatch, getState) => {
+  getFollowings(key).then(res=>{
+    //console.log(res);
+    return dispatch({ type: types.GET_FOLLOWING, payload: res });
   });
 };

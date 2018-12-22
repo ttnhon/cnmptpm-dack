@@ -63,7 +63,7 @@ class ProfileFollow extends Component {
                                                 this.linkClick(id, "following");
                                             }}>
                                                 <span className="profile-nav-label">Following</span>
-                                                <span className="profile-nav-value">{this.props.following ? this.props.following : 0}</span>
+                                                <span className="profile-nav-value">{this.props.following ? this.props.following.length : 0}</span>
                                             </a>
                                         </li>
                                         <li className={value === "followers" ? "profile-nav-item active" : "profile-nav-item"}>
@@ -72,7 +72,7 @@ class ProfileFollow extends Component {
                                                 this.linkClick(id, "followers");
                                             }}>
                                                 <span className="profile-nav-label">Followers</span>
-                                                <span className="profile-nav-value">{this.props.followers ? this.props.followers : 0}</span>
+                                                <span className="profile-nav-value">{this.props.followers ? this.props.followers.length : 0}</span>
                                             </a>
                                         </li>
                                         <li className={value === "lists" ? "profile-nav-item active" : "profile-nav-item"}>
@@ -153,8 +153,8 @@ class ProfileFollow extends Component {
 const mapStateToProps = state => {
     return {
         auth: state.auth,
-        followers: state.followers.users.length,
-        following: state.following.users.length
+        followers: state.followers.users,
+        following: state.following.users
     }
 };
 

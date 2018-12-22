@@ -173,7 +173,6 @@ export default (state = {}, action) => {
             ...state,
             newfeed: action.payload
         };
-            break;
         case types.LOGOUT:
             return {};
         default:

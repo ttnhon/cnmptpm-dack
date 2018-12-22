@@ -1,59 +1,65 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import '../assets/css/Following.css';
+import { GetFollowing } from '../store/actions/index';
+//import history from '../history';
 
 class Following extends Component {
+  componentWillMount() {
+    // if (this.props.following === undefined || this.props.following === null) {
+    //   const params = history.location.pathname.split("/");
+    //   let key = params[1];
+    //   this.props.GetFollowing(key);
+    // }
+  }
   render() {
     const users = this.props.following;
-    //console.log(users);
+    //console.log(this.props);
     return (
       <div>
-        { users && users.map((user,index) => {
+        {users && users.map((user, index) => {
           return (
             <div key={index} className="twPc-div">
-            <i className="twPc-bg twPc-block"></i>
+              <i className="twPc-bg twPc-block"></i>
 
-          <div>
-            <a title={user.name} href={user.url} className="twPc-avatarLink">
-              <img alt={user.name} src={user.avtUrl} className="twPc-avatarImg" />
-            </a>
+              <div>
+                <a title={user.name} href={"/"+user+"/tweets"} className="twPc-avatarLink">
+                  <img alt={user.name} src={user.avtUrl ? user.avtUrl: "https://pbs.twimg.com/profile_images/1068915193982271488/5-DfGVRD_400x400.jpg"} className="twPc-avatarImg" />
+                </a>
 
-            <div className="twPc-divUser">
-              <div className="twPc-divName">
-                <a href={user.url}>{user.name}</a>
+                <div className="twPc-divUser">
+                  <div className="twPc-divName">
+                    <a href={"/"+user+"/tweets"}>{user}</a>
+                  </div>
+                </div>
+
+                <div className="twPc-divStats">
+                  <ul className="twPc-Arrange">
+                    <li className="twPc-ArrangeSizeFit">
+                      <a href={user.url} title={user.tweets + " Tweets"}>
+                        <span className="twPc-StatLabel twPc-block">Tweets</span>
+                        <span className="twPc-StatValue">{user.tweets}</span>
+                      </a>
+                    </li>
+                    <li className="twPc-ArrangeSizeFit">
+                      <a href="#fake" title={user.following + " Following"}>
+                        <span className="twPc-StatLabel twPc-block">Following</span>
+                        <span className="twPc-StatValue">{user.following}</span>
+                      </a>
+                    </li>
+                    <li className="twPc-ArrangeSizeFit">
+                      <a href="#fake" title={user.followers + " Followers"}>
+                        <span className="twPc-StatLabel twPc-block">Followers</span>
+                        <span className="twPc-StatValue">{user.followers}</span>
+                      </a>
+                    </li>
+                  </ul>
+                </div>
               </div>
-              <span>
-                <a href={user.url}>@<span>{user.id}</span></a>
-              </span>
             </div>
-
-            <div className="twPc-divStats">
-              <ul className="twPc-Arrange">
-                <li className="twPc-ArrangeSizeFit">
-                  <a href={user.url} title={user.tweets+" Tweets"}>
-                    <span className="twPc-StatLabel twPc-block">Tweets</span>
-                    <span className="twPc-StatValue">{user.tweets}</span>
-                  </a>
-                </li>
-                <li className="twPc-ArrangeSizeFit">
-                  <a href="#fake" title={user.following+" Following"}>
-                    <span className="twPc-StatLabel twPc-block">Following</span>
-                    <span className="twPc-StatValue">{user.following}</span>
-                  </a>
-                </li>
-                <li className="twPc-ArrangeSizeFit">
-                  <a href="#fake" title={user.followers+" Followers"}>
-                    <span className="twPc-StatLabel twPc-block">Followers</span>
-                    <span className="twPc-StatValue">{user.followers}</span>
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
           )
         })}
-        
+
       </div>
     )
   }
@@ -65,4 +71,10 @@ const mapStatetoProps = (state) => {
   }
 };
 
-export default connect(mapStatetoProps)(Following);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    GetFollowing: (key) => dispatch(GetFollowing(key))
+  }
+};
+
+export default connect(mapStatetoProps, mapDispatchToProps)(Following);

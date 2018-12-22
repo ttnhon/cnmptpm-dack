@@ -64,7 +64,7 @@ class Newfeed extends Component {
         let media = null;
         if (tweets) {
             media = tweets.map((tweet, index) => {
-                let time = this.getTime(tweet.date);
+                //let time = this.getTime(tweet.date);
                 return (
                     <div className="media" href="#toDetail" key={index} onClick={() => this.ClickTweet(index)}>
                         <a className="media-left" href="#fake">
