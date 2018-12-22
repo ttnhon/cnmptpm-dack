@@ -6,7 +6,7 @@ import NewsDetail from './components/NewsDetail';
 import Login from './components/Login';
 import { connect } from 'react-redux';
 import { GetProfile } from './store/actions/index';
-//import Following from './components/Following';
+import Home from './components/Home';
 //import Followers from './components/Followers';
 
 class App extends Component {
@@ -19,6 +19,7 @@ class App extends Component {
     return (
       <Router history={history}>
         <Switch>
+        <Route exact path="/" component={Home} />
           <Route exact path="/login" component={Login} />
           <Route path="/:id/tweets/:index" component={NewsDetail} />
           <Route path="/:id/:value" component={Profile} />
