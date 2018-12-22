@@ -26,6 +26,9 @@ class ProfileFollow extends Component {
     linkClick(id, s) {
         history.push("/" + id + "/" + s);
     }
+    submitPicture() {
+        console.log(document.getElementById("myPicture").value);
+    }
 
     render() {
         let auth = this.props.auth;
@@ -44,6 +47,7 @@ class ProfileFollow extends Component {
                         </div>
                         <div className="container">
                             <div className="profile-canopy-avatar">
+
                                 <img src="https://pbs.twimg.com/profile_images/1068915193982271488/5-DfGVRD_400x400.jpg" alt="" />
                             </div>
                         </div>
@@ -107,6 +111,7 @@ class ProfileFollow extends Component {
                                     {
                                         auth.publicKey === id ?
                                             <div>
+
                                                 <button className="btn btn-edit-profile" onClick={this.openModal}>
                                                     Edit profile
                                         </button>
@@ -123,6 +128,10 @@ class ProfileFollow extends Component {
                                                             <label htmlFor="usr">Name:</label>
                                                             <input className="form-control" type="text" ref={node => inputName = node} defaultValue={this.props.auth.name} />
                                                         </div>
+                                                        <form onSubmit={this.submitPicture}>
+                                                          <input type="file" name="myPicture" id="myPicture" />
+                                                          <input type="submit" />
+                                                        </form>
                                                         <div className="form-group modal-form-item">
                                                             <span className="modal-user-id">@{this.props.auth.id}</span>
                                                         </div>
