@@ -44,19 +44,20 @@ class Newfeed extends Component {
     }
 
     render() {
+        let inputPost;
         let tweets = this.props.tweets;
         let media = null;
         if (tweets) {
             media = tweets.map((tweet, index) => {
                 let time = this.getTime(tweet.date);
                 return (
-                    <div className="media" href="#toDetail" key={index} onClick={()=>this.ClickTweet(index)}>
+                    <div className="media" href="#toDetail" key={index} onClick={() => this.ClickTweet(index)}>
                         <a className="media-left" href="#fake">
                             <img alt="" className="media-object img-circle" src="https://pbs.twimg.com/profile_images/1068915193982271488/5-DfGVRD_400x400.jpg" />
                         </a>
                         <div className="media-body">
                             <div className="profile-tweets-user-header">
-                                <a className="profile-tweets-user" href={this.props.auth ? "/"+ this.props.auth.publicKey+"/tweets" : "#noUserId"}>
+                                <a className="profile-tweets-user" href={this.props.auth ? "/" + this.props.auth.publicKey + "/tweets" : "#noUserId"}>
                                     <span className="user-name">
                                         <span>{this.props.auth ? this.props.auth.name : null}</span>
                                     </span>
@@ -82,11 +83,23 @@ class Newfeed extends Component {
                 <div className="panel panel-info profile-tweets-item">
                     <div className="panel-heading">
                         <div className="media">
-                            <h4 className="media-left">
-                                Tweets
-                                        </h4>
+                            <div className="media-left">
+                                <img src="https://pbs.twimg.com/profile_images/1068915193982271488/5-DfGVRD_400x400.jpg" alt="" />
+                            </div>
                             <div className="media-body">
-                                <a href="#fake">Tweets & replies</a>
+                                <div className="new-post">
+                                    <div className="text-input-wrapper">
+                                        <textarea className="form-control" ref={node => inputPost = node} placeholder="What's happening?"></textarea>
+                                    </div>
+                                    <div className="btn-send-wrapper">
+                                        <button type="button" className="btn btn-default" onClick={(e) => {
+                                            if (inputPost.value.trim()) return;
+                                            console.log("btn send");
+                                        }}>
+                                            <span className="glyphicon glyphicon-send" aria-hidden="true"></span>
+                                    </button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
