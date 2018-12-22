@@ -70,7 +70,8 @@ var getPosts = async(account) =>{
     one_transaction = decode(Buffer.from(tx.tx, 'base64'));
     if(one_transaction.operation == 'post')
     {
-      let one_post = PlainTextContent.decode(one_transaction.params.content);
+      let one_post = [];
+      one_post['content'] = PlainTextContent.decode(one_transaction.params.content);
       one_post['name'] = account.name;
       one_post['height'] = tx.height;
       list_post = list_post.concat(one_post);
