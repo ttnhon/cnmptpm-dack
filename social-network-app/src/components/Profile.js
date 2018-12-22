@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import '../assets/css/profile.css';
+import '../assets/css/Profile.css';
 import Header from './Header';
 import ProfileFollow from './ProfileFollow';
 import Tweets from './Tweets';
@@ -9,19 +9,26 @@ import Followers from './Followers';
 import { GetProfile } from '../store/actions/index';
 
 class Profile extends Component {
-
-    render() {
-        //console.log(this.props);
-        let auth = this.props.auth === {} ? undefined : this.props.auth;
-        let value = "";
+    componentWillMount() {
         let id = "";
-        if (this.props.match.params.value) {
-            value = this.props.match.params.value;
-        }
+
         if (this.props.match.params.id) {
             id = this.props.match.params.id;
             this.props.GetProfile(id);
         }
+    }
+    render() {
+        console.log(this.props);
+        let auth = this.props.auth === {} ? undefined : this.props.auth;
+        let value = "";
+        let id = auth.publicKey;
+        if (this.props.match.params.value) {
+            value = this.props.match.params.value;
+        }
+        // if (this.props.match.params.id) {
+        //     id = this.props.match.params.id;
+        //     this.props.GetProfile(id);
+        // }
         let page = null;
         switch (value) {
             case "tweets":
@@ -160,7 +167,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        GetProfile: (key) => GetProfile(key)
+        GetProfile: (key) => dispatch(GetProfile(key))
     }
 };
 

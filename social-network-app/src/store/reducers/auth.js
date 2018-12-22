@@ -148,11 +148,15 @@ export default (state = {}, action) => {
                 balance: action.payload.balance,
                 sequence: action.payload.sequence
             };
-        case types.SET_KEY:
+        case types.SET_PUBLIC_KEY:
             return {
                 ...state,
-                publicKey: action.payload.publicKey,
-                secretKey: action.payload.secretKey
+                publicKey: action.payload
+            };
+        case types.SET_SECRET_KEY:
+            return {
+                ...state,
+                secretKey: action.payload
             };
         case types.LOGOUT:
             return {};

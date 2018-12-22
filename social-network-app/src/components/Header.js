@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 import {Redirect} from 'react-router-dom';
 import * as account from './../lib/account.js';
 import '../assets/css/Header.css';
+import { logout } from '../lib/account';
+import history from '../history';
 
 const Header = (props) => {
   const key = account.checkLogged();
@@ -37,13 +39,17 @@ const Header = (props) => {
                   <li className="menu-user-acc">
                     <a href="#fake">
                       <h4>{props.auth.name}</h4>
-                      <h5>@{props.auth.id}</h5>
                     </a>
                   </li>
                   <li role="separator" className="divider"></li>
                   <li className="menu-user-profile"><a href="/">Profile</a></li>
                   <li role="separator" className="divider"></li>
-                  <li className="menu-user-logout"><a href="#fake">Log out</a></li>
+                  <li className="menu-user-logout"><a href="#fake" onClick={(e) => {
+                    e.preventDefault();
+                    props.logout();
+                    history.push('/login');
+                  }
+                  }>Log out</a></li>
                 </ul>
               </div>
               <button className="btn btn-primary" type="submit" aria-label="Left Align">
@@ -63,7 +69,7 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = (dispatch) => ({
-    logout: () => dispatch()
+    logout: () => logout()
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Header);

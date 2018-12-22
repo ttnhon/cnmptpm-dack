@@ -46,6 +46,7 @@ export const GetProfile = (key) => (dispatch, getState) => {
         }
       }
       //console.log(auth);
+      dispatch({ type: types.SET_PUBLIC_KEY, payload: key })
       return dispatch(EditProfile(auth));
     });
 };
@@ -62,5 +63,5 @@ export const LogIn = (key) => (dispatch, getState) => {
   //     });
   //   });
   dispatch(GetProfile(key.publicKey));
-  return dispatch({ type: types.SET_KEY, payload: key });
+  return dispatch({ type: types.SET_SECRET_KEY, payload: key.secretKey });
 };
