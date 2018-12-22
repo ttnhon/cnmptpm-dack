@@ -79,27 +79,31 @@ var getPosts = async(account) =>{
      one_post['name'] = name;
      one_post['content'] = PlainTextContent.decode(one_transaction.params.content);
      one_post['height'] = tx.height;
-     console.log(one_post);
-     list_post = list_post.concat(one_post);
+     
+     list_post.push(one_post);
    }
  });
  return list_post;
 };
 
 var getNewFeed = async(account) => {
-   const followings = await getFollowings(account);
-   if(followings.height <= 0)
-   return false;
-   console.log(followings)
-   var all_posts = [];
-   Promise.all(followings.map(async(one_account) => {
-     
-     let posts = await getPosts(one_account);
-     if(posts.length > 0)
-       all_posts = all_posts.concat(posts);
-   }));
+  const followings = await getFollowings(account);
+  if(followings.height <= 0)
+    return false;
 
-   return await all_posts;
+  var all_posts = [];
+  await Promise.all(followings.map(async(one_account) => {
+    
+    let posts = await getPosts(one_account);
+    if(posts.length > 0)
+    {
+      posts.map(one_post =>{
+        all_posts.push(one_post);
+      })
+    }
+  }));
+
+  return all_posts;
 };
 
 /* Update account FOLLOWINGS Transaction */
