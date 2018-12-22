@@ -9,6 +9,7 @@ import history from '../history';
 
 const Header = (props) => {
   const key = account.checkLogged();
+  console.log(key);
   if(key === false)
   {
       return <Redirect to={"/login"}/>
@@ -37,12 +38,12 @@ const Header = (props) => {
                 <button className="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img className="img-circle" src={props.auth.avtUrl ? props.auth.avtUrl : "https://pbs.twimg.com/profile_images/1068915193982271488/5-DfGVRD_400x400.jpg"} alt="" /></button>
                 <ul className="dropdown-menu">
                   <li className="menu-user-acc">
-                    <a href="#fake">
-                      <h4>{props.auth.name}</h4>
+                    <a href={"/"+key.publicKey()+"/tweets"}>
+                      <h4>{props.auth.name ? props.auth.name :"No Name"}</h4>
                     </a>
                   </li>
                   <li role="separator" className="divider"></li>
-                  <li className="menu-user-profile"><a href="/">Profile</a></li>
+                  <li className="menu-user-profile"><a href={"/"+key.publicKey()+"/tweets"}>Profile</a></li>
                   <li role="separator" className="divider"></li>
                   <li className="menu-user-logout"><a href="#fake" onClick={(e) => {
                     e.preventDefault();

@@ -60,7 +60,7 @@ class Profile extends Component {
                             <div className="panel panel-default">
                                 <div className="panel-body">
                                     <h2 className="profile-info-name">
-                                        <a href="/">{auth ? auth.name : ""}</a>
+                                        <a href={"/"+id+"/tweets"}>{auth.name ? auth.name : "No Name"}</a>
                                     </h2>
                                     <h5 className="profile-info-bio">
                                         <span>Balance: {auth.balance}</span>
