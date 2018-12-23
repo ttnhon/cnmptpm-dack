@@ -60,6 +60,53 @@ var getFollowings = async (account) => {
   return arr_following;
 };
 
+var getFullInfo = async (account) => {
+  var result = await axios('https://komodo.forest.network/tx_search?query=%22account=%27' + account + '%27%22');
+  const res = result.data;
+  console.log('thuc hien get fullinfo');
+
+  var info = [];
+  info['account'] = account;
+  info['name'] = 'No Name';
+  info['img_url'] = 'Not Set';
+
+  res.result.txs.map((tx) => {
+    let one_transaction = decode(Buffer.from(tx.tx, 'base64'));
+    if (one_transaction.operation == 'update_account') {
+      switch (one_transaction.params.key) {
+        case 'name':
+          info['name'] = one_transaction.params.value.toString('utf-8');
+        break;
+
+        case 'picture':
+          info['name'] = one_transaction.params.value;
+        break;
+
+        default:
+          break;
+      }
+    }
+  });
+
+  return info;
+};
+
+var getInfoFollowings = async (account) => {
+  const followings = await getFollowings(account);
+  if (followings.height <= 0)
+    return [];
+
+  var all_infos_followings = [];
+  await Promise.all(followings.map(async (one_account) => {
+    let one_info_followings = await getFullInfo(one_account);
+    all_infos_followings.push(one_info_followings);
+  }));
+
+  all_infos_followings.reverse();
+  return all_infos_followings;
+};
+
+
 var getPosts = async (account) => {
   const PlainTextContent = vstruct([
     { name: 'type', type: vstruct.UInt8 },
@@ -200,4 +247,4 @@ var doTransaction = async (tx, secret_key) => {
   const res = await axios('https://komodo.forest.network/broadcast_tx_commit?tx=' + txs);
   return res.data;
 };
-export { sendMoney, getFollowings, getPosts, getNewFeed, follow, unFollow, calcBalance, doTransaction };
+export { sendMoney, getFollowings, getPosts, getNewFeed, follow, unFollow, calcBalance, doTransaction, getInfoFollowings };
