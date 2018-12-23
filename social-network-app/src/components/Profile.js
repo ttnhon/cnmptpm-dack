@@ -14,7 +14,7 @@ class Profile extends Component {
 
         if (this.props.match.params.id) {
             id = this.props.match.params.id;
-            this.props.GetProfile(id);
+            this.props.GetProfile(id, 1, { balance: 0, sequence: 0, tweets: [] });
         }
     }
     render() {
@@ -25,10 +25,13 @@ class Profile extends Component {
         if (this.props.match.params.value) {
             value = this.props.match.params.value;
         }
-        // if (this.props.match.params.id) {
-        //     id = this.props.match.params.id;
-        //     this.props.GetProfile(id);
-        // }
+        //console.log(id);
+        if(auth.publicKey){
+            if (this.props.match.params.id !== auth.publicKey) {
+                id = this.props.match.params.id;
+                this.props.GetProfile(id, 1, { balance: 0, sequence: 0, tweets: [] });
+            }
+        }
         let page = null;
         switch (value) {
             case "tweets":
@@ -167,7 +170,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        GetProfile: (key) => dispatch(GetProfile(key))
+        GetProfile: (key, page, result) => dispatch(GetProfile(key, page, result))
     }
 };
 

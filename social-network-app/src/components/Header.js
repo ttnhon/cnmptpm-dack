@@ -25,6 +25,7 @@ closeModal() {
   this.setState({ open: false });
 }
   render() {
+    let inputSearch;
     const key = account.checkLogged();
     //console.log(key);
     if (key === false) {
@@ -33,7 +34,7 @@ closeModal() {
     } else {
       if (this.props.auth.user === undefined || this.props.auth.user === null) {
         //console.log(this.props.auth.user);
-        this.props.SetUserProfile(key.publicKey());
+        this.props.SetUserProfile(key.publicKey(), 1, { sequence: 0 });
       }
     }
     return (
@@ -53,8 +54,18 @@ closeModal() {
             </ul>
             <div className="navbar-form navbar-right">
               <div className="form-group has-feedback">
-                <input type="text" className="form-control-nav" id="search" aria-describedby="search1" />
-                <span className="glyphicon glyphicon-search form-control-feedback" aria-hidden="true"></span>
+                <input type="text" className="form-control-nav" id="search" ref={node => inputSearch = node} aria-describedby="search1" />
+                <button className="btn btn-primary btn-search" onClick={(e)=>{
+                  if(!inputSearch.value.trim()) return;
+                  //console.log(inputSearch.value);
+                  const { Keypair } = require('stellar-base');
+                  try {
+                    const key = Keypair.fromPublicKey(inputSearch.value);
+                    return history.push("/"+inputSearch.value+"/tweets")
+                  } catch (error) {
+                    alert("Nhập sai key");
+                  }
+                }}><span className="glyphicon glyphicon-search form-control-feedback"></span></button>
               </div>
               <div className="dropdown user-dropdown">
                 <button className="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img className="img-circle" src={this.props.auth.user ? this.props.auth.user.picture ? ('data:image/jpeg;base64,' + this.props.auth.user.picture) : "/default_profile_icon.png" : "/default_profile_icon.png"} alt="" /></button>
@@ -111,7 +122,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = (dispatch) => ({
   logout: () => logout(),
-  SetUserProfile: (key) => dispatch(SetUserProfile(key))
+  SetUserProfile: (key, page, result) => dispatch(SetUserProfile(key, page, result))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Header);

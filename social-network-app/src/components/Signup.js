@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import '../assets/css/Following.css';
-import { LogIn, AddSequence } from '../store/actions/index';
-import history from '../history';
-import { sign, encode } from '../lib/index';
-import axios from 'axios';
+import { AddSequence } from '../store/actions/index';
+//import history from '../history';
+//import { sign, encode } from '../lib/index';
+//import axios from 'axios';
 import * as account from '../lib/account';
 import { doTransaction } from '../lib/helper';
 
@@ -82,7 +82,6 @@ const mapStatetoProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        logIn: (key) => dispatch(LogIn(key)),
         AddSequence: () => dispatch(AddSequence())
     }
 };

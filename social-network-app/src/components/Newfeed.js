@@ -137,7 +137,7 @@ class Newfeed extends Component {
                                                 });
                                             });
                                             inputPost.value = "";
-                                        }).bind(this)}>
+                                        })}>
                                             <span className="glyphicon glyphicon-send" aria-hidden="true"></span>
                                     </button>
                                     </div>

@@ -88,7 +88,7 @@
 .navbar-default .navbar-right .form-signup{
     text-align: center;
     font-size: 15px;
-    margin-left: 20px;
+    margin-left: 10px;
 }
 
 .navbar-default .navbar-right .modal-close{
@@ -109,4 +109,15 @@
 .sign-up .key div{
     padding: 5px 20px;
     text-align: left;
+}
+
+.btn-search{
+    margin-left: 0!important;
+}
+
+.btn-search .form-control-feedback{
+    position: relative;
+    height: auto;
+    width: auto;
+    line-height: 11px;
 }

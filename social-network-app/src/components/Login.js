@@ -40,7 +40,7 @@ class Login extends Component {
     }
     render() {
         const key = account.checkLogged();
-        if(key != false)
+        if(key !== false)
         {
             return <Redirect to={"/" + key.publicKey() + "/tweets"}/>
         }

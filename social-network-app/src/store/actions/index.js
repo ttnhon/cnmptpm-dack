@@ -9,15 +9,17 @@ export const LogOut = () => (dispatch, getState) => {
   return dispatch({ type: types.LOGOUT });
 };
 
-export const SetUserProfile = (key) => (dispatch, getState) => {
-  axios.get('https://komodo.forest.network/tx_search?query="account=\'' + key + '\'"')
+export const SetUserProfile = (key, page, result) => (dispatch, getState) => {
+  axios.get('https://komodo.forest.network/tx_search?query="account=\'' + key + '\'"&page="'+page+'"')
     .then(res => {
       //console.log(res);
+      let end = false;
+      if(page * 30 >= res.data.result.total_count) end = true;
       const txs = res.data.result.txs.map((tx, index) => {
         return decode(Buffer.from(tx.tx, 'base64'));
       });
       //console.log(txs);
-      var auth = { sequence: 0 };
+      var auth = result;
       for (let i = 0; i < txs.length; i++) {
         if (key === txs[i].account) {
           //console.log(i);
@@ -37,16 +39,19 @@ export const SetUserProfile = (key) => (dispatch, getState) => {
           };
         }
       }
-      
-      if (auth.followings) {
-        const base32 = require('base32.js');
-        auth.followings = auth.followings.map(value => (base32.encode(value)));
+      if(end){
+        if (auth.followings) {
+          const base32 = require('base32.js');
+          auth.followings = auth.followings.map(value => (base32.encode(value)));
+        }
+        if(auth.picture){
+          auth.picture = Buffer.from(auth.picture).toString('base64');
+        }
+        //console.log(auth);
+        return dispatch({ type: types.SET_USER_PROFILE, payload: auth });
+      }else{
+        return dispatch(SetUserProfile(key, page + 1, auth))
       }
-      if(auth.picture){
-        auth.picture = Buffer.from(auth.picture).toString('base64');
-      }
-      //console.log(auth);
-      return dispatch({ type: types.SET_USER_PROFILE, payload: auth });
     });
 };
 
@@ -54,15 +59,22 @@ export const EditProfile = (profile) => (dispatch, getState) => {
   return dispatch({ type: types.EDIT_PROFILE, payload: profile });
 };
 
-export const GetProfile = (key) => (dispatch, getState) => {
-  axios.get('https://komodo.forest.network/tx_search?query="account=\'' + key + '\'"')
+export const GetProfile = (key, page, result) => (dispatch, getState) => {
+  axios.get('https://komodo.forest.network/tx_search?query="account=\'' + key + '\'"&page="'+page+'"')
     .then(res => {
-      //console.log(res);
+      //console.log(page);
+      let end = false;
+      //console.log(page);
+      //console.log(res.data.result.total_count);
+      if(page * 30 >= res.data.result.total_count) end = true;
+      //console.log(end);
       const txs = res.data.result.txs.map((tx, index) => {
         return decode(Buffer.from(tx.tx, 'base64'));
       });
       //console.log(txs);
-      var auth = { balance: 0, sequence: 0, tweets: [] };
+      var auth = result;
+      if(res.data.result.total_count == 0) auth["name"] = "Account not register";
+      //console.log(auth);
       for (let i = 0; i < txs.length; i++) {
         //console.log(txs[i]);
         if (key === txs[i].account) auth.sequence++;
@@ -95,23 +107,26 @@ export const GetProfile = (key) => (dispatch, getState) => {
               { name: 'text', type: vstruct.VarString(vstruct.UInt16BE) },
             ]);
             let one_post = {};
-            one_post = { content: PlainTextContent.decode(txs[i].params.content) };
+            one_post = { content: PlainTextContent.decode(txs[i].params.content), height: res.data.result.txs[i].height };
             //console.log(one_post);
-            auth.tweets = [...auth.tweets, one_post];
+            auth.tweets = [one_post].concat(auth.tweets);
             break;
           default:
             break;
         }
       }
-      if(auth.picture){
-        auth.picture = Buffer.from(auth.picture).toString('base64');
-      }
-      //console.log(auth);
       //var posts = getPosts(key);
-      dispatch({ type: types.GET_POST, payload: auth.tweets });
       dispatch({ type: types.SET_PUBLIC_KEY, payload: key });
-      dispatch(GetFollowing(key));
-      return dispatch(EditProfile(auth));
+      if(end) {
+        if(auth.picture){
+          auth.picture = Buffer.from(auth.picture).toString('base64');
+        }
+        //console.log(auth);
+        dispatch({ type: types.GET_POST, payload: auth.tweets });
+        dispatch(GetFollowing(key));
+        return dispatch(EditProfile(auth));
+      }
+      return dispatch(GetProfile(key, page + 1, auth));
     });
 };
 
@@ -127,7 +142,7 @@ export const LogIn = (key) => (dispatch, getState) => {
   //     });
   //   });
   //dispatch(GetProfile(key.publicKey));
-  dispatch(SetUserProfile(key.publicKey));
+  dispatch(SetUserProfile(key.publicKey, 1, { sequence: 0 }));
   return dispatch({ type: types.SET_SECRET_KEY, payload: key.secretKey });
 };
 

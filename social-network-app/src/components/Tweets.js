@@ -46,10 +46,10 @@ class Tweets extends Component {
     render() {
         let tweets = this.props.tweets;
         let media = null;
-        //console.log(this.props);
+        console.log(tweets);
         if (tweets) {
             media = tweets.map((tweet, index) => {
-                let time = this.getTime(tweet.date);
+                //let time = this.getTime(tweet.date);
                 return (
                     <div className="media" href="#toDetail" key={index} onClick={()=>this.ClickTweet(index)}>
                         <a className="media-left" href="#fake">
@@ -62,11 +62,11 @@ class Tweets extends Component {
                                         <span>{this.props.auth ? this.props.auth.name ? this.props.auth.name : "No name" : null}</span>
                                     </span>
                                     <div className="user-time">
-                                        <span>{time}</span>
+                                        <span>{tweet.height}</span>
                                     </div>
                                 </a>
                             </div>
-                            <p>{tweet.content.text}</p>
+                            <p>{tweet ? tweet.content ? tweet.content.text : null : null}</p>
                             <ul className="nav nav-pills nav-pills-custom">
                                 <li><a href="#fake"><i className="far fa-comment"></i></a></li>
                                 <li><a href="#fake"><span className="glyphicon glyphicon-retweet"></span></a></li>
