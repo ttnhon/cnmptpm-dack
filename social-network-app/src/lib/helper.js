@@ -263,7 +263,7 @@ var calcBalance = async (account) => {
   return balance;
 }
 
-var postPlainText = async(account, text, sequence) =>{
+var postPlainText = async(text, sequence) =>{
   const PlainTextContent = vstruct([
     { name: 'type', type: vstruct.UInt8 },
     { name: 'text', type: vstruct.VarString(vstruct.UInt16BE) },
@@ -271,7 +271,7 @@ var postPlainText = async(account, text, sequence) =>{
   var ct = PlainTextContent.encode({type: 1, text: text});
   var tx = {
     version: 1,
-    account: account,
+    account: new Buffer(35),
     sequence: sequence,
     memo: Buffer.alloc(0),
     operation: 'post',

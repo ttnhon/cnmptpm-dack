@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import history from '../history';
 import { GetNewfeed } from '../store/actions/index';
 import * as account from './../lib/account.js';
+import { postPlainText, doTransaction } from './../lib/helper';
 
 class Newfeed extends Component {
     getTime(time) {
@@ -58,6 +59,8 @@ class Newfeed extends Component {
 
     render() {
         //console.log(this.props);
+        const auth = this.props.auth;
+        console.log(auth);
         let inputPost;
         let tweets = this.props.newfeed;
         //console.log(tweets);
@@ -111,8 +114,13 @@ class Newfeed extends Component {
                                     </div>
                                     <div className="btn-send-wrapper">
                                         <button type="button" className="btn btn-default" onClick={(e) => {
-                                            if (inputPost.value.trim()) return;
-                                            console.log("btn send");
+                                            if (!inputPost.value.trim()) return;
+                                            let seq = auth.sequence;
+                                            seq++;
+                                            const secretKey = account.checkLogged().secret();
+                                            console.log(seq);
+                                            let tx = postPlainText(inputPost.value, seq);
+                                            //doTransaction(tx,secretKey);
                                         }}>
                                             <span className="glyphicon glyphicon-send" aria-hidden="true"></span>
                                     </button>
