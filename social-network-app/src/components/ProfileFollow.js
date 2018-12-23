@@ -45,7 +45,7 @@ class ProfileFollow extends Component {
 
     render() {
         let auth = this.props.auth;
-        //console.log(auth);
+        console.log(auth);
         let value = this.props.value;
         let id = this.props.id;
         let inputName;

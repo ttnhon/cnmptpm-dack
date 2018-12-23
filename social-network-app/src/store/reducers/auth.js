@@ -161,6 +161,13 @@ export default (state = {}, action) => {
                 ...state,
                 user: action.payload
             };
+        case types.ADD_SEQUENCE:
+            return {
+                ...state,
+                user: {...state.user,
+                    sequence: state.user.sequence + 1
+                }
+            };
         case types.ADD_USER_FOLLOW:
             return {
                 ...state,
