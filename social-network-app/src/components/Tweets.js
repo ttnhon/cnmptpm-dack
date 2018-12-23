@@ -46,6 +46,7 @@ class Tweets extends Component {
     render() {
         let tweets = this.props.tweets;
         let media = null;
+        //console.log(this.props);
         if (tweets) {
             media = tweets.map((tweet, index) => {
                 let time = this.getTime(tweet.date);
@@ -58,7 +59,7 @@ class Tweets extends Component {
                             <div className="profile-tweets-user-header">
                                 <a className="profile-tweets-user" href={this.props.auth ? "/"+ this.props.auth.publicKey+"/tweets" : "#noUserId"}>
                                     <span className="user-name">
-                                        <span>{this.props.auth ? this.props.auth.name : null}</span>
+                                        <span>{this.props.auth ? this.props.auth.name ? this.props.auth.name : "No name" : null}</span>
                                     </span>
                                     <div className="user-time">
                                         <span>{time}</span>

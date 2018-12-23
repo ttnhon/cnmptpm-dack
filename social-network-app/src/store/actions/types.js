@@ -8,3 +8,4 @@ export const GET_NEWFEED = "GET_NEWFEED";
 export const GET_FOLLOWING = "GET_FOLLOWING";
 export const ADD_USER_FOLLOW = "ADD_USER_FOLLOW";
 export const DELETE_USER_FOLLOW = "DELETE_USER_FOLLOW";
+export const ADD_SEQUENCE = "ADD_SEQUENCE";

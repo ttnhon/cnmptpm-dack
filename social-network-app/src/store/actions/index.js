@@ -30,17 +30,20 @@ export const SetUserProfile = (key) => (dispatch, getState) => {
             ]);
             auth.followings = Followings.decode(txs[i].params.value).addresses;
           };
-          if (txs[i].params.key === "name") {
+          if (txs[i].params.key === "picture") {
             auth.picture = txs[i].params.value;
           };
         }
       }
-      const base32 = require('base32.js');
-
+      
       if (auth.followings) {
+        const base32 = require('base32.js');
         auth.followings = auth.followings.map(value => (base32.encode(value)));
       }
-      console.log(auth);
+      if(auth.picture){
+        auth.picture = Buffer.from(auth.picture).toString('base64');
+      }
+      //console.log(auth);
       return dispatch({ type: types.SET_USER_PROFILE, payload: auth });
     });
 };
@@ -146,6 +149,7 @@ export const Follow = (key, isFollow) => (dispatch, getState) => {
     unFollow(acc.publicKey(), key, getState().auth.user.sequence + 1).then(res => {
       doTransaction(res, acc.secret()).then(res => {
         if (res) {
+          dispatch(AddSequence());
           return dispatch({ type: types.DELETE_USER_FOLLOW, payload: key });
         }
       })
@@ -154,9 +158,14 @@ export const Follow = (key, isFollow) => (dispatch, getState) => {
     follow(acc.publicKey(), key, getState().auth.user.sequence + 1).then(res => {
       doTransaction(res, acc.secret()).then(res => {
         if (res) {
+          dispatch(AddSequence());
           return dispatch({ type: types.ADD_USER_FOLLOW, payload: key });
         }
       })
     })
   }
 };
+
+export const AddSequence = () => (dispatch, getState) => {
+  return dispatch({ type: types.ADD_SEQUENCE });
+}
