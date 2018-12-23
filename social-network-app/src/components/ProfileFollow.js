@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Popup from "reactjs-popup";
 //import DatePicker from 'react-date-picker';
-import { EditProfile } from '../store/actions/index';
+import { EditProfile, Follow } from '../store/actions/index';
 import history from '../history';
-import * as account from './../lib/account.js';
+import * as account from '../lib/account';
 import { updateName } from './../lib/helper';
 
 class ProfileFollow extends Component {
@@ -45,11 +45,19 @@ class ProfileFollow extends Component {
 
     render() {
         let auth = this.props.auth;
-
+        //console.log(auth);
         let value = this.props.value;
         let id = this.props.id;
         let inputName;
         let isUser = account.checkLogged().publicKey() === auth.publicKey;
+        let isFollow = null;
+        if(!isUser){
+            if(auth.user){
+                if(auth.user.followings){
+                    isFollow = auth.user.followings.indexOf(auth.publicKey) !== -1;
+                }
+            }
+        }
         return (
             <div className="profile-canopy">
                 <div className="profile-canopy-inner">
@@ -161,7 +169,12 @@ class ProfileFollow extends Component {
                                                     </div>
                                                 </Popup>
                                             </div>
-                                            : null
+                                            : isFollow === null ? null : <button className="btn btn-edit-profile" onClick={((e)=>{
+                                                if(isFollow === null) return;
+                                                this.props.follow(auth.publicKey, isFollow);
+                                            }).bind(this)}>
+                                            {isFollow ? "Unfollow" : "Follow"}
+                                            </button>
                                     }
                                 </div>
                             </div>
@@ -183,7 +196,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        editProfile: (profile) => dispatch(EditProfile(profile))
+        editProfile: (profile) => dispatch(EditProfile(profile)),
+        follow: (key, isFollow) => dispatch(Follow(key, isFollow))
     }
 };
 

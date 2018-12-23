@@ -78,11 +78,12 @@ div.panel-heading{
 }
 
 .profile-canopy-header .container .profile-canopy-avatar{
-	border: 5px solid #fff;
 	border-radius: 50%;
+	min-width: 100%;
 }
 
 .profile-canopy-avatar img{
+	border: 5px solid #fff;
 	border-radius: 50%;
 	width: 100%;
 }

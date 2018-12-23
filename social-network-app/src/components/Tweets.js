@@ -52,7 +52,7 @@ class Tweets extends Component {
                 return (
                     <div className="media" href="#toDetail" key={index} onClick={()=>this.ClickTweet(index)}>
                         <a className="media-left" href="#fake">
-                            <img alt="" className="media-object img-circle" src="https://pbs.twimg.com/profile_images/1068915193982271488/5-DfGVRD_400x400.jpg" />
+                            <img alt="" className="media-object img-circle" src={this.props.auth ? this.props.auth.picture ? ('data:image/jpeg;base64,' + this.props.auth.picture) : "/default_profile_icon.png" : "/default_profile_icon.png"} />
                         </a>
                         <div className="media-body">
                             <div className="profile-tweets-user-header">
