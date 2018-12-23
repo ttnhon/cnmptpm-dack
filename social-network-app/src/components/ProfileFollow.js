@@ -5,6 +5,7 @@ import Popup from "reactjs-popup";
 import { EditProfile } from '../store/actions/index';
 import history from '../history';
 import * as account from './../lib/account.js';
+import { updateName } from './../lib/helper';
 
 class ProfileFollow extends Component {
     constructor(props) {
@@ -14,6 +15,7 @@ class ProfileFollow extends Component {
         this.closeModal = this.closeModal.bind(this);
         this.onChange = this.onChange.bind(this);
         this.linkClick = this.linkClick.bind(this);
+        this.submitPicture = this.submitPicture.bind(this);
     }
     openModal() {
         this.setState({ open: true });
@@ -28,11 +30,22 @@ class ProfileFollow extends Component {
         history.push("/" + id + "/" + s);
     }
     submitPicture() {
-        console.log(document.getElementById("myPicture").value);
+        const auth = this.props.auth;
+        let seq = auth.sequence;
+        const secretKey = account.checkLogged();
+        
+        // const input = document.getElementById("myPicture");
+        // const file = input.files[0];
+        // const fr = new FileReader();
+        // //fr.onload = receivedText;
+        //   //fr.readAsText(file);
+        // fr.readAsText(file);
+        //console.log(fr);
     }
 
     render() {
         let auth = this.props.auth;
+
         let value = this.props.value;
         let id = this.props.id;
         let inputName;
@@ -114,12 +127,12 @@ class ProfileFollow extends Component {
                                                         </h3>
                                                         <div className="form-group modal-form-item">
                                                             <label htmlFor="usr">Name:</label>
-                                                            <input className="form-control" type="text" ref={node => inputName = node} defaultValue={this.props.auth.name} />
+                                                            <input className="form-control" type="text" ref={node => inputName = node} defaultValue={this.props.auth.name} id="txtName" />
                                                         </div>
 
-                                                        <form onSubmit={this.submitPicture}>
-                                                            <input type="file" name="myPicture" id="myPicture" />
-                                                            <input type="submit" />
+                                                        <form action="#" onSubmit={this.submitPicture}>
+                                                            <label>Change your avatar: </label><input type="file" name="myPicture" id="myPicture" />
+                                                            <input type="submit" className="btn btn-primary" />
                                                         </form>
                                                         <div className="modal-form-btn-group">
                                                             <button className="btn btn-default" onClick={this.closeModal}>Cancel</button>
@@ -127,11 +140,21 @@ class ProfileFollow extends Component {
                                                                 if (!inputName.value.trim()) {
                                                                     return;
                                                                 }
+                                                                
+                                                                console.log(inputName.value);
+                                                                
+                                                                let seq = auth.sequence;
+                                                                seq++;
+                                                                const secretKey = account.checkLogged().secret();
+                                                                updateName(secretKey,seq,inputName.value);
                                                                 let profile = {
-                                                                    name: inputName.value
+                                                                    name: inputName.value,
+                                                                    sequence: seq,
+                                                                    balance: auth.balance
                                                                 };
                                                                 this.props.editProfile(profile);
-                                                                this.closeModal();
+                                                                //this.closeModal();
+
                                                             }
                                                             }>Save change</button>
                                                         </div>
