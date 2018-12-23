@@ -149,7 +149,7 @@ export const Follow = (key, isFollow) => (dispatch, getState) => {
     unFollow(acc.publicKey(), key, getState().auth.user.sequence + 1).then(res => {
       doTransaction(res, acc.secret()).then(res => {
         if (res) {
-          dispatch({ type: types.ADD_SEQUENCE });
+          dispatch(AddSequence());
           return dispatch({ type: types.DELETE_USER_FOLLOW, payload: key });
         }
       })
@@ -158,10 +158,14 @@ export const Follow = (key, isFollow) => (dispatch, getState) => {
     follow(acc.publicKey(), key, getState().auth.user.sequence + 1).then(res => {
       doTransaction(res, acc.secret()).then(res => {
         if (res) {
-          dispatch({ type: types.ADD_SEQUENCE });
+          dispatch(AddSequence());
           return dispatch({ type: types.ADD_USER_FOLLOW, payload: key });
         }
       })
     })
   }
 };
+
+export const AddSequence = () => (dispatch, getState) => {
+  return dispatch({ type: types.ADD_SEQUENCE });
+}
