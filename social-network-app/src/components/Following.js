@@ -24,31 +24,31 @@ class Following extends Component {
 
               <div>
                 <a title={user.name} href={"/"+user+"/tweets"} className="twPc-avatarLink">
-                  <img alt={user.name} src={user.avtUrl ? user.avtUrl: "https://pbs.twimg.com/profile_images/1068915193982271488/5-DfGVRD_400x400.jpg"} className="twPc-avatarImg" />
+                  <img alt={user.name} src={user.img_url !=="Not Set" ? user.img_url: "https://pbs.twimg.com/profile_images/1068915193982271488/5-DfGVRD_400x400.jpg"} className="twPc-avatarImg" />
                 </a>
 
                 <div className="twPc-divUser">
                   <div className="twPc-divName">
-                    <a href={"/"+user+"/tweets"}>{user}</a>
+                    <a href={"/"+user.account+"/tweets"}>{user.name}</a>
                   </div>
                 </div>
 
                 <div className="twPc-divStats">
                   <ul className="twPc-Arrange">
                     <li className="twPc-ArrangeSizeFit">
-                      <a href={user.url} title={user.tweets + " Tweets"}>
+                      <a href={"/"+user.account+"/tweets"} title={user.tweets + " Tweets"}>
                         <span className="twPc-StatLabel twPc-block">Tweets</span>
                         <span className="twPc-StatValue">{user.tweets}</span>
                       </a>
                     </li>
                     <li className="twPc-ArrangeSizeFit">
-                      <a href="#fake" title={user.following + " Following"}>
+                      <a href={"/"+user.account+"/following"} title={user.following + " Following"}>
                         <span className="twPc-StatLabel twPc-block">Following</span>
                         <span className="twPc-StatValue">{user.following}</span>
                       </a>
                     </li>
                     <li className="twPc-ArrangeSizeFit">
-                      <a href="#fake" title={user.followers + " Followers"}>
+                      <a href={"/"+user.account+"/followers"} title={user.followers + " Followers"}>
                         <span className="twPc-StatLabel twPc-block">Followers</span>
                         <span className="twPc-StatValue">{user.followers}</span>
                       </a>

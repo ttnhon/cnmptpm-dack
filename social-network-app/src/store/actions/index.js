@@ -1,7 +1,7 @@
 import * as types from "./types";
 import { decode } from '../../lib/index';
 import axios from 'axios';
-import { getNewFeed, getFollowings } from '../../lib/helper';
+import { getNewFeed, getInfoFollowings } from '../../lib/helper';
 
 export const LogOut = () => (dispatch, getState) => {
   return dispatch({ type: types.LOGOUT });
@@ -112,8 +112,8 @@ export const GetNewfeed = (key) => (dispatch, getState) => {
 };
 
 export const GetFollowing = (key) => (dispatch, getState) => {
-  getFollowings(key).then(res=>{
-    //console.log(res);
+  getInfoFollowings(key).then(res=>{
+    console.log(res);
     return dispatch({ type: types.GET_FOLLOWING, payload: res });
   });
 };
