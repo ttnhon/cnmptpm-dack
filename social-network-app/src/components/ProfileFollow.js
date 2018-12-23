@@ -45,16 +45,19 @@ class ProfileFollow extends Component {
 
     render() {
         let auth = this.props.auth;
-        console.log(auth);
+        //console.log(auth);
         let value = this.props.value;
         let id = this.props.id;
         let inputName;
         let isUser = account.checkLogged().publicKey() === auth.publicKey;
         let isFollow = null;
         if(!isUser){
+            //console.log(auth.user);
             if(auth.user){
                 if(auth.user.followings){
                     isFollow = auth.user.followings.indexOf(auth.publicKey) !== -1;
+                }else{
+                    isFollow = false;
                 }
             }
         }
@@ -172,7 +175,7 @@ class ProfileFollow extends Component {
                                             : isFollow === null ? null : <button className="btn btn-edit-profile" onClick={((e)=>{
                                                 if(isFollow === null) return;
                                                 this.props.follow(auth.publicKey, isFollow);
-                                            }).bind(this)}>
+                                            })}>
                                             {isFollow ? "Unfollow" : "Follow"}
                                             </button>
                                     }

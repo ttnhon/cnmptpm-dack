@@ -170,7 +170,6 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        
         GetNewfeed: (key) => dispatch(GetNewfeed(key)),
         AddSequence: () => dispatch(AddSequence()),
         AddNewfeed: (post) => dispatch(AddNewfeed(post))

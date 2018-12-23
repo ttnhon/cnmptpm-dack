@@ -5,29 +5,18 @@ import { connect } from 'react-redux';
 import '../assets/css/login.css';
 import { LogIn } from '../store/actions/index';
 import history from '../history';
-import Popup from "reactjs-popup";
-import Signup from './Signup';
-import * as account from './../lib/account.js';
+//import Popup from "reactjs-popup";
+//import Signup from './Signup';
+import * as account from '../lib/account';
 class Login extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            secretKey: '',
-            open: false
+            secretKey: ''
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.openModal = this.openModal.bind(this);
-        this.closeModal = this.closeModal.bind(this);
     }
-
-    openModal() {
-        this.setState({ open: true });
-    }
-    closeModal() {
-        this.setState({ open: false });
-    }
-
     handleChange(event) {
         let state_name = event.target.name;
         let state_value = event.target.value;
@@ -68,20 +57,6 @@ class Login extends Component {
                                 </div>
                                 <div className="form-submit">
                                     <button onClick={this.handleSubmit} className="btn btn-login float-right">Sign in</button>
-                                </div>
-                                <div className="form-signup">
-                                    <a href="javascript:;" onClick={this.openModal}>Sign up</a>
-                                    <Popup modal={true}
-                                        closeOnDocumentClick={false}
-                                        open={this.state.open}
-                                        onClose={this.closeModal}>
-                                        <div>
-                                            <Signup />
-                                            <div className="modal-close">
-                                                <button className="btn btn-default btn-close-modal" onClick={this.closeModal}>Cancel</button>
-                                            </div>
-                                        </div>
-                                    </Popup>
                                 </div>
                             </form>
                             <div className="copy-text">Created with <i className="fa fa-heart" /> by <a href="/">N2P</a></div>

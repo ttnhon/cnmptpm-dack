@@ -177,7 +177,7 @@ export default (state = {}, action) => {
             return {
                 ...state,
                 user: {...state.user,
-                    followings: [...state.user.followings, action.payload]
+                    followings: state.user.followings ? state.user.followings.concat(action.payload) : undefined
                 }
             };
         case types.DELETE_USER_FOLLOW:

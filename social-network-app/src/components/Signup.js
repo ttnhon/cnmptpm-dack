@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import '../assets/css/Following.css';
-import { LogIn } from '../store/actions/index';
+import { LogIn, AddSequence } from '../store/actions/index';
 import history from '../history';
-import { sign, encode, decode } from '../lib/index';
+import { sign, encode } from '../lib/index';
 import axios from 'axios';
+import * as account from '../lib/account';
+import { doTransaction } from '../lib/helper';
 
 
 class Signup extends Component {
@@ -15,45 +17,32 @@ class Signup extends Component {
     BtnClick(e) {
         const { Keypair } = require('stellar-base');
         const key = Keypair.random();
-        document.getElementById("btn-create").disabled = true;
+        //document.getElementById("btn-create").disabled = true;
         this.setState({ isClick: true, key: { public: key.publicKey(), secret: key.secret() } });
     }
     NextClick(e) {
         //console.log("next");
-        const key = {
-            public: 'GDKJTGPHZET53YN6DFXXJAWMZH6ZZ5YO6T5ZGJZWBTAKUV3JVHGCESRI',
-            secret: 'SACE2PK3T76STIS44EBKE3Y4E7YOY7IT6HBE6JFXVIVB65X7HCJ2IR45'
+        const key = account.checkLogged();
+        if(key === false) return;
+        var tx = {
+            version: 1,
+            account: new Buffer(35),
+            sequence: this.props.auth.user.sequence + 1,
+            memo: Buffer.alloc(0),
+            operation: 'create_account',
+            params: {
+                address: this.state.key.public
+            },
+            signature: new Buffer(64)
         };
-        axios.get('https://komodo.forest.network/tx_search?query="account=\'' + key.public + '\'"')
-            .then(res => {
-                var tx = {
-                    version: 1,
-                    account: new Buffer(35),
-                    sequence: 0,
-                    memo: Buffer.alloc(0),
-                    operation: 'create_account',
-                    params: {
-                        address: this.state.key.public
-                    },
-                    signature: new Buffer(64)
-                };
-                res.data.result.txs.map((t, index) => {
-                    let result = decode(Buffer.from(t.tx, 'base64'));
-                    if (result.account === key.public) tx.sequence++;
-                    return result;
-                });
-                tx.sequence++;
-                sign(tx, key.secret);
-                //console.log(tx);
-                const txs = '0x' + encode(tx).toString('hex');
-
-                axios.get('https://komodo.forest.network/broadcast_tx_commit?tx=' + txs)
-                    .then(res => {
-                        //console.log(res);
-                        this.props.logIn({ publicKey: this.state.key.public, secretKey: this.state.key.secret });
-                        history.push("/" + this.state.key.public + "/tweets");
-                    });
-            });
+        var secretKey = key.secret();
+        //const txs = '0x' + encode(tx).toString('hex');
+        doTransaction(tx, secretKey).then(res=>{
+            if(res){
+                this.props.AddSequence();
+                console.log(res);
+            }
+        });
     }
     render() {
         return (
@@ -87,13 +76,14 @@ class Signup extends Component {
 
 const mapStatetoProps = (state) => {
     return {
-
+        auth: state.auth
     }
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        logIn: (key) => dispatch(LogIn(key))
+        logIn: (key) => dispatch(LogIn(key)),
+        AddSequence: () => dispatch(AddSequence())
     }
 };
 

@@ -16,11 +16,11 @@ export const SetUserProfile = (key) => (dispatch, getState) => {
       const txs = res.data.result.txs.map((tx, index) => {
         return decode(Buffer.from(tx.tx, 'base64'));
       });
-      console.log(txs);
+      //console.log(txs);
       var auth = { sequence: 0 };
       for (let i = 0; i < txs.length; i++) {
         if (key === txs[i].account) {
-          console.log(i);
+          //console.log(i);
           auth.sequence++;}
         if (txs[i].operation === "update_account") {
           if (txs[i].params.key === "name") {
