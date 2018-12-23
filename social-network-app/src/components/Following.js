@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import '../assets/css/Following.css';
 import { GetFollowing } from '../store/actions/index';
-import history from '../history';
+//import history from '../history';
 
 class Following extends Component {
   componentWillMount() {
@@ -11,9 +11,6 @@ class Following extends Component {
     //   let key = params[1];
     //   this.props.GetFollowing(key);
     // }
-  }
-  ClickPerson(key, value){
-    history.push('/' + key + '/'+value);
   }
   render() {
     const users = this.props.following;
@@ -26,47 +23,32 @@ class Following extends Component {
               <i className="twPc-bg twPc-block"></i>
 
               <div>
-                <a title={user.name} href={"/"} onClick={(e)=>{
-                        e.preventDefault();
-                        this.ClickPerson(user.account, "tweets");
-                      }} className="twPc-avatarLink">
+                <a title={user.name} href={"/"+user+"/tweets"} className="twPc-avatarLink">
                   <img alt={user.name} src={user.img_url !=="Not Set" ? 'data:image/jpeg;base64,'+user.img_url : "/default_profile_icon.png"} className="twPc-avatarImg" />
                 </a>
 
                 <div className="twPc-divUser">
                   <div className="twPc-divName">
-                    <a href={"/"} onClick={(e)=>{
-                        e.preventDefault();
-                        this.ClickPerson(user.account, "tweets");
-                      }}>{user.name}</a>
+                    <a href={"/"+user.account+"/tweets"}>{user.name}</a>
                   </div>
                 </div>
 
                 <div className="twPc-divStats">
                   <ul className="twPc-Arrange">
                     <li className="twPc-ArrangeSizeFit">
-                      <a href={"/"} onClick={(e)=>{
-                        e.preventDefault();
-                        this.ClickPerson(user.account, "tweets");
-                      }} title={user.tweets + " Tweets"}>
+                      <a href={"/"+user.account+"/tweets"} title={user.tweets + " Tweets"}>
                         <span className="twPc-StatLabel twPc-block">Tweets</span>
                         <span className="twPc-StatValue">{user.tweets}</span>
                       </a>
                     </li>
                     <li className="twPc-ArrangeSizeFit">
-                      <a href={"/"} onClick={(e)=>{
-                        e.preventDefault();
-                        this.ClickPerson(user.account, "Following");
-                      }} title={user.following + " Following"}>
+                      <a href={"/"+user.account+"/following"} title={user.following + " Following"}>
                         <span className="twPc-StatLabel twPc-block">Following</span>
                         <span className="twPc-StatValue">{user.following}</span>
                       </a>
                     </li>
                     <li className="twPc-ArrangeSizeFit">
-                      <a href={"/"} onClick={(e)=>{
-                        e.preventDefault();
-                        this.ClickPerson(user.account, "Followers");
-                      }} title={user.followers + " Followers"}>
+                      <a href={"/"+user.account+"/followers"} title={user.followers + " Followers"}>
                         <span className="twPc-StatLabel twPc-block">Followers</span>
                         <span className="twPc-StatValue">{user.followers}</span>
                       </a>

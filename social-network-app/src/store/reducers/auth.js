@@ -144,9 +144,7 @@ export default (state = {}, action) => {
         case types.EDIT_PROFILE:
             return {
                 ...state,
-                name: action.payload.name,
-                balance: action.payload.balance,
-                sequence: action.payload.sequence
+                ...action.payload
             };
         case types.SET_PUBLIC_KEY:
             return {
@@ -162,6 +160,20 @@ export default (state = {}, action) => {
             return {
                 ...state,
                 user: action.payload
+            };
+        case types.ADD_USER_FOLLOW:
+            return {
+                ...state,
+                user: {...state.user,
+                    followings: [...state.user.followings, action.payload]
+                }
+            };
+        case types.DELETE_USER_FOLLOW:
+            return {
+                ...state,
+                user: {...state.user,
+                    followings: state.user.followings.splice(action.payload, 1)
+                }
             };
         case types.GET_POST:
             return {

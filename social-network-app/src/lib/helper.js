@@ -73,7 +73,7 @@ var getFollowings = async (account) => {
       arr_following = Followings.decode(one_transaction.params.value).addresses;
     }
   });
-
+  
   if (arr_following.length > 0) {
     arr_following = arr_following.map(value => (base32.encode(value)));
   }
@@ -220,10 +220,9 @@ var unFollow = async (my_account, remove_account, sequence) => {
     { name: 'addresses', type: vstruct.VarArray(vstruct.UInt16BE, vstruct.Buffer(35)) },
   ]);
   var arr_following = await getFollowings(my_account);
-
   //cap nhat danh sach following
   let index_account = arr_following.indexOf(remove_account);
-  if (index_account == -1)
+  if (index_account === -1)
     return false;
   arr_following.splice(index_account, 1);
   arr_following = arr_following.map(one_following => (Buffer.from(base32.decode(one_following))));
