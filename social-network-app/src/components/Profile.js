@@ -53,7 +53,7 @@ class Profile extends Component {
                             <div className="profile-canopy-header">
                                 <div className="container">
                                     <div className="profile-canopy-avatar">
-                                        <img src="https://pbs.twimg.com/profile_images/1068915193982271488/5-DfGVRD_400x400.jpg" alt="" />
+                                        <img src="/default_profile_icon.png" alt="" />
                                     </div>
                                 </div>
                             </div>

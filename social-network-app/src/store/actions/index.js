@@ -113,7 +113,7 @@ export const GetNewfeed = (key) => (dispatch, getState) => {
 
 export const GetFollowing = (key) => (dispatch, getState) => {
   getInfoFollowings(key).then(res=>{
-    console.log(res);
+    //console.log(res);
     return dispatch({ type: types.GET_FOLLOWING, payload: res });
   });
 };

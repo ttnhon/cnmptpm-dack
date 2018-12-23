@@ -40,7 +40,7 @@ const Header = (props) => {
               <span className="glyphicon glyphicon-search form-control-feedback" aria-hidden="true"></span>
             </div>
             <div className="dropdown user-dropdown">
-              <button className="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img className="img-circle" src={props.auth.avtUrl ? props.auth.avtUrl : "https://pbs.twimg.com/profile_images/1068915193982271488/5-DfGVRD_400x400.jpg"} alt="" /></button>
+              <button className="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img className="img-circle" src={props.auth.avtUrl ? props.auth.avtUrl : "/default_profile_icon.png"} alt="" /></button>
               <ul className="dropdown-menu">
                 <li className="menu-user-acc">
                   <a href={"/" + key.publicKey() + "/tweets"}>

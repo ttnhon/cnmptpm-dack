@@ -46,7 +46,7 @@ class Newfeed extends Component {
     }
 
     ClickPerson(key){
-        history.push('/' + key + '/tweets/');
+        history.push('/' + key + '/tweets');
     }
 
     componentWillMount() {
