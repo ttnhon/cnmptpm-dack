@@ -61,25 +61,24 @@ var getFollowings = async (account) => {
 };
 
 var getFullInfo = async (account) => {
-  var result = await axios('https://komodo.forest.network/tx_search?query=%22account=%27' + account + '%27%22');
+  var result = await axios('https://komodo.forest.network/tx_search?query=%22account=%27' + account + '%27%22&total_count=1000');
   const res = result.data;
   console.log('thuc hien get fullinfo');
 
-  var info = [];
-  info['account'] = account;
-  info['name'] = 'No Name';
-  info['img_url'] = 'Not Set';
+  var name = null;
+  var img_url = null;
 
+  console.log(res.result.txs.length);
   res.result.txs.map((tx) => {
     let one_transaction = decode(Buffer.from(tx.tx, 'base64'));
     if (one_transaction.operation == 'update_account') {
       switch (one_transaction.params.key) {
         case 'name':
-          info['name'] = one_transaction.params.value.toString('utf-8');
+          name = one_transaction.params.value.toString('utf-8');
         break;
 
         case 'picture':
-          info['name'] = one_transaction.params.value;
+          img_url = one_transaction.params.value;
         break;
 
         default:
@@ -87,6 +86,13 @@ var getFullInfo = async (account) => {
       }
     }
   });
+
+  var info = [];
+  info['account'] = account;
+  info['name'] = name? name: 'No Name';
+  info['img_url'] = img_url? 
+  Buffer.from(img_url).toString('base64')
+  : 'Not Set';
 
   return info;
 };
@@ -236,6 +242,28 @@ var calcBalance = async (account) => {
   });
   return balance;
 }
+
+var postPlainText = async(account, text, sequence) =>{
+  const PlainTextContent = vstruct([
+    { name: 'type', type: vstruct.UInt8 },
+    { name: 'text', type: vstruct.VarString(vstruct.UInt16BE) },
+  ]);
+  var ct = PlainTextContent.encode({type: 1, text: text});
+  var tx = {
+    version: 1,
+    account: account,
+    sequence: sequence,
+    memo: Buffer.alloc(0),
+    operation: 'post',
+    params: {
+      content: ct,
+      keys: []
+    },
+    signature: new Buffer(64)
+  };
+  return tx;
+}
+
 var doTransaction = async (tx, secret_key) => {
   console.log('do transaction');
   if (tx === false)
@@ -247,4 +275,4 @@ var doTransaction = async (tx, secret_key) => {
   const res = await axios('https://komodo.forest.network/broadcast_tx_commit?tx=' + txs);
   return res.data;
 };
-export { sendMoney, getFollowings, getPosts, getNewFeed, follow, unFollow, calcBalance, doTransaction, getInfoFollowings };
+export { sendMoney, getFollowings, getPosts, getNewFeed, follow, unFollow, calcBalance, doTransaction, getInfoFollowings, postPlainText };
