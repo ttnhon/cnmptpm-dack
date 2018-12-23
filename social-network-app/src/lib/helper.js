@@ -295,10 +295,5 @@ var doTransaction = async (tx, secret_key) => {
   const res = await axios('https://komodo.forest.network/broadcast_tx_commit?tx=' + txs);
   return res.data;
 };
-<<<<<<< HEAD
 
-
-export { sendMoney, updateName, getFollowings, getPosts, getNewFeed, follow, unFollow, calcBalance, doTransaction, getInfoFollowings };
-=======
-export { sendMoney, getFollowings, getPosts, getNewFeed, follow, unFollow, calcBalance, doTransaction, getInfoFollowings, postPlainText };
->>>>>>> 03ad3d3100e6538d920d60f0e3040a5993656cec
+export { sendMoney, updateName, getFollowings, getPosts, getNewFeed, follow, unFollow, calcBalance, doTransaction, getInfoFollowings, postPlainText };
