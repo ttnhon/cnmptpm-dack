@@ -20,7 +20,27 @@ var sendMoney = async (public_key, secret_key, receiver_account, sequence, amoun
   sign(tx, secret_key);
   const txs = '0x' + encode(tx).toString('hex');
   return await txs;
-};
+}; 
+
+var updateName = async (secret_key, sequence, newName, memo = '') => {
+  var buff = Buffer.from(newName, 'utf-8');
+  var tx = {
+    version: 1,
+    account: new Buffer(35),
+    sequence: sequence,
+    memo: Buffer.alloc(0),
+    operation: 'update_account',
+    params: {
+      key: 'name',
+      value: buff
+    },
+    signature: new Buffer(64)
+  };
+  sign(tx, secret_key);
+  const txs = '0x' + encode(tx).toString('hex');
+  const res = await axios('https://komodo.forest.network/broadcast_tx_commit?tx=' + txs);
+  return res.data;
+}
 
 var getName = async (account) => {
   var name = 'No Name';
@@ -275,4 +295,5 @@ var doTransaction = async (tx, secret_key) => {
   const res = await axios('https://komodo.forest.network/broadcast_tx_commit?tx=' + txs);
   return res.data;
 };
-export { sendMoney, getFollowings, getPosts, getNewFeed, follow, unFollow, calcBalance, doTransaction, getInfoFollowings, postPlainText };
+
+export { sendMoney, updateName, getFollowings, getPosts, getNewFeed, follow, unFollow, calcBalance, doTransaction, getInfoFollowings, postPlainText };
