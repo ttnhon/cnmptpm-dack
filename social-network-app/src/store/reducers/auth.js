@@ -168,6 +168,11 @@ export default (state = {}, action) => {
                     sequence: state.user.sequence + 1
                 }
             };
+        case types.ADD_NEWFEED:
+            return {
+                ...state,
+                newfeed: [action.payload].concat(state.newfeed)
+            };
         case types.ADD_USER_FOLLOW:
             return {
                 ...state,
