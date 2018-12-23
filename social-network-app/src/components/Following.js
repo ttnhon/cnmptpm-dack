@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import '../assets/css/Following.css';
-import { GetFollowing } from '../store/actions/index';
+import { GetFollowing, Follow, DeleteFollowing } from '../store/actions/index';
 import history from '../history';
+import * as account from '../lib/account';
 
 class Following extends Component {
   componentWillMount() {
@@ -17,7 +18,8 @@ class Following extends Component {
   }
   render() {
     const users = this.props.following;
-    //console.log(this.props);
+    const isUser = account.checkLogged().publicKey() === this.props.auth.publicKey;
+    //console.log(users);
     return (
       <div>
         {users && users.map((user, index) => {
@@ -26,26 +28,32 @@ class Following extends Component {
               <i className="twPc-bg twPc-block"></i>
 
               <div>
-                <a title={user.name} href={"/"} onClick={(e)=>{
-                        e.preventDefault();
-                        this.ClickPerson(user.account, "tweets");
-                      }} className="twPc-avatarLink">
+                <a title={user.name} href={"/"} onClick={(e) => {
+                  e.preventDefault();
+                  this.ClickPerson(user.account, "tweets");
+                }} className="twPc-avatarLink">
                   <img alt={user.name} src={user.img_url !== "Not Set" ? 'data:image/jpeg;base64,' + user.img_url : "/default_profile_icon.png"} className="twPc-avatarImg" />
                 </a>
 
                 <div className="twPc-divUser">
                   <div className="twPc-divName">
-                    <a href={"/"} onClick={(e)=>{
-                        e.preventDefault();
-                        this.ClickPerson(user.account, "tweets");
-                      }}>{user.name}</a>
+                    <a href={"/"} onClick={(e) => {
+                      e.preventDefault();
+                      this.ClickPerson(user.account, "tweets");
+                    }}>{user.name}</a>
+                    {isUser ? <button className="btn btn-default btn-unfollow" onClick={((e) => {
+                      this.props.unFollow(user.account, true);
+                      this.props.DeleteFollowing(user.account);
+                    })}>
+                      Unfollow
+                    </button> : null}
                   </div>
                 </div>
 
                 <div className="twPc-divStats">
                   <ul className="twPc-Arrange">
                     <li className="twPc-ArrangeSizeFit">
-                      <a href={"/"} onClick={(e)=>{
+                      <a href={"/"} onClick={(e) => {
                         e.preventDefault();
                         this.ClickPerson(user.account, "tweets");
                       }} title={user.tweets + " Tweets"}>
@@ -54,7 +62,7 @@ class Following extends Component {
                       </a>
                     </li>
                     <li className="twPc-ArrangeSizeFit">
-                      <a href={"/"} onClick={(e)=>{
+                      <a href={"/"} onClick={(e) => {
                         e.preventDefault();
                         this.ClickPerson(user.account, "Following");
                       }} title={user.following + " Following"}>
@@ -63,7 +71,7 @@ class Following extends Component {
                       </a>
                     </li>
                     <li className="twPc-ArrangeSizeFit">
-                      <a href={"/"} onClick={(e)=>{
+                      <a href={"/"} onClick={(e) => {
                         e.preventDefault();
                         this.ClickPerson(user.account, "Followers");
                       }} title={user.followers + " Followers"}>
@@ -85,13 +93,16 @@ class Following extends Component {
 
 const mapStatetoProps = (state) => {
   return {
+    auth: state.auth,
     following: state.following.users
   }
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    GetFollowing: (key) => dispatch(GetFollowing(key))
+    GetFollowing: (key) => dispatch(GetFollowing(key)),
+    unFollow: (key, isFollow) => dispatch(Follow(key, isFollow)),
+    DeleteFollowing: (acc) => dispatch(DeleteFollowing(acc))
   }
 };
 

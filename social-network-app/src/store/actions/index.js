@@ -188,6 +188,21 @@ export const AddSequence = () => (dispatch, getState) => {
 }
 
 export const AddNewfeed = (post) => (dispatch, getState) => {
-  console.log(post);
+  //console.log(post);
   return dispatch({ type: types.ADD_NEWFEED, payload: post });
+}
+
+export const DeleteFollowing = (acc) => (dispatch, getState) => {
+  const list = getState().following.users;
+  var index;
+  for(let i = 0; i < list.length; i++){
+    if(list[i].account === acc) {
+      index = i;
+      break;
+    }
+  }
+  //console.log(index);
+  if(index){
+    return dispatch({ type: types.DELETE_FOLLOWING, payload: index });
+  }
 }

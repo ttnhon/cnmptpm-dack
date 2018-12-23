@@ -181,10 +181,12 @@ export default (state = {}, action) => {
                 }
             };
         case types.DELETE_USER_FOLLOW:
+        var list = state.user.followings;
+        list.splice(action.payload, 1);
             return {
                 ...state,
                 user: {...state.user,
-                    followings: state.user.followings.splice(action.payload, 1)
+                    followings: list
                 }
             };
         case types.GET_POST:

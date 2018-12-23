@@ -46,7 +46,7 @@ class Tweets extends Component {
     render() {
         let tweets = this.props.tweets;
         let media = null;
-        console.log(tweets);
+        //console.log(tweets);
         if (tweets) {
             media = tweets.map((tweet, index) => {
                 //let time = this.getTime(tweet.date);

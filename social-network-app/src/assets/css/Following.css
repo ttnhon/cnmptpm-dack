@@ -89,3 +89,15 @@ ul.twPc-Arrange {
     text-transform: uppercase;
     transition: color 0.15s ease-in-out 0s;
 }
+
+.twPc-divName .btn-unfollow{
+    background: none;
+    border-radius: 100px;
+    margin-right: 20px;
+    float: right;
+}
+
+.twPc-divName .btn-unfollow:focus{
+    outline: none;
+
+}
