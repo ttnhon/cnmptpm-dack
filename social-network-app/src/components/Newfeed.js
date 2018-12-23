@@ -115,12 +115,16 @@ class Newfeed extends Component {
                                     <div className="btn-send-wrapper">
                                         <button type="button" className="btn btn-default" onClick={(e) => {
                                             if (!inputPost.value.trim()) return;
-                                            let seq = auth.sequence;
+                                            let seq = auth.user.sequence;
                                             seq++;
                                             const secretKey = account.checkLogged().secret();
-                                            console.log(seq);
-                                            let tx = postPlainText(inputPost.value, seq);
-                                            //doTransaction(tx,secretKey);
+                                            console.log(seq, inputPost.value, secretKey);
+                                            postPlainText(inputPost.value, seq).then(tx => {
+                                                
+                                                doTransaction(tx,secretKey);
+                                            });
+                                            
+                                            
                                         }}>
                                             <span className="glyphicon glyphicon-send" aria-hidden="true"></span>
                                     </button>
@@ -154,6 +158,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
+        
         GetNewfeed: (key) => dispatch(GetNewfeed(key))
     }
 };
