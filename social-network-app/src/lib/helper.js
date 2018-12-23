@@ -269,7 +269,7 @@ var calcBalance = async (account) => {
   return balance;
 }
 
-var postPlainText = async(text, sequence) =>{
+var postPlainText = async(text, sequence, keys = []) =>{
   const PlainTextContent = vstruct([
     { name: 'type', type: vstruct.UInt8 },
     { name: 'text', type: vstruct.VarString(vstruct.UInt16BE) },
@@ -283,7 +283,48 @@ var postPlainText = async(text, sequence) =>{
     operation: 'post',
     params: {
       content: ct,
-      keys: []
+      keys: keys
+    },
+    signature: new Buffer(64)
+  };
+  return tx;
+}
+
+var doReact = async(reaction, object, sequence) => {
+  const ReactContent = vstruct([
+    { name: 'type', type: vstruct.UInt8 },
+    { name: 'reaction', type: vstruct.UInt8 },
+  ]);
+  var ct = ReactContent.encode({type: 2, reaction: reaction});
+  var tx = {
+    version: 1,
+    account: new Buffer(35),
+    sequence: sequence,
+    memo: Buffer.alloc(0),
+    operation: 'interact',
+    params: {
+      object: object,
+      content: ct
+    },
+    signature: new Buffer(64)
+  };
+  return tx;
+}
+var doComment = async(text, object, sequence) => {
+  const PlainTextContent = vstruct([
+    { name: 'type', type: vstruct.UInt8 },
+    { name: 'text', type: vstruct.VarString(vstruct.UInt16BE) },
+  ]);
+  var ct = PlainTextContent.encode({type:1, text: text});
+  var tx = {
+    version: 1,
+    account: new Buffer(35),
+    sequence: sequence,
+    memo: Buffer.alloc(0),
+    operation: 'interact',
+    params: {
+      object: object,
+      content: ct
     },
     signature: new Buffer(64)
   };
