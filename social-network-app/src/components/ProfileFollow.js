@@ -5,7 +5,7 @@ import Popup from "reactjs-popup";
 import { EditProfile, Follow } from '../store/actions/index';
 import history from '../history';
 import * as account from '../lib/account';
-import { updateName } from './../lib/helper';
+import { updateName, updatePicture } from './../lib/helper';
 
 class ProfileFollow extends Component {
     constructor(props) {
@@ -30,17 +30,29 @@ class ProfileFollow extends Component {
         history.push("/" + id + "/" + s);
     }
     submitPicture() {
-        const auth = this.props.auth;
-        let seq = auth.sequence;
-        const secretKey = account.checkLogged();
+        let seq = this.props.auth.sequence;
+        seq++;
+        const secretKey = account.checkLogged().secret();
         
-        // const input = document.getElementById("myPicture");
-        // const file = input.files[0];
-        // const fr = new FileReader();
-        // //fr.onload = receivedText;
-        //   //fr.readAsText(file);
-        // fr.readAsText(file);
-        //console.log(fr);
+        const input = document.getElementById("myPicture");
+        const file = input.files[0];
+        if(file === undefined) {
+            alert("Please select image");
+            return;
+        }
+        const fr = new FileReader();
+        //fr.onload = receivedText;
+          //fr.readAsText(file);
+        fr.onload = () => {
+            const str = fr.result; //Url cua cai file
+            updatePicture(secretKey,seq,str.split(',')[1])
+            //location.reload();
+        }
+        fr.readAsDataURL(file);
+
+        // console.log(fr);
+        // const str = fr.result;
+        // updatePicture(secretKey,seq,str.split(',')[1])
     }
 
     render() {
