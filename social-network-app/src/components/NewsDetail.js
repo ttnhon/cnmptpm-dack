@@ -23,7 +23,13 @@ class NewsDetail extends Component {
         var tweet = this.props.tweet;
         let interact = [];
         let error;
-        let react = { none: [], like: [], love: [], haha: [], wow: [], sad: [], angry: [] };
+        let react = { none: [],
+                    like: [],
+                    love: [],
+                    haha: [],
+                    wow: [],
+                    sad: [],
+                    angry: [] };
         let replies = null;
         let reps = [];
         let reacts;
@@ -150,7 +156,40 @@ class NewsDetail extends Component {
                     })
                 }
             }
-            
+            if (reps.length === 0) {
+                replies = undefined;
+            }
+            let list = [{ type: "like", array: react.like },
+            { type: "love", array: react.love },
+            { type: "haha", array: react.haha },
+            { type: "wow", array: react.wow },
+            { type: "sad", array: react.sad },
+            { type: "angry", array: react.angry }]
+            reacts = list.map((react, index) => {
+                if (react.array.length <= 0) return [];
+                let result = [];
+                for(let i = 0; i < react.array.length; i++){
+                    result.push(
+                        <div key={i}><a className="nav-link-account" href="/" onClick={(e) => {
+                            e.preventDefault();
+                            history.push('/' + react.array[i].account.account + '/tweets');
+                        }}>{react.array[i].account.name}</a></div>
+                    );
+                }
+                return (
+                    <div className="popup-react" key={index}>
+                    <Popup trigger={<div className="react-wrapper">
+                            <button><img src={"/reaction/" + react.type + ".png"} className="img-responsive" alt="" /></button>
+                            <span className="number">{react.array.length}</span>
+                        </div>}
+                        position="bottom center"
+                        on="hover"
+                    >
+                    <div>{result.length > 0 ? result : null}</div>
+                    </Popup>
+                    </div>
+                );
+            })
         }
         //console.log(replies);
         return (
@@ -207,30 +246,7 @@ class NewsDetail extends Component {
                         <ul className="stats col-md-12">
                             <li>Retweet: <strong>{tweet ? tweet.retweet ? tweet.retweet : null : null}</strong> </li>
                             <li>React: <div className="rection-case">
-                            {react.like.length > 0 ? <div className="react-wrapper">
-                                    <button><img src="/reaction/like.png" className="img-responsive" alt="" /></button>
-                                    <span className="number">{react.like.length}</span>
-                                </div> : null}
-                                {react.love.length > 0 ? <div className="react-wrapper">
-                                    <button><img src="/reaction/love.png" className="img-responsive" alt="" /></button>
-                                    <span className="number">{react.love.length}</span>
-                                </div> : null}
-                                {react.haha.length > 0 ? <div className="react-wrapper">
-                                    <button><img src="/reaction/haha.png" className="img-responsive" alt="" /></button>
-                                    <span className="number">{react.haha.length}</span>
-                                </div> : null}
-                                {react.wow.length > 0 ? <div className="react-wrapper">
-                                    <button><img src="/reaction/wow.png" className="img-responsive" alt="" /></button>
-                                    <span className="number">{react.wow.length}</span>
-                                </div> : null}
-                                {react.sad.length > 0 ? <div className="react-wrapper">
-                                    <button><img src="/reaction/sad.png" className="img-responsive" alt="" /></button>
-                                    <span className="number">{react.sad.length}</span>
-                                </div> : null}
-                                {react.angry.length > 0 ? <div className="react-wrapper">
-                                    <button><img src="/reaction/angry.png" className="img-responsive" alt="" /></button>
-                                    <span className="number">{react.angry.length}</span>
-                                </div> : null}
+                                {reacts ? reacts : null}
                             </div></li>
                         </ul>
                         <ul className="associate col-md-12">
@@ -256,7 +272,7 @@ class NewsDetail extends Component {
                             </div>
                         </form>
                     </div> {/* end one-new-reply */}
-                    {replies === null ? <div className="img-loading-wrapper"><img className="img-loading" src="/loading.gif" alt="" /></div> : replies}
+                    {replies === null ? replies ? null : <div className="img-loading-wrapper"><img className="img-loading" src="/loading.gif" alt="" /></div> : replies}
                 </div>
             </div>
         );

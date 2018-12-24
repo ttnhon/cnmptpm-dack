@@ -183,9 +183,6 @@ ul.associate li button:hover {
     display: inline-flex;
 }
 
-.rection-tooltip .react-wrapper{
-}
-
 .rection-tooltip .react-wrapper .number{
     position: relative;
     right: 9px;
@@ -207,9 +204,6 @@ ul.associate li button:hover {
 
 .rection-case{
     display: inline-flex;
-}
-
-.rection-case .react-wrapper{
 }
 
 .rection-case .react-wrapper .number{
