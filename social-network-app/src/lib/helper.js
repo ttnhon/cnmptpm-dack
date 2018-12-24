@@ -2,6 +2,7 @@ import { encode, decode, verify, sign, hash } from './index';
 const base32 = require('base32.js');
 const axios = require('axios');
 const vstruct = require('varstruct');
+const request = require('request');
 
 
 var sendMoney = async (public_key, secret_key, receiver_account, sequence, amount = 100, memo = '') => {
@@ -40,6 +41,49 @@ var updateName = async (secret_key, sequence, newName, memo = '') => {
   const txs = '0x' + encode(tx).toString('hex');
   const res = await axios('https://komodo.forest.network/broadcast_tx_commit?tx=' + txs);
   return res;
+}
+var updatePicture = async (secret_key, sequence, str, memo = '') => {
+  var buff = Buffer.from(str, "base64");
+  console.log(buff);
+  var tx = {
+    version: 1,
+    account: new Buffer(35),
+    sequence: sequence,
+    memo: Buffer.alloc(0),
+    operation: 'update_account',
+    params: {
+      key: 'picture',
+      value: buff
+    },
+    signature: new Buffer(64)
+  };
+
+  sign(tx,secret_key);
+  var param = encode(tx).toString('base64');
+  var header = {
+      'Content-Type': 'application/json-rpc',
+  }
+
+  let options = {
+      url: "https://komodo.forest.network/",
+      method: "post",
+      headers: header,
+      body: JSON.stringify({
+        jsonrpc: '2.0',
+        method: 'broadcast_tx_commit',
+        params: [param],
+        id: 1
+      })
+  };
+
+  await request(options, (error, response, body) => {
+      if (error) {
+          console.error('An error has occurred: ', error);
+      } else {
+          console.log('Post successful: response: ', body);
+      }
+  });
+
 }
 
 var getName = async (account) => {
@@ -348,8 +392,5 @@ var doTransaction = async (tx, secret_key) => {
   return res;
 };
 
-<<<<<<< HEAD
-export { sendMoney, updateName, getFollowings, getPosts, getNewFeed, follow, unFollow, calcBalance, doTransaction, getInfoFollowings, postPlainText, doComment, doReact };
-=======
-export { sendMoney, updateName, getFollowings, getPosts, getNewFeed, follow, unFollow, calcBalance, doTransaction, getInfoFollowings, postPlainText, getFullInfo };
->>>>>>> a60dc0695c17fb50f4692f25b4366a66ad83f7aa
+
+export { sendMoney, updateName, updatePicture, getFollowings, getPosts, getNewFeed, follow, unFollow, calcBalance, doTransaction, getInfoFollowings, postPlainText, getFullInfo, doComment, doReact };
