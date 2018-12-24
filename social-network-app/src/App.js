@@ -25,7 +25,7 @@ class App extends Component {
         <Switch>
           <Route exact path="/" component={Home} />
           <Route exact path="/login" component={Login} />
-          <Route path="/:id/tweets/:index" component={NewsDetail} />
+          <Route path="/:id/tweets/:hash" component={NewsDetail} />
           <Route path="/:id/:value" component={Profile} />
         </Switch>
       </Router>

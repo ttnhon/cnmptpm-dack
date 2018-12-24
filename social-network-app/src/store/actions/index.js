@@ -62,7 +62,7 @@ export const EditProfile = (profile) => (dispatch, getState) => {
 export const GetProfile = (key, page, result) => (dispatch, getState) => {
   axios.get('https://komodo.forest.network/tx_search?query="account=\'' + key + '\'"&page="'+page+'"')
     .then(res => {
-      //console.log(page);
+      //console.log(res);
       let end = false;
       //console.log(page);
       //console.log(res.data.result.total_count);
@@ -107,7 +107,7 @@ export const GetProfile = (key, page, result) => (dispatch, getState) => {
               { name: 'text', type: vstruct.VarString(vstruct.UInt16BE) },
             ]);
             let one_post = {};
-            one_post = { content: PlainTextContent.decode(txs[i].params.content), height: res.data.result.txs[i].height };
+            one_post = { content: PlainTextContent.decode(txs[i].params.content), height: res.data.result.txs[i].height, hash: res.data.result.txs[i].hash };
             //console.log(one_post);
             auth.tweets = [one_post].concat(auth.tweets);
             break;
@@ -209,5 +209,5 @@ export const DeleteFollowing = (acc) => (dispatch, getState) => {
 
 export const AddTweet = (post) => (dispatch, getState) => {
   //console.log(post);
-  return dispatch({ type: types.GET_POST, payload: [post] });
+  return dispatch({ type: types.ADD_POST, payload: [post] });
 }

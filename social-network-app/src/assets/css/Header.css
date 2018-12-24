@@ -121,3 +121,28 @@
     width: auto;
     line-height: 11px;
 }
+
+.modal-btn-tweet{
+    padding: 0 20px 30px 20px;
+}
+
+.modal-btn-tweet .form-post{
+    padding: 0;
+}
+.modal-btn-tweet .form-post .media .media-left{
+    padding: 0;
+    vertical-align: middle;
+}
+
+.modal-btn-tweet .form-post .media .media-left img {
+    height: 32px;
+    border-radius: 50%;
+}
+
+.modal-btn-tweet .form-post .media .media-body .text-input-wrapper textarea{
+    width: 100%;
+}
+
+.modal-btn-tweet .form-post .media .media-body .btn-send-wrapper{
+    float: right;
+}

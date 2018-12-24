@@ -41,8 +41,8 @@ class Tweets extends Component {
         return t + " " + unit;
     }
 
-    ClickTweet(index) {
-        history.push('/' + this.props.auth.publicKey + '/tweets/' + index);
+    ClickTweet(hash) {
+        history.push('/' + this.props.auth.publicKey + '/tweets/' + hash);
     }
 
     render() {
@@ -54,7 +54,7 @@ class Tweets extends Component {
             media = tweets.map((tweet, index) => {
                 //let time = this.getTime(tweet.date);
                 return (
-                    <div className="media" href="#toDetail" key={index} onClick={()=>this.ClickTweet(index)}>
+                    <div className="media" href="#toDetail" key={index} onClick={()=>this.ClickTweet(tweet.hash)}>
                         <a className="media-left" href="#fake">
                             <img alt="" className="media-object img-circle" src={this.props.auth ? this.props.auth.picture ? ('data:image/jpeg;base64,' + this.props.auth.picture) : "/default_profile_icon.png" : "/default_profile_icon.png"} />
                         </a>

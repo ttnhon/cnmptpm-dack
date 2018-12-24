@@ -42,8 +42,8 @@ class Newfeed extends Component {
         return t + " " + unit;
     }
 
-    ClickTweet(index) {
-        //history.push('/' + this.props.auth.publicKey + '/tweets/' + index);
+    ClickTweet(acc, hash) {
+        history.push('/' + acc + '/tweets/' + hash);
     }
 
     ClickPerson(key){
@@ -61,7 +61,6 @@ class Newfeed extends Component {
         //console.log(this.props);
         const auth = this.props.auth;
         console.log(auth);
-        let inputPost;
         let tweets = this.props.newfeed;
         //console.log(tweets);
         let media = null;
@@ -69,7 +68,7 @@ class Newfeed extends Component {
             media = tweets.map((tweet, index) => {
                 //let time = this.getTime(tweet.date);
                 return (
-                    <div className="media" href="#toDetail" key={index} onClick={() => this.ClickTweet(index)}>
+                    <div className="media" href="#toDetail" key={index} onClick={() => this.ClickTweet(tweet.account, tweet.hash)}>
                         <a className="media-left" href="#fake">
                             <img alt="" className="media-object img-circle" src="https://pbs.twimg.com/profile_images/1068915193982271488/5-DfGVRD_400x400.jpg" />
                         </a>

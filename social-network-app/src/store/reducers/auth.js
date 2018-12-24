@@ -192,6 +192,11 @@ export default (state = {}, action) => {
         case types.GET_POST:
             return {
                 ...state,
+                tweets: action.payload
+            };
+        case types.ADD_POST:
+            return {
+                ...state,
                 tweets: state.tweets ? action.payload.concat(state.tweets) : action.payload
             };
         case types.GET_NEWFEED:

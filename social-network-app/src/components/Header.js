@@ -8,22 +8,23 @@ import { logout } from '../lib/account';
 import history from '../history';
 import Popup from "reactjs-popup";
 import Signup from './Signup';
+import Post from './Post';
 
 class Header extends Component {
   constructor(props) {
     super(props);
     this.state = {
-        open: false
+      open: false
     };
     this.openModal = this.openModal.bind(this);
     this.closeModal = this.closeModal.bind(this);
-}
-openModal() {
-  this.setState({ open: true });
-}
-closeModal() {
-  this.setState({ open: false });
-}
+  }
+  openModal() {
+    this.setState({ open: true });
+  }
+  closeModal() {
+    this.setState({ open: false });
+  }
   render() {
     let inputSearch;
     const key = account.checkLogged();
@@ -55,13 +56,13 @@ closeModal() {
             <div className="navbar-form navbar-right">
               <div className="form-group has-feedback">
                 <input type="text" className="form-control-nav" id="search" ref={node => inputSearch = node} aria-describedby="search1" />
-                <button className="btn btn-primary btn-search" onClick={(e)=>{
-                  if(!inputSearch.value.trim()) return;
+                <button className="btn btn-primary btn-search" onClick={(e) => {
+                  if (!inputSearch.value.trim()) return;
                   //console.log(inputSearch.value);
                   const { Keypair } = require('stellar-base');
                   try {
                     const key = Keypair.fromPublicKey(inputSearch.value);
-                    return history.push("/"+inputSearch.value+"/tweets")
+                    return history.push("/" + inputSearch.value + "/tweets")
                   } catch (error) {
                     alert("Nhập sai key");
                   }
@@ -86,25 +87,31 @@ closeModal() {
                   }>Log out</a></li>
                 </ul>
               </div>
-              <button className="btn btn-primary" type="submit" aria-label="Left Align">
+              <Popup trigger={<button className="btn btn-primary" aria-label="Left Align">
                 Tweet
-              </button>
+              </button>} position="left center"
+              modal={true}>
+              <div className="modal-btn-tweet">
+                  <h3>Tweet what you want to say</h3>
+                <Post />
+              </div>
+              </Popup>
               <div className="form-signup">
-              <a href={"/"} onClick={((e)=>{
-                      e.preventDefault();
-                      this.openModal();
-                    })}>Signup</a>
-              <Popup modal={true}
-                      closeOnDocumentClick={false}
-                      open={this.state.open}
-                      onClose={this.closeModal}>
-                      <div>
-                        <Signup />
-                        <div className="modal-close">
-                          <button className="btn btn-default btn-close-modal" onClick={this.closeModal}>Cancel</button>
-                        </div>
-                      </div>
-                    </Popup>
+                <a href={"/"} onClick={((e) => {
+                  e.preventDefault();
+                  this.openModal();
+                })}>Signup</a>
+                <Popup modal={true}
+                  closeOnDocumentClick={false}
+                  open={this.state.open}
+                  onClose={this.closeModal}>
+                  <div>
+                    <Signup />
+                    <div className="modal-close">
+                      <button className="btn btn-default btn-close-modal" onClick={this.closeModal}>Cancel</button>
+                    </div>
+                  </div>
+                </Popup>
               </div>
             </div>
           </div>
