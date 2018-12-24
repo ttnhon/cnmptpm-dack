@@ -102,16 +102,20 @@ export const GetProfile = (key, page, result) => (dispatch, getState) => {
             }
             break;
           case "post":
-            //console.log(txs[i].params);
-            const PlainTextContent = vstruct([
-              { name: 'type', type: vstruct.UInt8 },
-              { name: 'text', type: vstruct.VarString(vstruct.UInt16BE) },
-            ]);
-            let one_post = {};
-            let content = PlainTextContent.decode(txs[i].params.content);
-            one_post = { content: content, height: res.data.result.txs[i].height, hash: res.data.result.txs[i].hash };
-            //console.log(one_post);
-            auth.tweets = [one_post].concat(auth.tweets);
+            try {
+              console.log(txs[i].params);
+              const PlainTextContent = vstruct([
+                { name: 'type', type: vstruct.UInt8 },
+                { name: 'text', type: vstruct.VarString(vstruct.UInt16BE) },
+              ]);
+              let one_post = {};
+              let content = PlainTextContent.decode(txs[i].params.content);
+              one_post = { content: content, height: res.data.result.txs[i].height, hash: res.data.result.txs[i].hash };
+              //console.log(one_post);
+              auth.tweets = [one_post].concat(auth.tweets);
+            } catch (error) {
+              console.log(error);
+            }
             break;
           default:
             break;
@@ -268,9 +272,9 @@ export const AddTweet = (post) => (dispatch, getState) => {
 
 export const AddInteractInfo = () => async (dispatch, getState) => {
   let list = getState().auth.interact;
-  if(list){
-    for(let i = 0; i < list.length; i++){
-      await getFullInfo(list[i].account).then(res=>{
+  if (list) {
+    for (let i = 0; i < list.length; i++) {
+      await getFullInfo(list[i].account).then(res => {
         list[i].account = res;
       })
     }
