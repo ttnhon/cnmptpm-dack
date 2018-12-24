@@ -21,6 +21,7 @@ export const SetUserProfile = (key, page, result) => (dispatch, getState) => {
       });
       //console.log(txs);
       var auth = result;
+      auth.balance = 0;
       for (let i = 0; i < txs.length; i++) {
         if (key === txs[i].account) {
           //console.log(i);
@@ -39,6 +40,14 @@ export const SetUserProfile = (key, page, result) => (dispatch, getState) => {
           if (txs[i].params.key === "picture") {
             auth.picture = txs[i].params.value;
           };
+        }
+        
+        if (txs[i].operation === "payment") {
+          if (key === txs[i].account) {
+            auth.balance = auth.balance - txs[i].params.amount;
+          } else {
+            auth.balance = auth.balance + txs[i].params.amount;
+          }
         }
       }
       if (end) {
