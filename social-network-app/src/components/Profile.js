@@ -56,7 +56,7 @@ class Profile extends Component {
                             <div className="profile-canopy-header">
                                 <div className="container">
                                     <div className="profile-canopy-avatar">
-                                        <img src={this.props.auth ? this.props.auth.picture ? ('data:image/jpeg;base64,' + this.props.auth.picture) : "/default_profile_icon.png" : "/default_profile_icon.png"} alt="" />
+                                        <img src={this.props.auth ? this.props.auth.picture ? ('data:image/jpeg;base64,' + this.props.auth.picture) : "/default_profile_icon.png" : "/loading_circle.gif"} alt="" />
                                     </div>
                                 </div>
                             </div>

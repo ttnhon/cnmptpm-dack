@@ -17,7 +17,7 @@ class Post extends Component {
             <div className="panel-heading form-post">
                 <div className="media">
                     <div className="media-left">
-                        <img src={auth.user ? auth.user.picture ? ('data:image/jpeg;base64,' + auth.user.picture) : "/default_profile_icon.png" : "/default_profile_icon.png"} alt="" />
+                        <img src={auth.user ? auth.user.picture ? ('data:image/jpeg;base64,' + auth.user.picture) : "/default_profile_icon.png" : "/loading_circle.gif"} alt="" />
                     </div>
                     <div className="media-body">
                         <div className="new-post">

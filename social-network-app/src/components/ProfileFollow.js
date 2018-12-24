@@ -157,7 +157,7 @@ class ProfileFollow extends Component {
                                                             Edit your profile
                                                         </h3>
                                                         <div className="form-group modal-form-item modal-flex">
-                                                            <img className="modal-form-profile-img modal-flex-left clearfix" src={this.props.auth ? this.props.auth.picture ? ('data:image/jpeg;base64,' + this.props.auth.picture) : "/default_profile_icon.png" : "/default_profile_icon.png"} alt="" />
+                                                            <img className="modal-form-profile-img modal-flex-left clearfix" src={this.props.auth ? this.props.auth.picture ? ('data:image/jpeg;base64,' + this.props.auth.picture) : "/default_profile_icon.png" : "/loading_circle.gif"} alt="" />
                                                             <form className="modal-form-input" action="#" onSubmit={this.submitPicture}>
                                                             <div  className="modal-input">
                                                             <label>Change your avatar: </label><input className=" btn" type="file" name="myPicture" id="myPicture" />

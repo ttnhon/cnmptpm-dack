@@ -70,7 +70,7 @@ class Newfeed extends Component {
                 return (
                     <div className="media" href="#toDetail" key={index} onClick={() => this.ClickTweet(tweet.account, tweet.hash)}>
                         <a className="media-left" href="#fake">
-                            <img alt={tweet.img_url} className="media-object img-circle" src={tweet.img_url !== "Not Set" ? tweet.img_url ?  'data:image/jpeg;base64,' + tweet.img_url : "/default_profile_icon.png" : "/default_profile_icon.png"} />
+                            <img alt={tweet.img_url} className="media-object img-circle" src={tweet.img_url !== "Not Set" ? tweet.img_url ?  'data:image/jpeg;base64,' + tweet.img_url : "/default_profile_icon.png" : "/loading_circle.gif"} />
                         </a>
                         <div className="media-body">
                             <div className="profile-tweets-user-header">

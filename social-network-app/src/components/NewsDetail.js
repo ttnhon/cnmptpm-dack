@@ -210,7 +210,7 @@ class NewsDetail extends Component {
                 <div className="container-fluid one-news-detail">
                     <div className="row one-news-header">
                         <div className="col-md-2 img-responsive">
-                            <img src={this.props.auth ? this.props.auth.picture ? ('data:image/jpeg;base64,' + this.props.auth.picture) : "/default_profile_icon.png" : "/default_profile_icon.png"} className="img-circle" alt="" />
+                            <img src={this.props.auth ? this.props.auth.picture ? ('data:image/jpeg;base64,' + this.props.auth.picture) : "/default_profile_icon.png" : "/loading_circle.gif"} className="img-circle" alt="" />
                         </div>
                         <div className="col-md-7 news-owner-name">
                             <h4><strong><a className="nav-link-account" href="/" onClick={(e) => {
@@ -278,7 +278,7 @@ class NewsDetail extends Component {
                         <form className="form-inline" action="/">
                             <div className="form-group">
                                 <label htmlFor="email">
-                                    <img src={this.props.auth.user ? this.props.auth.user.picture ? ('data:image/jpeg;base64,' + this.props.auth.user.picture) : "/default_profile_icon.png" : "/default_profile_icon.png"} className="img-circle" alt="" />
+                                    <img src={this.props.auth.user ? this.props.auth.user.picture ? ('data:image/jpeg;base64,' + this.props.auth.user.picture) : "/default_profile_icon.png" : "/loading_circle.gif"} className="img-circle" alt="" />
                                 </label>
                                 <input type="text" className="form-control" placeholder="Để lại bình luận của bạn" name="your_comment" />
                             </div>
