@@ -58,11 +58,11 @@ class Newfeed extends Component {
     }
 
     render() {
-        //console.log(this.props);
+        console.log(this.props);
         const auth = this.props.auth;
         //console.log(auth);
         let tweets = this.props.newfeed;
-        //console.log(tweets);
+        console.log(tweets);
         let media = null;
         if (tweets) {
             media = tweets.map((tweet, index) => {
@@ -70,7 +70,7 @@ class Newfeed extends Component {
                 return (
                     <div className="media" href="#toDetail" key={index} onClick={() => this.ClickTweet(tweet.account, tweet.hash)}>
                         <a className="media-left" href="#fake">
-                            <img alt={tweet.img_url} className="media-object img-circle" src={tweet.img_url ? 'data:image/jpeg;base64,' + tweet.img_url : "/default_profile_icon.png"} />
+                            <img alt={tweet.img_url} className="media-object img-circle" src={tweet.img_url !== "Not Set" ? tweet.img_url ?  'data:image/jpeg;base64,' + tweet.img_url : "/default_profile_icon.png" : "/default_profile_icon.png"} />
                         </a>
                         <div className="media-body">
                             <div className="profile-tweets-user-header">
@@ -97,13 +97,16 @@ class Newfeed extends Component {
                     </div>
                 );
             })
+            if(tweets.length === 0){
+                media = undefined;
+            }
         }
         return (
             <div className="profile-tweets">
                 <div className="panel panel-info profile-tweets-item">
                     <Post />
                     <div className="panel-body">
-                        {media}
+                        {media === null ? media ? null : <div className="img-loading-wrapper"><img className="img-loading" src="/loading.gif" alt="" /></div> : media}
                     </div>
                     <div className="panel-footer">
                         <div className="media">
