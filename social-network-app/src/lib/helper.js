@@ -136,7 +136,7 @@ var getInfoFollowings = async (account) => {
 };
 
 
-var getPosts = async (account, page = 1, list_post = []) => {
+var getPosts = async (account, info, page = 1, list_post = []) => {
   const PlainTextContent = vstruct([
     { name: 'type', type: vstruct.UInt8 },
     { name: 'text', type: vstruct.VarString(vstruct.UInt16BE) },
@@ -144,18 +144,19 @@ var getPosts = async (account, page = 1, list_post = []) => {
   var result = await axios('https://komodo.forest.network/tx_search?query="account=\'' + account + '\'"&page="'+page+'"');
   const res = result.data;
   console.log('thuc hien get post');
-  var name = 'No name';
-  res.result.txs.map((tx) => {
-    let one_transaction = decode(Buffer.from(tx.tx, 'base64'));
-    if (one_transaction.operation == 'update_account' && one_transaction.params.key == 'name') {
-      name = one_transaction.params.value.toString('utf-8');
-    }
-  });
+  // var name = 'No name';
+  // res.result.txs.map((tx) => {
+  //   let one_transaction = decode(Buffer.from(tx.tx, 'base64'));
+  //   if (one_transaction.operation == 'update_account' && one_transaction.params.key == 'name') {
+  //     name = one_transaction.params.value.toString('utf-8');
+  //   }
+  // });
   res.result.txs.map((tx) => {
     let one_transaction = decode(Buffer.from(tx.tx, 'base64'));
     if (one_transaction.operation == 'post') {
       let one_post = [];
-      one_post['name'] = name;
+      one_post['name'] = info['name'];
+      one_post['img_url'] = info['img_url'];
       one_post['account'] = account;
       one_post['content'] = PlainTextContent.decode(one_transaction.params.content);
       one_post['height'] = tx.height;
@@ -166,7 +167,7 @@ var getPosts = async (account, page = 1, list_post = []) => {
 
   if(page * 30 >= res.result.total_count)
       return list_post;
-  return getPosts(account, ++page, list_post);
+  return getPosts(account, info, ++page, list_post);
 };
 
 var getNewFeed = async (account) => {
@@ -176,20 +177,20 @@ var getNewFeed = async (account) => {
 
   var all_posts = [];
   await Promise.all(followings.map(async (one_account) => {
-
-    let posts = await getPosts(one_account);
+    let info = await getFullInfo(one_account);
+    let posts = await getPosts(one_account, info);
     if (posts.length > 0) {
       posts.map(one_post => {
         all_posts.push(one_post);
       })
     }
     //get user post
-    let User_posts = await getPosts(account);
-    if (User_posts.length > 0) {
-      User_posts.map(one_post => {
-        all_posts.push(one_post);
-      })
-    }
+    // let User_posts = await getPosts(account);
+    // if (User_posts.length > 0) {
+    //   User_posts.map(one_post => {
+    //     all_posts.push(one_post);
+    //   })
+    // }
   }));
   all_posts.sort(function(a, b){return b.height - a.height});
   return all_posts;
