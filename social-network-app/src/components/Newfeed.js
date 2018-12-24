@@ -60,7 +60,7 @@ class Newfeed extends Component {
     render() {
         //console.log(this.props);
         const auth = this.props.auth;
-        console.log(auth);
+        //console.log(auth);
         let tweets = this.props.newfeed;
         //console.log(tweets);
         let media = null;

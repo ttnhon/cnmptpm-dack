@@ -1,7 +1,7 @@
 import * as types from "./types";
 import { decode } from '../../lib/index';
 import axios from 'axios';
-import { getNewFeed, getInfoFollowings, doTransaction, unFollow, follow } from '../../lib/helper';
+import { getNewFeed, getInfoFollowings, doTransaction, unFollow, follow, getFullInfo } from '../../lib/helper';
 import * as account from '../../lib/account';
 const vstruct = require('varstruct');
 
@@ -10,11 +10,11 @@ export const LogOut = () => (dispatch, getState) => {
 };
 
 export const SetUserProfile = (key, page, result) => (dispatch, getState) => {
-  axios.get('https://komodo.forest.network/tx_search?query="account=\'' + key + '\'"&page="'+page+'"')
+  axios.get('https://komodo.forest.network/tx_search?query="account=\'' + key + '\'"&page="' + page + '"')
     .then(res => {
       //console.log(res);
       let end = false;
-      if(page * 30 >= res.data.result.total_count) end = true;
+      if (page * 30 >= res.data.result.total_count) end = true;
       const txs = res.data.result.txs.map((tx, index) => {
         return decode(Buffer.from(tx.tx, 'base64'));
       });
@@ -23,7 +23,8 @@ export const SetUserProfile = (key, page, result) => (dispatch, getState) => {
       for (let i = 0; i < txs.length; i++) {
         if (key === txs[i].account) {
           //console.log(i);
-          auth.sequence++;}
+          auth.sequence++;
+        }
         if (txs[i].operation === "update_account") {
           if (txs[i].params.key === "name") {
             auth.name = txs[i].params.value.toString('utf-8');
@@ -39,41 +40,41 @@ export const SetUserProfile = (key, page, result) => (dispatch, getState) => {
           };
         }
       }
-      if(end){
+      if (end) {
         if (auth.followings) {
           const base32 = require('base32.js');
           auth.followings = auth.followings.map(value => (base32.encode(value)));
         }
-        if(auth.picture){
+        if (auth.picture) {
           auth.picture = Buffer.from(auth.picture).toString('base64');
         }
         //console.log(auth);
         return dispatch({ type: types.SET_USER_PROFILE, payload: auth });
-      }else{
+      } else {
         return dispatch(SetUserProfile(key, page + 1, auth))
       }
     });
 };
 
 export const EditProfile = (profile) => (dispatch, getState) => {
-  return dispatch({ type: types.EDIT_PROFILE, payload: profile });
+  return dispatch({ type: types.EDIT_PROFILE, payload: { name: profile.name, balance: profile.balance, sequence: profile.sequence, picture: profile.picture } });
 };
 
 export const GetProfile = (key, page, result) => (dispatch, getState) => {
-  axios.get('https://komodo.forest.network/tx_search?query="account=\'' + key + '\'"&page="'+page+'"')
+  axios.get('https://komodo.forest.network/tx_search?query="account=\'' + key + '\'"&page="' + page + '"')
     .then(res => {
       //console.log(res);
       let end = false;
       //console.log(page);
       //console.log(res.data.result.total_count);
-      if(page * 30 >= res.data.result.total_count) end = true;
+      if (page * 30 >= res.data.result.total_count) end = true;
       //console.log(end);
       const txs = res.data.result.txs.map((tx, index) => {
         return decode(Buffer.from(tx.tx, 'base64'));
       });
       //console.log(txs);
       var auth = result;
-      if(res.data.result.total_count === 0) auth["name"] = "Account not register";
+      if (res.data.result.total_count == 0) auth["name"] = "Account not register";
       //console.log(auth);
       for (let i = 0; i < txs.length; i++) {
         //console.log(txs[i]);
@@ -117,16 +118,68 @@ export const GetProfile = (key, page, result) => (dispatch, getState) => {
       }
       //var posts = getPosts(key);
       dispatch({ type: types.SET_PUBLIC_KEY, payload: key });
-      if(end) {
-        if(auth.picture){
+      if (end) {
+        if (auth.picture) {
           auth.picture = Buffer.from(auth.picture).toString('base64');
         }
         //console.log(auth);
         dispatch({ type: types.GET_POST, payload: auth.tweets });
+        //dispatch({ type: types.GET_INTERACT, payload: auth.interact });
         dispatch(GetFollowing(key));
         return dispatch(EditProfile(auth));
       }
       return dispatch(GetProfile(key, page + 1, auth));
+    });
+};
+
+export const GetInteract = (key, page, result) => (dispatch, getState) => {
+  axios.get('https://komodo.forest.network/tx_search?query="account=\'' + key + '\'"&page="' + page + '"')
+    .then(res => {
+      //console.log(res);
+      let end = false;
+      if (page * 30 >= res.data.result.total_count) end = true;
+      //console.log(end);
+      const txs = res.data.result.txs.map((tx, index) => {
+        return decode(Buffer.from(tx.tx, 'base64'));
+      });
+      //console.log(txs);
+      var interact = result;
+      //if (res.data.result.total_count == 0) interact["name"] = "Account not register";
+      //console.log(interact);
+      for (let i = 0; i < txs.length; i++) {
+        switch (txs[i].operation) {
+          case "interact":
+            const Type = vstruct([
+              { name: 'type', type: vstruct.UInt8 }
+            ]);
+            const ReactContent = vstruct([
+              { name: 'type', type: vstruct.UInt8 },
+              { name: 'reaction', type: vstruct.UInt8 },
+            ]);
+            const PlainTextContent = vstruct([
+              { name: 'type', type: vstruct.UInt8 },
+              { name: 'text', type: vstruct.VarString(vstruct.UInt16BE) },
+            ]);
+            let one_interact = {};
+            let type = Type.decode(txs[i].params.content);
+            let content;
+            if (type.type === 1) {
+              content = PlainTextContent.decode(txs[i].params.content);
+            } else {
+              content = ReactContent.decode(txs[i].params.content);
+            }
+            one_interact = { object: txs[i].params.object, content: content, account: txs[i].account, hash: res.data.result.txs[i].hash };
+            interact = interact.concat([one_interact]);
+            break;
+          default:
+            break;
+        }
+      }
+      if (end) {
+        dispatch({ type: types.GET_INTERACT, payload: interact });
+        return dispatch(AddInteractInfo());
+      }
+      return dispatch(GetInteract(key, page + 1, interact));
     });
 };
 
@@ -195,14 +248,14 @@ export const AddNewfeed = (post) => (dispatch, getState) => {
 export const DeleteFollowing = (acc) => (dispatch, getState) => {
   const list = getState().following.users;
   var index;
-  for(let i = 0; i < list.length; i++){
-    if(list[i].account === acc) {
+  for (let i = 0; i < list.length; i++) {
+    if (list[i].account === acc) {
       index = i;
       break;
     }
   }
   //console.log(index);
-  if(index){
+  if (index) {
     return dispatch({ type: types.DELETE_FOLLOWING, payload: index });
   }
 }
@@ -210,4 +263,16 @@ export const DeleteFollowing = (acc) => (dispatch, getState) => {
 export const AddTweet = (post) => (dispatch, getState) => {
   //console.log(post);
   return dispatch({ type: types.ADD_POST, payload: [post] });
+}
+
+export const AddInteractInfo = () => async (dispatch, getState) => {
+  let list = getState().auth.interact;
+  if(list){
+    for(let i = 0; i < list.length; i++){
+      await getFullInfo(list[i].account).then(res=>{
+        list[i].account = res;
+      })
+    }
+    return dispatch({ type: types.GET_INTERACT, payload: list });
+  }
 }

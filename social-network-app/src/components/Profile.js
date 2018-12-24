@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import '../assets/css/profile.css';
+import '../assets/css/Profile.css';
 import Header from './Header';
 import ProfileFollow from './ProfileFollow';
 import Tweets from './Tweets';
@@ -29,7 +29,7 @@ class Profile extends Component {
         if(auth.publicKey){
             if (this.props.match.params.id !== auth.publicKey) {
                 id = this.props.match.params.id;
-                this.props.GetProfile(id, 1, { balance: 0, sequence: 0, tweets: [] });
+                this.props.GetProfile(id, 1, { balance: 0, sequence: 0, tweets: [], interact: [] });
             }
         }
         let page = null;
