@@ -117,7 +117,10 @@ class NewsDetail extends Component {
                                         <img src={reps[i].account.img_url === "Not Set" ? "/default_profile_icon.png" : ('data:image/jpeg;base64,' + reps[i].account.img_url)} className="img-circle" alt="" />
                                     </div>
                                     <div className="col-md-10 comment-content">
-                                        <pre><strong className="name">{reps[i].account.name}</strong><i className="time"> {reps[i].date ? reps[i].date.toLocaleString() : "time"}</i></pre>
+                                        <pre><strong className="name"><a className="nav-link-account" href="/" onClick={(e) => {
+                                e.preventDefault();
+                                history.push('/' + reply.account.account + '/tweets');
+                            }}>{reps[i].account.name ? reps[i].account.name : ""}</a></strong><i className="time"> {reps[i].date ? reps[i].date.toLocaleString() : "time"}</i></pre>
                                         <div className="content">
                                             <h4>{reps[i].content.text}</h4>
                                         </div>
@@ -138,7 +141,10 @@ class NewsDetail extends Component {
                                     <img src={reply.account.img_url === "Not Set" ? "/default_profile_icon.png" : ('data:image/jpeg;base64,' + reply.account.img_url)} className="img-circle" alt="" />
                                 </div>
                                 <div className="col-md-10 comment-content">
-                                    <pre><strong className="name">{reply.account.name ? reply.account.name : "error"}</strong><i className="time"> {reply.date ? reply.date.toLocaleString() : "time"}</i></pre>
+                                    <pre><strong className="name"><a className="nav-link-account" href="/" onClick={(e) => {
+                                e.preventDefault();
+                                history.push('/' + reply.account.account + '/tweets');
+                            }}>{reply.account.name ? reply.account.name : ""}</a></strong><i className="time"> {reply.date ? reply.date.toLocaleString() : "time"}</i></pre>
                                     <div className="content">
                                         <h4>{reply.content.text}</h4>
                                     </div>
@@ -207,7 +213,7 @@ class NewsDetail extends Component {
                             }}>{this.props.auth.name}</a></strong></h4>
                         </div>
                         <div className="col-md-3 news-status">
-                            <button type="button" className="btn btn-primary">Follow</button>
+                            {/* <button type="button" className="btn btn-primary">Follow</button> */}
                             {/* <button type="button" class="btn btn-danger">Bỏ theo dõi</button> */}
                         </div>
                     </div> {/* end one-news-header */}
