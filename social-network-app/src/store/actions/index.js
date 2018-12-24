@@ -73,7 +73,7 @@ export const GetProfile = (key, page, result) => (dispatch, getState) => {
       });
       //console.log(txs);
       var auth = result;
-      if(res.data.result.total_count == 0) auth["name"] = "Account not register";
+      if(res.data.result.total_count === 0) auth["name"] = "Account not register";
       //console.log(auth);
       for (let i = 0; i < txs.length; i++) {
         //console.log(txs[i]);
