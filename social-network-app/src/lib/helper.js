@@ -394,9 +394,4 @@ var doTransaction = async (tx, secret_key) => {
   return res;
 };
 
-<<<<<<< HEAD
-
 export { sendMoney, updateName, updatePicture, getFollowings, getPosts, getNewFeed, follow, unFollow, calcBalance, doTransaction, getInfoFollowings, postPlainText, getFullInfo, doComment, doReact };
-=======
-export { sendMoney, updateName, getFollowings, getPosts, getNewFeed, follow, unFollow, calcBalance, doTransaction, getInfoFollowings, postPlainText, getFullInfo, doComment, doReact };
->>>>>>> a0a2b752f328612ed63615d4b9be4dda4d20725f
