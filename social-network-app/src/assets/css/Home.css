@@ -1,18 +1,18 @@
-.homepage .profile-tweets .panel-heading .media .media-left img {
+.profile-tweets .form-post .media .media-left img {
     height: 32px;
     border-radius: 50%;
 }
 
-.homepage .profile-tweets .panel-heading .media .media-body .new-post{
+.profile-tweets .form-post .media .media-body .new-post{
     display: flex;
     align-items: center;
 }
 
-.homepage .profile-tweets .panel-heading .media .media-body .text-input-wrapper{
+.profile-tweets .form-post .media .media-body .text-input-wrapper{
     width: 80%;
 }
 
-.homepage .profile-tweets .panel-heading .media .media-body .btn-send-wrapper{
+.profile-tweets .form-post .media .media-body .btn-send-wrapper{
     text-align: left;
     padding-left: 5px;
 }

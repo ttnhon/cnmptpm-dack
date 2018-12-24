@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import history from '../history';
+import Post from './Post';
+import * as account from '../lib/account';
 
 class Tweets extends Component {
     getTime(time) {
@@ -46,6 +48,7 @@ class Tweets extends Component {
     render() {
         let tweets = this.props.tweets;
         let media = null;
+        let isUser = account.checkLogged().publicKey() === this.props.auth.publicKey;
         //console.log(tweets);
         if (tweets) {
             media = tweets.map((tweet, index) => {
@@ -81,16 +84,15 @@ class Tweets extends Component {
         return (
             <div className="profile-tweets">
                 <div className="panel panel-info profile-tweets-item">
-                    <div className="panel-heading">
+                    {isUser ? <Post /> : <div className="panel-heading">
                         <div className="media">
                             <h4 className="media-left">
                                 Tweets
                                         </h4>
                             <div className="media-body">
-                                <a href="#fake">Tweets & replies</a>
                             </div>
                         </div>
-                    </div>
+                    </div>}
                     <div className="panel-body">
                         {media}
                     </div>

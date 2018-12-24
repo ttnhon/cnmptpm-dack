@@ -206,3 +206,8 @@ export const DeleteFollowing = (acc) => (dispatch, getState) => {
     return dispatch({ type: types.DELETE_FOLLOWING, payload: index });
   }
 }
+
+export const AddTweet = (post) => (dispatch, getState) => {
+  //console.log(post);
+  return dispatch({ type: types.GET_POST, payload: [post] });
+}
