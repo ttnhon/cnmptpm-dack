@@ -3,6 +3,7 @@ import { decode } from '../../lib/index';
 import axios from 'axios';
 import { getNewFeed, getInfoFollowings, doTransaction, unFollow, follow, getFullInfo } from '../../lib/helper';
 import * as account from '../../lib/account';
+import server from '../../lib/server'
 const vstruct = require('varstruct');
 
 export const LogOut = () => (dispatch, getState) => {
@@ -10,7 +11,7 @@ export const LogOut = () => (dispatch, getState) => {
 };
 
 export const SetUserProfile = (key, page, result) => (dispatch, getState) => {
-  axios.get('https://komodo.forest.network/tx_search?query="account=\'' + key + '\'"&page="' + page + '"')
+  axios.get('https://'+server+'.forest.network/tx_search?query="account=\'' + key + '\'"&page="' + page + '"')
     .then(res => {
       //console.log(res);
       let end = false;
@@ -48,6 +49,7 @@ export const SetUserProfile = (key, page, result) => (dispatch, getState) => {
         if (auth.picture) {
           auth.picture = Buffer.from(auth.picture).toString('base64');
         }
+        auth.publicKey = key;
         //console.log(auth);
         return dispatch({ type: types.SET_USER_PROFILE, payload: auth });
       } else {
@@ -61,7 +63,7 @@ export const EditProfile = (profile) => (dispatch, getState) => {
 };
 
 export const GetProfile = (key, page, result) => (dispatch, getState) => {
-  axios.get('https://komodo.forest.network/tx_search?query="account=\'' + key + '\'"&page="' + page + '"')
+  axios.get('https://'+server+'.forest.network/tx_search?query="account=\'' + key + '\'"&page="' + page + '"')
     .then(res => {
       //console.log(res);
       let end = false;
@@ -103,7 +105,7 @@ export const GetProfile = (key, page, result) => (dispatch, getState) => {
             break;
           case "post":
             try {
-              console.log(txs[i].params);
+              //console.log(txs[i].params);
               const PlainTextContent = vstruct([
                 { name: 'type', type: vstruct.UInt8 },
                 { name: 'text', type: vstruct.VarString(vstruct.UInt16BE) },
@@ -138,7 +140,7 @@ export const GetProfile = (key, page, result) => (dispatch, getState) => {
 };
 
 export const GetInteract = (key, page, result) => (dispatch, getState) => {
-  axios.get('https://komodo.forest.network/tx_search?query="account=\'' + key + '\'"&page="' + page + '"')
+  axios.get('https://'+server+'.forest.network/tx_search?query="account=\'' + key + '\'"&page="' + page + '"')
     .then(res => {
       //console.log(res);
       let end = false;
@@ -280,4 +282,9 @@ export const AddInteractInfo = () => async (dispatch, getState) => {
     }
     return dispatch({ type: types.GET_INTERACT, payload: list });
   }
+}
+
+export const AddInteract = (interact) => (dispatch, getState) => {
+  //console.log(interact);
+  return dispatch({ type: types.ADD_INTERACT, payload: interact });
 }

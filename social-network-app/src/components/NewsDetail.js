@@ -33,6 +33,7 @@ class NewsDetail extends Component {
         let replies = null;
         let reps = [];
         let reacts;
+        let yourReact = "none";
         //console.log(tweet);
         if (tweet && hash) {
             let index = null;
@@ -175,6 +176,11 @@ class NewsDetail extends Component {
                 if (react.array.length <= 0) return [];
                 let result = [];
                 for(let i = 0; i < react.array.length; i++){
+                    if(this.props.auth.user){
+                        if(react.array[i].account.account === this.props.auth.user.publicKey){
+                            yourReact = react.type;
+                        }
+                    }
                     result.push(
                         <div key={i}><a className="nav-link-account" href="/" onClick={(e) => {
                             e.preventDefault();
@@ -263,7 +269,7 @@ class NewsDetail extends Component {
                                 position="right center"
                                 on="hover"
                             >
-                                <Reaction react={react} hash={hash} />
+                                <Reaction yourReact={yourReact} hash={hash} />
                             </Popup></div></li>
                             <li><button><span className="glyphicon glyphicon-envelope"></span></button></li>
                         </ul>

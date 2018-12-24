@@ -196,6 +196,11 @@ ul.associate li button:hover {
 
 .rection-tooltip .react-wrapper img{
     height: 40px;
+    opacity: 0.5;
+    transition: all .15s ease-in-out;
+}
+.rection-tooltip .react-wrapper img:hover{
+    opacity: 1;
 }
 
 .popup-react .popup-content{

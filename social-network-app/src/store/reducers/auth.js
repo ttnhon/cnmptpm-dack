@@ -209,6 +209,11 @@ export default (state = {}, action) => {
             ...state,
             interact: action.payload
         };
+        case types.ADD_INTERACT:
+        return {
+            ...state,
+            interact: state.interact ? state.interact.concat(action.payload) : action.payload
+        };
         case types.LOGOUT:
             return {};
         default:

@@ -29,27 +29,35 @@ class ProfileFollow extends Component {
     linkClick(id, s) {
         history.push("/" + id + "/" + s);
     }
-    submitPicture() {
+    submitPicture(e) {
+        e.preventDefault();
         let seq = this.props.auth.sequence;
         seq++;
         const secretKey = account.checkLogged().secret();
-        
+
         const input = document.getElementById("myPicture");
         const file = input.files[0];
-        if(file === undefined) {
+        if (file === undefined) {
             alert("Please select image");
             return;
         }
         const fr = new FileReader();
         //fr.onload = receivedText;
-          //fr.readAsText(file);
+        //fr.readAsText(file);
         fr.onload = () => {
             const str = fr.result; //Url cua cai file
-            updatePicture(secretKey,seq,str.split(',')[1])
+            const binary = str.split(',')[1]
+            updatePicture(secretKey, seq, binary);
             //location.reload();
+            let profile = {
+                picture: binary,
+                name: this.props.auth.name,
+                sequence: seq,
+                balance: this.props.auth.balance
+            };
+            this.props.editProfile(profile);
         }
         fr.readAsDataURL(file);
-
         // console.log(fr);
         // const str = fr.result;
         // updatePicture(secretKey,seq,str.split(',')[1])
@@ -63,12 +71,12 @@ class ProfileFollow extends Component {
         let inputName;
         let isUser = account.checkLogged().publicKey() === auth.publicKey;
         let isFollow = null;
-        if(!isUser){
+        if (!isUser) {
             //console.log(auth.user);
-            if(auth.user){
-                if(auth.user.followings){
+            if (auth.user) {
+                if (auth.user.followings) {
                     isFollow = auth.user.followings.indexOf(auth.publicKey) !== -1;
-                }else{
+                } else {
                     isFollow = false;
                 }
             }
@@ -148,29 +156,35 @@ class ProfileFollow extends Component {
                                                         <h3 className="modal-header-text">
                                                             Edit your profile
                                                         </h3>
+                                                        <div className="form-group modal-form-item modal-flex">
+                                                            <img className="modal-form-profile-img modal-flex-left clearfix" src={this.props.auth ? this.props.auth.picture ? ('data:image/jpeg;base64,' + this.props.auth.picture) : "/default_profile_icon.png" : "/default_profile_icon.png"} alt="" />
+                                                            <form className="modal-form-input" action="#" onSubmit={this.submitPicture}>
+                                                            <div  className="modal-input">
+                                                            <label>Change your avatar: </label><input className=" btn" type="file" name="myPicture" id="myPicture" />
+                                                            <input type="submit" className="btn btn-primary" />
+                                                            </div>
+                                                        </form>
+                                                        </div>
+                                                        
                                                         <div className="form-group modal-form-item">
                                                             <label htmlFor="usr">Name:</label>
                                                             <input className="form-control" type="text" ref={node => inputName = node} defaultValue={this.props.auth.name} id="txtName" />
                                                         </div>
-
-                                                        <form action="#" onSubmit={this.submitPicture}>
-                                                            <label>Change your avatar: </label><input type="file" name="myPicture" id="myPicture" />
-                                                            <input type="submit" className="btn btn-primary" />
-                                                        </form>
                                                         <div className="modal-form-btn-group">
                                                             <button className="btn btn-default" onClick={this.closeModal}>Cancel</button>
                                                             <button className="btn btn-primary" onClick={(e) => {
                                                                 if (!inputName.value.trim()) {
                                                                     return;
                                                                 }
-                                                                
+
                                                                 console.log(inputName.value);
-                                                                
+
                                                                 let seq = auth.sequence;
                                                                 seq++;
                                                                 const secretKey = account.checkLogged().secret();
-                                                                updateName(secretKey,seq,inputName.value);
+                                                                updateName(secretKey, seq, inputName.value);
                                                                 let profile = {
+                                                                    picture: auth.picture,
                                                                     name: inputName.value,
                                                                     sequence: seq,
                                                                     balance: auth.balance
@@ -184,11 +198,11 @@ class ProfileFollow extends Component {
                                                     </div>
                                                 </Popup>
                                             </div>
-                                            : isFollow === null ? null : <button className="btn btn-edit-profile" onClick={((e)=>{
-                                                if(isFollow === null) return;
+                                            : isFollow === null ? null : <button className="btn btn-edit-profile" onClick={((e) => {
+                                                if (isFollow === null) return;
                                                 this.props.follow(auth.publicKey, isFollow);
                                             })}>
-                                            {isFollow ? "Unfollow" : "Follow"}
+                                                {isFollow ? "Unfollow" : "Follow"}
                                             </button>
                                     }
                                 </div>

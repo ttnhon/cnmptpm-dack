@@ -38,15 +38,19 @@ class Post extends Component {
                                         doTransaction(tx, secretKey).then(res => {
                                             console.log(res);
                                             if (res) {
-                                                this.props.AddSequence();
-                                                var post = {
-                                                    name: auth.user.name,
-                                                    account: acc.publicKey(),
-                                                    height: res.data.result.height,
-                                                    content: { type: 1, text: text }
-                                                };
-                                                this.props.AddNewfeed(post);
-                                                this.props.AddTweet(post);
+                                                if (res.data.result.check_tx.log) {
+                                                    console.log(res.data.result.check_tx.log);
+                                                }else{
+                                                    this.props.AddSequence();
+                                                    var post = {
+                                                        name: auth.user.name,
+                                                        account: acc.publicKey(),
+                                                        height: res.data.result.height,
+                                                        content: { type: 1, text: text }
+                                                    };
+                                                    this.props.AddNewfeed(post);
+                                                    this.props.AddTweet(post);
+                                                }
                                             }
                                         });
                                     });

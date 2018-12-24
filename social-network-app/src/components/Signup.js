@@ -39,8 +39,12 @@ class Signup extends Component {
         //const txs = '0x' + encode(tx).toString('hex');
         doTransaction(tx, secretKey).then(res=>{
             if(res){
-                this.props.AddSequence();
-                console.log(res);
+                if (res.data.result.check_tx.log) {
+                    console.log(res.data.result.check_tx.log);
+                }else{
+                    this.props.AddSequence();
+                    console.log(res);
+                }
             }
         });
     }
