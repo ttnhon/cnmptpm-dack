@@ -108,7 +108,8 @@ export const GetProfile = (key, page, result) => (dispatch, getState) => {
               { name: 'text', type: vstruct.VarString(vstruct.UInt16BE) },
             ]);
             let one_post = {};
-            one_post = { content: PlainTextContent.decode(txs[i].params.content), height: res.data.result.txs[i].height, hash: res.data.result.txs[i].hash };
+            let content = PlainTextContent.decode(txs[i].params.content);
+            one_post = { content: content, height: res.data.result.txs[i].height, hash: res.data.result.txs[i].hash };
             //console.log(one_post);
             auth.tweets = [one_post].concat(auth.tweets);
             break;

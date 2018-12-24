@@ -42,7 +42,7 @@ class Post extends Component {
                                                 var post = {
                                                     name: auth.user.name,
                                                     account: acc.publicKey(),
-                                                    height: res.result.height,
+                                                    height: res.data.result.height,
                                                     content: { type: 1, text: text }
                                                 };
                                                 this.props.AddNewfeed(post);
