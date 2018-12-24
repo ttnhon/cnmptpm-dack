@@ -172,3 +172,62 @@ ul.associate li button:hover {
 .nav-link-account{
     color: black;
 }
+.img-loading-wrapper{
+    text-align: center;
+}
+.img-loading-wrapper .img-loading{
+    height: 100px;
+}
+
+.rection-tooltip{
+    display: inline-flex;
+}
+
+.rection-tooltip .react-wrapper{
+}
+
+.rection-tooltip .react-wrapper .number{
+    position: relative;
+    right: 9px;
+    font-weight: 500;
+    cursor: default;
+}
+
+.rection-tooltip .react-wrapper button:focus{
+    outline: none;
+}
+
+.rection-tooltip .react-wrapper img{
+    height: 40px;
+}
+
+.popup-react .popup-content{
+    width: auto!important;
+}
+
+.rection-case{
+    display: inline-flex;
+}
+
+.rection-case .react-wrapper{
+}
+
+.rection-case .react-wrapper .number{
+    position: relative;
+    right: 5px;
+    font-weight: 500;
+    cursor: default;
+}
+
+.rection-case .react-wrapper button{
+    border: none;
+    background: none;
+}
+
+.rection-case .react-wrapper button:focus{
+    outline: none;
+}
+
+.rection-case .react-wrapper img{
+    height: 20px;
+}

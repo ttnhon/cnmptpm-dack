@@ -204,6 +204,11 @@ export default (state = {}, action) => {
             ...state,
             newfeed: action.payload
         };
+        case types.GET_INTERACT:
+        return {
+            ...state,
+            interact: action.payload
+        };
         case types.LOGOUT:
             return {};
         default:
