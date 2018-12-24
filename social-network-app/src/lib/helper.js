@@ -184,14 +184,15 @@ var getNewFeed = async (account) => {
         all_posts.push(one_post);
       })
     }
-    //get user post
-    // let User_posts = await getPosts(account);
-    // if (User_posts.length > 0) {
-    //   User_posts.map(one_post => {
-    //     all_posts.push(one_post);
-    //   })
-    // }
   }));
+  //get user post
+  let info_user = await getFullInfo(account);
+  let User_posts = await getPosts(account, info_user);
+  if (User_posts.length > 0) {
+    User_posts.map(one_post => {
+      all_posts.push(one_post);
+    })
+  }
   all_posts.sort(function(a, b){return b.height - a.height});
   return all_posts;
 };
