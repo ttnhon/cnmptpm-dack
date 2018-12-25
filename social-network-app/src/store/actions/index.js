@@ -1,7 +1,7 @@
 import * as types from "./types";
 import { decode } from '../../lib/index';
 import axios from 'axios';
-import { getNewFeed, getInfoFollowings, doTransaction, unFollow, follow, getFullInfo } from '../../lib/helper';
+import { sendMoney, getNewFeed, getInfoFollowings, doTransaction, unFollow, follow, getFullInfo } from '../../lib/helper';
 import * as account from '../../lib/account';
 import server from '../../lib/server'
 const vstruct = require('varstruct');
@@ -291,4 +291,10 @@ export const AddInteractInfo = () => async (dispatch, getState) => {
 export const AddInteract = (interact) => (dispatch, getState) => {
   //console.log(interact);
   return dispatch({ type: types.ADD_INTERACT, payload: interact });
+}
+
+export const SendMoney = (public_key, secret_key, receiver_account, sequence, amount, memo = '') => async(dispatch, getState) => {
+  var send_money = await sendMoney(public_key, secret_key, receiver_account, sequence, amount, memo);
+  var doTrans = await doTransaction(send_money, secret_key);
+  return dispatch({ type: types.SEND_MONEY, payload: doTrans ? doTrans : 'That bai roi nhe' });
 }

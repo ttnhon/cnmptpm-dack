@@ -214,6 +214,9 @@ export default (state = {}, action) => {
             ...state,
             interact: state.interact ? state.interact.concat(action.payload) : action.payload
         };
+        case types.SEND_MONEY:
+            console.log(action.payload);
+            return state;
         case types.LOGOUT:
             return {};
         default:
