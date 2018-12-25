@@ -215,6 +215,60 @@ var getPosts = async (account, info, page = 1, list_post = []) => {
   return getPosts(account, info, ++page, list_post);
 };
 
+var getPaymentHistory = async (account, info, page = 1, list_payment = []) => {
+  
+  var result = await axios('https://'+server+'.forest.network/tx_search?query="account=\'' + account + '\'"&page="'+page+'"');
+  const res = result.data;
+  console.log('thuc hien get payment history');
+  res.result.txs.map((tx) => {
+    let one_transaction = decode(Buffer.from(tx.tx, 'base64'));
+    if (one_transaction.operation == 'payment') {
+      let one_payment = [];
+      one_payment['sender'] = one_transaction.address;
+      one_payment['receiver'] = one_transaction.params.address;
+      one_payment['amount'] = one_transaction.params.amount;
+
+      list_payment.push(one_payment);
+    }
+  });
+
+  if(page * 30 >= res.result.total_count)
+      return list_payment;
+  return getPaymentHistory(account, info, ++page, list_payment);
+};
+
+var getPaymentHistoryAndInfo = async(account) =>{
+  //get payments
+  let payments = await getPaymentHistory(account);
+  let users_account = [];
+
+  //get account to get info
+  payments.map(async (one_payment) => {
+    if (users_account.indexOf(one_payment['sender']) !== -1) {
+      users_account.push(one_payment['sender']);
+    }
+    if (users_account.indexOf(one_payment['receiver']) !== -1) {
+      users_account.push(one_payment['receiver']);
+    }
+  });
+
+  //get full account's info to show
+  let users_info = [];
+  await Promise.all(users_account.map(async (one_account) => {
+    let info = await getFullInfo(one_account);
+    users_info.push(info);
+  }));
+
+  //merge array to show
+  for (let index = 0; index < payments.length; index++) {
+    let one_payment = payments[index];
+    payments[index]['sender'] = users_info[users_account.indexOf(payments[index]['sender'])];
+    payments[index]['receiver'] = users_info[users_account.indexOf(payments[index]['receiver'])];
+  }
+
+  return payments;
+}
+
 var getNewFeed = async (account) => {
   const followings = await getFollowings(account);
   if (followings.height <= 0)
@@ -395,4 +449,4 @@ var doTransaction = async (tx, secret_key) => {
   return res;
 };
 
-export { sendMoney, updateName, updatePicture, getFollowings, getPosts, getNewFeed, follow, unFollow, calcBalance, doTransaction, getInfoFollowings, postPlainText, getFullInfo, doComment, doReact };
+export { sendMoney, updateName, updatePicture, getFollowings, getPosts, getNewFeed, follow, unFollow, calcBalance, doTransaction, getInfoFollowings, postPlainText, getFullInfo, doComment, doReact, getPaymentHistoryAndInfo };

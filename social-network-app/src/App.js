@@ -9,6 +9,7 @@ import { GetProfile } from './store/actions/index';
 import Home from './components/Home';
 import Payment from './components/Payment';
 import * as account from './lib/account';
+import PaymentHistory from './components/PaymentHistory';
 //import Followers from './components/Followers';
 
 class App extends Component {
@@ -29,6 +30,7 @@ class App extends Component {
           <Route path="/:id/tweets/:hash" component={NewsDetail} />
           <Route path="/:id/:value" component={Profile} />
           <Route exact path="/payment" component={Payment} />
+          <Route exact path="/payment-history" component={PaymentHistory} />
         </Switch>
       </Router>
     );
