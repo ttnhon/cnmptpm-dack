@@ -4,6 +4,7 @@ import history from '../history';
 import { GetNewfeed } from '../store/actions/index';
 import * as account from '../lib/account';
 import Post from './Post';
+import { Link } from 'react-router-dom';
 
 class Newfeed extends Component {
     getTime(time) {
@@ -46,10 +47,6 @@ class Newfeed extends Component {
         history.push('/' + acc + '/tweets/' + hash);
     }
 
-    ClickPerson(key){
-        history.push('/' + key + '/tweets');
-    }
-
     componentWillMount() {
         if (this.props.newfeed === undefined || this.props.newfeed === null) {
             let key = account.checkLogged().publicKey();
@@ -68,23 +65,29 @@ class Newfeed extends Component {
             media = tweets.map((tweet, index) => {
                 //let time = this.getTime(tweet.date);
                 return (
-                    <div className="media" href="#toDetail" key={index} onClick={() => this.ClickTweet(tweet.account, tweet.hash)}>
-                        <a className="media-left" href="#fake">
+                    <div className="media" href="#toDetail" key={index} onClick={(e) => {
+                        e.preventDefault();
+                        let event = e.nativeEvent;
+                        let uri = event.toElement.baseURI;
+                        if(!(uri === window.location.href)){
+                            this.ClickTweet(tweet.account, tweet.hash);
+                        }else{
+
+                        }
+                        }}>
+                        <Link className="media-left" to={'/' + tweet.account + '/tweets'}>
                             <img alt={tweet.img_url} className="media-object img-circle" src={tweet.img_url ? tweet.img_url !== "Not Set" ?  'data:image/jpeg;base64,' + tweet.img_url : "/default_profile_icon.png" : "/loading_circle.gif"} />
-                        </a>
+                        </Link>
                         <div className="media-body">
                             <div className="profile-tweets-user-header">
-                                <a className="profile-tweets-user" onClick={(e)=>{
-                                    e.preventDefault();
-                                    this.ClickPerson(tweet.account);
-                                }} href="/">
+                                <Link className="profile-tweets-user" to={'/' + tweet.account + '/tweets'}>
                                     <span className="user-name">
                                         <span>{tweet.name ? tweet.name : null}</span>
                                     </span>
                                     <div className="user-time">
                                         <span>{tweet.height}</span>
                                     </div>
-                                </a>
+                                </Link>
                             </div>
                             <p>{tweet.content.text}</p>
                             {/* <ul className="nav nav-pills nav-pills-custom">

@@ -12,19 +12,19 @@ import Comment from './Comment';
 class NewsDetail extends Component {
     componentWillMount() {
         let id = "";
-
-        if (this.props.match.params.id) {
+        let hash = "";
+        if (this.props.match.params.id && this.props.match.params.hash) {
             id = this.props.match.params.id;
+            hash = this.props.match.params.hash;
             this.props.GetProfile(id, 1, { balance: 0, sequence: 0, tweets: [] });
-            this.props.GetInteract(id, 1, []);
+            this.props.GetInteract({key : id, hash: hash}, 1, []);
         }
     }
     render() {
         let hash = this.props.match.params.hash;
-        let interacts = this.props.interact;
         var tweets = this.props.tweet;
         var tweet;
-        let interact = [];
+        let interact = this.props.interact;
         let error;
         let react = {
             none: [],
@@ -54,27 +54,27 @@ class NewsDetail extends Component {
                 error = "Tweet not found";
             }
         }
-        if (tweet && interacts && hash) {
-            for (let i = 0; i < interacts.length; i++) {
-                if (interacts[i].skip) continue;
-                let leng;
-                if (interacts[i].object === hash) {
-                    leng = interact.push(interacts[i]);
-                }
-                if (leng) {
-                    for (let j = 0; j < interacts.length; j++) {
-                        if (interacts[j].skip) continue;
-                        if (interacts[j].object === interact[leng - 1].hash) {
-                            if (interact[leng - 1].interact) {
-                                interact[leng - 1].interact.push(interacts[j]);
-                            } else {
-                                interact[leng - 1].interact = [].concat(interacts[j]);
-                            }
-                            interacts[j].skip = true;
-                        }
-                    }
-                }
-            }
+        if (tweet && interact && hash) {
+            // for (let i = 0; i < interacts.length; i++) {
+            //     if (interacts[i].skip) continue;
+            //     let leng;
+            //     if (interacts[i].object === hash) {
+            //         leng = interact.push(interacts[i]);
+            //     }
+            //     if (leng) {
+            //         for (let j = 0; j < interacts.length; j++) {
+            //             if (interacts[j].skip) continue;
+            //             if (interacts[j].object === interact[leng - 1].hash) {
+            //                 if (interact[leng - 1].interact) {
+            //                     interact[leng - 1].interact.push(interacts[j]);
+            //                 } else {
+            //                     interact[leng - 1].interact = [].concat(interacts[j]);
+            //                 }
+            //                 interacts[j].skip = true;
+            //             }
+            //         }
+            //     }
+            // }
             //console.log(interact);
             if (interact.length > 0) {
                 for (let i = 0; i < interact.length; i++) {

@@ -11,12 +11,14 @@ const followingReducer = (state = initState, action) => {
             };
         case types.DELETE_FOLLOWING:
         var list = state.users;
-        console.log(state);
+        //console.log(state);
         list.splice(action.payload, 1);
             return {
                 ...state,
                 users: list
             };
+        case types.SET_DEFAULT:
+            return initState;
         default:
             return state;
     }

@@ -10,7 +10,7 @@ import { updateName, updatePicture } from './../lib/helper';
 class ProfileFollow extends Component {
     constructor(props) {
         super(props)
-        this.state = { open: false };
+        this.state = { open: false, error: undefined, succeed: undefined, isLoading: false };
         this.openModal = this.openModal.bind(this);
         this.closeModal = this.closeModal.bind(this);
         this.onChange = this.onChange.bind(this);
@@ -45,17 +45,22 @@ class ProfileFollow extends Component {
         //fr.onload = receivedText;
         //fr.readAsText(file);
         fr.onload = () => {
+            this.setState({ isLoading: true, error: undefined, succeed: undefined });
             const str = fr.result; //Url cua cai file
-            const binary = str.split(',')[1]
-            updatePicture(secretKey, seq, binary);
-            //location.reload();
-            let profile = {
-                picture: binary,
-                name: this.props.auth.name,
-                sequence: seq,
-                balance: this.props.auth.balance
-            };
-            this.props.editProfile(profile);
+            const binary = str.split(',')[1];
+            var res = updatePicture(secretKey, seq, binary).then(res=>{
+                if(res.error){
+                    this.setState({error: res.error, succeed: undefined});
+                }else{
+                    let profile = {
+                        picture: binary,
+                        sequence: seq
+                    };
+                    this.props.editProfile(profile);
+                    this.setState({error: undefined, succeed: res.succeed})
+                }
+                this.setState({ isLoading: false });
+            });
         }
         fr.readAsDataURL(file);
         // console.log(fr);
@@ -107,10 +112,10 @@ class ProfileFollow extends Component {
                                                 this.linkClick(id, "following");
                                             }}>
                                                 <span className="profile-nav-label">Following</span>
-                                                <span className="profile-nav-value">{this.props.following ? this.props.following.length : 0}</span>
+                                                <span className="profile-nav-value">{auth.followings ? auth.followings.length : 0}</span>
                                             </a>
                                         </li>
-                                        <li className={value === "followers" ? "profile-nav-item active" : "profile-nav-item"}>
+                                        {/* <li className={value === "followers" ? "profile-nav-item active" : "profile-nav-item"}>
                                             <a href="#link" onClick={(e) => {
                                                 e.preventDefault();
                                                 this.linkClick(id, "followers");
@@ -136,7 +141,7 @@ class ProfileFollow extends Component {
                                                 <span className="profile-nav-label">Moments</span>
                                                 <span className="profile-nav-value">0</span>
                                             </a>
-                                        </li>
+                                        </li> */}
                                     </ul>
                                 </div>
                                 <div className="col-sm-3 col-md-3 col-lg-3 profile-nav-btn">
@@ -159,39 +164,54 @@ class ProfileFollow extends Component {
                                                         <div className="form-group modal-form-item modal-flex">
                                                             <img className="modal-form-profile-img modal-flex-left clearfix" src={auth.picture ? auth.picture !== "Not Set" ? ('data:image/jpeg;base64,' + auth.picture) : "/default_profile_icon.png" : "/loading_circle.gif"} alt="" />
                                                             <form className="modal-form-input" action="#" onSubmit={this.submitPicture}>
-                                                            <div  className="modal-input">
-                                                            <label>Change your avatar: </label><input className=" btn" type="file" name="myPicture" id="myPicture" />
-                                                            <input type="submit" className="btn btn-primary" />
-                                                            </div>
-                                                        </form>
+                                                                <div className="modal-input">
+                                                                    <label>Change your avatar: </label><input className=" btn" type="file" name="myPicture" id="myPicture" />
+                                                                    <input type="submit" className="btn btn-primary" />
+                                                                </div>
+                                                            </form>
                                                         </div>
-                                                        
+
                                                         <div className="form-group modal-form-item">
                                                             <label htmlFor="usr">Name:</label>
                                                             <input className="form-control" type="text" ref={node => inputName = node} defaultValue={auth.name} id="txtName" />
                                                         </div>
+                                                        {this.state.isLoading ? <div className="img-loading-wrapper"><img className="img-loading" src="/loading.gif" alt="" /></div> : null}
+                                                        {this.state.error ? <div className="alert alert-danger fade in error-log">
+                                                            <strong>{this.state.error ? this.state.error : null}</strong>
+                                                        </div> : null}
+                                                        {this.state.succeed ? <div className="alert alert-success fade in error-log">
+                                                            <strong>{this.state.succeed ? this.state.succeed : null}</strong>
+                                                        </div> : null}
                                                         <div className="modal-form-btn-group">
                                                             <button className="btn btn-default" onClick={this.closeModal}>Cancel</button>
                                                             <button className="btn btn-primary" onClick={(e) => {
                                                                 if (!inputName.value.trim()) {
                                                                     return;
                                                                 }
-
-                                                                console.log(inputName.value);
+                                                                this.setState({ isLoading: true, error: undefined, succeed: undefined });
+                                                                //console.log(inputName.value);
 
                                                                 let seq = auth.sequence;
                                                                 seq++;
                                                                 const secretKey = account.checkLogged().secret();
-                                                                updateName(secretKey, seq, inputName.value);
-                                                                let profile = {
-                                                                    picture: auth.picture,
-                                                                    name: inputName.value,
-                                                                    sequence: seq,
-                                                                    balance: auth.balance
-                                                                };
-                                                                this.props.editProfile(profile);
-                                                                //this.closeModal();
-
+                                                                let name = inputName.value;
+                                                                updateName(secretKey, seq, name).then(res=>{
+                                                                    if (res) {
+                                                                        if (res.data.result.check_tx.log) {
+                                                                            this.setState({error: res.data.result.check_tx.log, succeed: undefined})
+                                                                            alert(res.data.result.check_tx.log);
+                                                                        } else {
+                                                                            let profile = {
+                                                                                name: name,
+                                                                                sequence: seq
+                                                                            };
+                                                                            this.props.editProfile(profile);
+                                                                            this.setState({error: undefined, succeed: "Change name succeess"})
+                                                                        }
+                                                                    //this.closeModal();
+                                                                    this.setState({ isLoading: false });
+                                                                    }
+                                                                })
                                                             }
                                                             }>Save change</button>
                                                         </div>

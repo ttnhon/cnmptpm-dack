@@ -15,3 +15,4 @@ export const ADD_POST = "ADD_POST";
 export const GET_INTERACT = "GET_INTERACT";
 export const ADD_INTERACT = "ADD_INTERACT";
 export const SEND_MONEY = "SEND_MONEY";
+export const SET_DEFAULT = "SET_DEFAULT";

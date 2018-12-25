@@ -11,7 +11,7 @@ export const LogOut = () => (dispatch, getState) => {
 };
 
 export const SetUserProfile = (key, page, result) => (dispatch, getState) => {
-  axios.get('https://'+server+'.forest.network/tx_search?query="account=\'' + key + '\'"&page="' + page + '"')
+  axios.get('https://' + server + '.forest.network/tx_search?query="account=\'' + key + '\'"&page="' + page + '"')
     .then(res => {
       //console.log(res);
       let end = false;
@@ -41,7 +41,7 @@ export const SetUserProfile = (key, page, result) => (dispatch, getState) => {
             auth.picture = txs[i].params.value;
           };
         }
-        
+
         if (txs[i].operation === "payment") {
           if (key === txs[i].account) {
             auth.balance = auth.balance - txs[i].params.amount;
@@ -57,10 +57,10 @@ export const SetUserProfile = (key, page, result) => (dispatch, getState) => {
         }
         if (auth.picture) {
           auth.picture = Buffer.from(auth.picture).toString('base64');
-        }else{
+        } else {
           auth.picture = "Not Set";
         }
-        if(auth.name === undefined){
+        if (auth.name === undefined) {
           auth.name = "No name";
         }
         auth.publicKey = key;
@@ -73,11 +73,11 @@ export const SetUserProfile = (key, page, result) => (dispatch, getState) => {
 };
 
 export const EditProfile = (profile) => (dispatch, getState) => {
-  return dispatch({ type: types.EDIT_PROFILE, payload: { name: profile.name, balance: profile.balance, sequence: profile.sequence, picture: profile.picture } });
+  return dispatch({ type: types.EDIT_PROFILE, payload: profile });
 };
 
 export const GetProfile = (key, page, result) => (dispatch, getState) => {
-  axios.get('https://'+server+'.forest.network/tx_search?query="account=\'' + key + '\'"&page="' + page + '"')
+  axios.get('https://' + server + '.forest.network/tx_search?query="account=\'' + key + '\'"&page="' + page + '"')
     .then(res => {
       //console.log(res);
       let end = false;
@@ -102,6 +102,10 @@ export const GetProfile = (key, page, result) => (dispatch, getState) => {
                 auth[txs[i].params.key] = txs[i].params.value.toString('utf-8');
                 break;
               case "followings":
+                const Followings = vstruct([
+                  { name: 'addresses', type: vstruct.VarArray(vstruct.UInt16BE, vstruct.Buffer(35)) },
+                ]);
+                auth.followings = Followings.decode(txs[i].params.value).addresses;
                 break;
               case "picture":
                 auth.picture = txs[i].params.value;
@@ -142,24 +146,27 @@ export const GetProfile = (key, page, result) => (dispatch, getState) => {
       if (end) {
         if (auth.picture) {
           auth.picture = Buffer.from(auth.picture).toString('base64');
-        }else{
+        } else {
           auth.picture = "Not Set";
         }
-        if(auth.name === undefined){
+        if (auth.followings) {
+          const base32 = require('base32.js');
+          auth.followings = auth.followings.map(value => (base32.encode(value)));
+        }
+        if (auth.name === undefined) {
           auth.name = "No name";
         }
         //console.log(auth);
-        dispatch({ type: types.GET_POST, payload: auth.tweets });
-        //dispatch({ type: types.GET_INTERACT, payload: auth.interact });
-        dispatch(GetFollowing(key));
-        return dispatch(EditProfile(auth));
+        dispatch(EditProfile({ name: auth.name, balance: auth.balance, sequence: auth.sequence, picture: auth.picture, followings: auth.followings }));
+        //dispatch(GetFollowing(key));
+        return dispatch({ type: types.GET_POST, payload: auth.tweets });
       }
       return dispatch(GetProfile(key, page + 1, auth));
     });
 };
 
-export const GetInteract = (key, page, result) => (dispatch, getState) => {
-  axios.get('https://'+server+'.forest.network/tx_search?query="account=\'' + key + '\'"&page="' + page + '"')
+export const GetInteract = (acc, page, result) => (dispatch, getState) => {
+  axios.get('https://' + server + '.forest.network/tx_search?query="account=\'' + acc.key + '\'"&page="' + page + '"')
     .then(res => {
       //console.log(res);
       let end = false;
@@ -202,10 +209,34 @@ export const GetInteract = (key, page, result) => (dispatch, getState) => {
         }
       }
       if (end) {
-        dispatch({ type: types.GET_INTERACT, payload: interact });
+        //console.log(interact);
+        //console.log(acc.hash);
+        let res = [];
+        for (let i = 0; i < interact.length; i++) {
+          if (interact[i].skip) continue;
+          let leng;
+          if (interact[i].object === acc.hash) {
+            leng = res.push(interact[i]);
+          }
+          if (leng) {
+            for (let j = 0; j < interact.length; j++) {
+              if (interact[j].skip) continue;
+              if (interact[j].object === res[leng - 1].hash) {
+                if (res[leng - 1].interact) {
+                  res[leng - 1].interact.push(interact[j]);
+                } else {
+                  res[leng - 1].interact = [].concat(interact[j]);
+                }
+                interact[j].skip = true;
+              }
+            }
+          }
+        }
+        //console.log(res);
+        dispatch({ type: types.GET_INTERACT, payload: res });
         return dispatch(AddInteractInfo());
       }
-      return dispatch(GetInteract(key, page + 1, interact));
+      return dispatch(GetInteract(acc, page + 1, interact));
     });
 };
 
@@ -284,6 +315,13 @@ export const AddInteractInfo = () => async (dispatch, getState) => {
   let list = getState().auth.interact;
   if (list) {
     for (let i = 0; i < list.length; i++) {
+      if(list[i].interact){
+        for(let j = 0; j < list[i].interact.length; j++){
+          await getFullInfo(list[i].interact[j].account).then(res => {
+            list[i].interact[j].account = res;
+          })
+        }
+      }
       await getFullInfo(list[i].account).then(res => {
         list[i].account = res;
       })
@@ -292,12 +330,16 @@ export const AddInteractInfo = () => async (dispatch, getState) => {
   }
 }
 
+export const SetDefaultState = () => (dispatch, getState) => {
+  return dispatch({ type: types.SET_DEFAULT });
+}
+
 export const AddInteract = (interact) => (dispatch, getState) => {
   //console.log(interact);
   return dispatch({ type: types.ADD_INTERACT, payload: interact });
 }
 
-export const SendMoney = (public_key, secret_key, receiver_account, sequence, amount, memo = '') => async(dispatch, getState) => {
+export const SendMoney = (public_key, secret_key, receiver_account, sequence, amount, memo = '') => async (dispatch, getState) => {
   var send_money = await sendMoney(public_key, secret_key, receiver_account, sequence, amount, memo);
   var doTrans = await doTransaction(send_money, secret_key);
   return dispatch({ type: types.SEND_MONEY, payload: doTrans ? doTrans : 'That bai roi nhe' });

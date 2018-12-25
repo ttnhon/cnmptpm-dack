@@ -12,7 +12,8 @@ class Login extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            secretKey: ''
+            secretKey: '',
+            error: undefined
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -31,18 +32,18 @@ class Login extends Component {
             const key = Keypair.fromSecret(this.state.secretKey);
             //console.log(key.publicKey());
             this.props.logIn({ publicKey: key.publicKey(), secretKey: this.state.secretKey });
-            
+
             account.login(this.state.secretKey);
             history.push("/" + key.publicKey() + "/tweets");
         } catch (err) {
+            this.setState({error: "Invalid secret key"});
             console.log(err);
         }
     }
     render() {
         const key = account.checkLogged();
-        if(key !== false)
-        {
-            return <Redirect to={"/" + key.publicKey() + "/tweets"}/>
+        if (key !== false) {
+            return <Redirect to={"/" + key.publicKey() + "/tweets"} />
         }
         return (
             <section className="login-block">
@@ -55,10 +56,13 @@ class Login extends Component {
                                     <label htmlFor="exampleInputEmail1" className="text-uppercase">Secret key</label>
                                     <input type="text" name='secretKey' value={this.state.secretKey} onChange={this.handleChange} className="form-control" placeholder="" />
                                 </div>
-                                <div className="form-submit">
+                                <div className="form-submit text-center">
                                     <button onClick={this.handleSubmit} className="btn btn-login float-right">Sign in</button>
                                 </div>
                             </form>
+                            {this.state.error ? <div className="alert alert-danger fade in  error-log">
+                                    <strong>{this.state.error ? this.state.error : null}</strong>
+                                </div> : null}
                             <div className="copy-text">Created with <i className="fa fa-heart" /> by <a href="/">N2P</a></div>
                         </div>
                         <div className="col-md-6 banner-sec">

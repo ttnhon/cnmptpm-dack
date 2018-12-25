@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import history from '../history';
 import Post from './Post';
 import * as account from '../lib/account';
@@ -54,20 +55,27 @@ class Tweets extends Component {
             media = tweets.map((tweet, index) => {
                 //let time = this.getTime(tweet.date);
                 return (
-                    <div className="media" href="#toDetail" key={index} onClick={()=>this.ClickTweet(tweet.hash)}>
-                        <a className="media-left" href="#fake">
-                            <img alt="" className="media-object img-circle" src={this.props.auth.picture ? this.props.auth.picture !== "Not Set" ? ('data:image/jpeg;base64,' + this.props.auth.picture) : "/default_profile_icon.png" : "/loading_circle.gif"} />
-                        </a>
+                    <div className="media" href="#toDetail" key={index} onClick={(e)=>{
+                        e.preventDefault();
+                        let event = e.nativeEvent;
+                        console.log(event.toElement.id === "toAcc");
+                        if(!(event.toElement.id === "toAcc")){
+                            this.ClickTweet(tweet.hash);
+                        }
+                        }}>
+                        <Link className="media-left" to={this.props.auth.publicKey ? "/"+ this.props.auth.publicKey+"/tweets" : "/error" }>
+                            <img id="toAcc" alt="" className="media-object img-circle" src={this.props.auth.picture ? this.props.auth.picture !== "Not Set" ? ('data:image/jpeg;base64,' + this.props.auth.picture) : "/default_profile_icon.png" : "/loading_circle.gif"} />
+                        </Link>
                         <div className="media-body">
                             <div className="profile-tweets-user-header">
-                                <a className="profile-tweets-user" href={this.props.auth ? "/"+ this.props.auth.publicKey+"/tweets" : "#noUserId"}>
-                                    <span className="user-name">
-                                        <span>{this.props.auth ? this.props.auth.name ? this.props.auth.name : "No name" : null}</span>
+                                <Link className="profile-tweets-user" to={this.props.auth.publicKey ? "/"+ this.props.auth.publicKey+"/tweets" : "/error" }>
+                                    <span id="toAcc" className="user-name">
+                                        <span id="toAcc" >{this.props.auth ? this.props.auth.name ? this.props.auth.name : "No name" : null}</span>
                                     </span>
                                     <div className="user-time">
-                                        <span>{tweet.height}</span>
+                                        <span id="toAcc">{tweet.height}</span>
                                     </div>
-                                </a>
+                                </Link>
                             </div>
                             <p>{tweet ? tweet.content ? tweet.content.text : null : null}</p>
                             {/* <ul className="nav nav-pills nav-pills-custom">

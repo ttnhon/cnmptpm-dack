@@ -8,6 +8,7 @@ import { connect } from 'react-redux';
 import { GetProfile } from './store/actions/index';
 import Home from './components/Home';
 import Payment from './components/Payment';
+import Error from './components/Error';
 import * as account from './lib/account';
 //import Followers from './components/Followers';
 
@@ -29,6 +30,7 @@ class App extends Component {
           <Route path="/:id/tweets/:hash" component={NewsDetail} />
           <Route path="/:id/:value" component={Profile} />
           <Route exact path="/payment" component={Payment} />
+          <Route exact path="/error" component={Error} />
         </Switch>
       </Router>
     );

@@ -6,8 +6,8 @@ import Header from './Header';
 import ProfileFollow from './ProfileFollow';
 import Tweets from './Tweets';
 import Following from './Following';
-import Followers from './Followers';
-import { GetProfile } from '../store/actions/index';
+import Error from './Error';
+import { GetProfile, SetDefaultState } from '../store/actions/index';
 
 class Profile extends Component {
     componentWillMount() {
@@ -22,14 +22,15 @@ class Profile extends Component {
         //console.log(this.props);
         let auth = this.props.auth;
         let value = "";
-        let id = null;
         if (this.props.match.params.value) {
             value = this.props.match.params.value;
         }
         //console.log(auth);
         if (auth.publicKey) {
             if (this.props.match.params.id !== auth.publicKey) {
-                id = this.props.match.params.id;
+                //console.log("get info");
+                let id = this.props.match.params.id;
+                this.props.SetDefaultState();
                 this.props.GetProfile(id, 1, { balance: 0, sequence: 0, tweets: [], interact: [] });
             }
         }
@@ -41,10 +42,8 @@ class Profile extends Component {
             case "following":
                 page = <Following />;
                 break;
-            case "followers":
-                page = <Followers />;
-                break;
             default:
+                page = <Error error={"Page not found"} />
                 break;
         }
         return (
@@ -171,7 +170,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        GetProfile: (key, page, result) => dispatch(GetProfile(key, page, result))
+        GetProfile: (key, page, result) => dispatch(GetProfile(key, page, result)),
+        SetDefaultState: () => dispatch(SetDefaultState())
     }
 };
 

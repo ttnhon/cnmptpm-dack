@@ -78,9 +78,9 @@ var updatePicture = async (secret_key, sequence, str, memo = '') => {
 
   await request(options, (error, response, body) => {
       if (error) {
-          console.error('An error has occurred: ', error);
+          return {error: 'An error has occurred: ' + error};
       } else {
-          console.log('Post successful: response: ', body);
+          return {succeed: 'Change avatar success', response: body};
       }
   });
 

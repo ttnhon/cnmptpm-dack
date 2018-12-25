@@ -22,7 +22,7 @@ class Signup extends Component {
     }
     NextClick(e) {
         //console.log("next");
-        this.setState({isLoading: true});
+        this.setState({ isLoading: true });
         const key = account.checkLogged();
         if (key === false) return;
         var tx = {
@@ -42,14 +42,14 @@ class Signup extends Component {
             if (res) {
                 if (res.data.result.check_tx.log) {
                     console.log(res.data.result.check_tx.log);
-                    this.setState({error: res.data.result.check_tx.log});
+                    this.setState({ error: res.data.result.check_tx.log, succeed: undefined });
                 } else {
                     this.props.AddSequence();
                     console.log(res);
-                    this.setState({succeed: "Succeess! Your account had been created."});
+                    this.setState({error: undefined, succeed: "Succeess! Your account had been created." });
                 }
             }
-            this.setState({isLoading: false});
+            this.setState({ isLoading: false });
         });
     }
     render() {
@@ -77,12 +77,12 @@ class Signup extends Component {
                             </div>
                         </div>
                         : null}
-                        {this.state.isLoading ? <div className="img-loading-wrapper"><img className="img-loading" src="/loading.gif" alt="" /></div> : null}
+                    {this.state.isLoading ? <div className="img-loading-wrapper"><img className="img-loading" src="/loading.gif" alt="" /></div> : null}
                     {this.state.error ? <div className="alert alert-danger fade in error-log">
-                    <strong>{this.state.error ? this.state.error : null}</strong>
+                        <strong>{this.state.error ? this.state.error : null}</strong>
                     </div> : null}
                     {this.state.succeed ? <div className="alert alert-success fade in error-log">
-                    <strong>{this.state.succeed ? this.state.succeed : null}</strong>
+                        <strong>{this.state.succeed ? this.state.succeed : null}</strong>
                     </div> : null}
                 </div>
             </div>
