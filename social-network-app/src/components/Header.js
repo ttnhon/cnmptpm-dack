@@ -77,7 +77,7 @@ class Header extends Component {
                 }}><span className="glyphicon glyphicon-search form-control-feedback"></span></button>
               </div>
               <div className="dropdown user-dropdown">
-                <button className="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img className="img-circle" src={this.props.auth.user ? this.props.auth.user.picture ? ('data:image/jpeg;base64,' + this.props.auth.user.picture) : "/default_profile_icon.png" : "/loading_circle.gif"} alt="" /></button>
+                <button className="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img className="img-circle" src={this.props.auth.user ? this.props.auth.user.picture !== "Not Set" ? ('data:image/jpeg;base64,' + this.props.auth.user.picture) : "/default_profile_icon.png" : "/loading_circle.gif"} alt="" /></button>
                 <ul className="dropdown-menu">
                   <li className="menu-user-acc">
                     <Link to={"/" + key.publicKey() + "/tweets"}>

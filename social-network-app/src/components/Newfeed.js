@@ -70,7 +70,7 @@ class Newfeed extends Component {
                 return (
                     <div className="media" href="#toDetail" key={index} onClick={() => this.ClickTweet(tweet.account, tweet.hash)}>
                         <a className="media-left" href="#fake">
-                            <img alt={tweet.img_url} className="media-object img-circle" src={tweet.img_url !== "Not Set" ? tweet.img_url ?  'data:image/jpeg;base64,' + tweet.img_url : "/default_profile_icon.png" : "/loading_circle.gif"} />
+                            <img alt={tweet.img_url} className="media-object img-circle" src={tweet.img_url ? tweet.img_url !== "Not Set" ?  'data:image/jpeg;base64,' + tweet.img_url : "/default_profile_icon.png" : "/loading_circle.gif"} />
                         </a>
                         <div className="media-body">
                             <div className="profile-tweets-user-header">
@@ -87,12 +87,12 @@ class Newfeed extends Component {
                                 </a>
                             </div>
                             <p>{tweet.content.text}</p>
-                            <ul className="nav nav-pills nav-pills-custom">
+                            {/* <ul className="nav nav-pills nav-pills-custom">
                                 <li><a href="#fake"><i className="far fa-comment"></i></a></li>
                                 <li><a href="#fake"><span className="glyphicon glyphicon-retweet"></span></a></li>
                                 <li><a href="#fake"><span className="glyphicon glyphicon-heart-empty"></span> <span>1</span></a></li>
                                 <li><a href="#fake"><i className="far fa-chart-bar"></i></a></li>
-                            </ul>
+                            </ul> */}
                         </div>
                     </div>
                 );

@@ -45,6 +45,7 @@
 
 .one-news-content .text, .one-news-content .imgs, .one-news-content .videos {
     margin-bottom: 10px;
+    margin-left: 25px;
 }
 
 .comment-content {
@@ -58,6 +59,7 @@
 
 .one-news-status {
     margin-top: 10px;
+    border-bottom: 1px solid gainsboro;
 }
 
 .one-news-detail p {
@@ -69,7 +71,7 @@ i.nickname {
 }
 .one-news-reply .form-group{
     width: 100%;
-    text-align: center;
+    text-align: left;
 }
 
 .one-news-reply label {
@@ -115,10 +117,6 @@ i.nickname {
 
 .one-news-content .imgs img.img-fluid {
     border-radius: 10px;
-}
-
-.one-news-reply {
-    margin-top: 20px;
 }
 
 .one-news-detail ul {
@@ -213,7 +211,7 @@ ul.associate li button:hover {
 }
 
 .rection-tooltip .react-wrapper img{
-    height: 40px;
+    height: 30px;
     opacity: 0.5;
     transition: all .15s ease-in-out;
 }
@@ -223,7 +221,12 @@ ul.associate li button:hover {
 
 .popup-react .popup-content{
     width: auto!important;
-    min-width: 324px;
+}
+
+.rection-case .popup-content{
+    min-width: auto;
+    max-height: 200px;
+    overflow: auto;
 }
 
 .rection-case{
@@ -248,4 +251,17 @@ ul.associate li button:hover {
 
 .rection-case .react-wrapper img{
     height: 20px;
+}
+
+.associate button:focus{
+    outline: none;
+}
+
+.comment-reply{
+    padding: 0;
+    padding-left: 13%;
+}
+
+.reply-margin{
+    padding-left: 13%;
 }

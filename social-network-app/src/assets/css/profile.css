@@ -295,8 +295,6 @@ div.panel-heading{
 	display: flex;
 	margin-left: 10px;
 }
-.modal-flex .modal-input{
-}
 .modal-edit-profile .modal-form-item .modal-form-profile-img{
 	height: 200px;
 	border: 5px solid rgb(155, 155, 155);

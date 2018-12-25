@@ -38,15 +38,15 @@ class Post extends Component {
                                     seq++;
                                     var acc = account.checkLogged();
                                     const secretKey = acc.secret();
-                                    console.log(seq, inputPost.value, secretKey);
+                                    //console.log(seq, inputPost.value, secretKey);
                                     let text = inputPost.value;
                                     postPlainText(inputPost.value, seq).then(tx => {
-                                        console.log(tx);
+                                        //console.log(tx);
                                         doTransaction(tx, secretKey).then(res => {
-                                            console.log(res);
+                                            //console.log(res);
                                             if (res) {
                                                 if (res.data.result.check_tx.log) {
-                                                    console.log(res.data.result.check_tx.log);
+                                                    alert(res.data.result.check_tx.log);
                                                 } else {
                                                     this.props.AddSequence();
                                                     var post = {

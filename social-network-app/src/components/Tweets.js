@@ -56,7 +56,7 @@ class Tweets extends Component {
                 return (
                     <div className="media" href="#toDetail" key={index} onClick={()=>this.ClickTweet(tweet.hash)}>
                         <a className="media-left" href="#fake">
-                            <img alt="" className="media-object img-circle" src={this.props.auth ? this.props.auth.picture ? ('data:image/jpeg;base64,' + this.props.auth.picture) : "/default_profile_icon.png" : "/loading_circle.gif"} />
+                            <img alt="" className="media-object img-circle" src={this.props.auth.picture ? this.props.auth.picture !== "Not Set" ? ('data:image/jpeg;base64,' + this.props.auth.picture) : "/default_profile_icon.png" : "/loading_circle.gif"} />
                         </a>
                         <div className="media-body">
                             <div className="profile-tweets-user-header">
@@ -70,12 +70,12 @@ class Tweets extends Component {
                                 </a>
                             </div>
                             <p>{tweet ? tweet.content ? tweet.content.text : null : null}</p>
-                            <ul className="nav nav-pills nav-pills-custom">
+                            {/* <ul className="nav nav-pills nav-pills-custom">
                                 <li><a href="#fake"><i className="far fa-comment"></i></a></li>
                                 <li><a href="#fake"><span className="glyphicon glyphicon-retweet"></span></a></li>
                                 <li><a href="#fake"><span className="glyphicon glyphicon-heart-empty"></span> <span>1</span></a></li>
                                 <li><a href="#fake"><i className="far fa-chart-bar"></i></a></li>
-                            </ul>
+                            </ul> */}
                         </div>
                     </div>
                 );

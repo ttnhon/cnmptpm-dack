@@ -10,7 +10,7 @@ import { updateName, updatePicture } from './../lib/helper';
 class ProfileFollow extends Component {
     constructor(props) {
         super(props)
-        this.state = { open: false, date: props.auth.birthday };
+        this.state = { open: false };
         this.openModal = this.openModal.bind(this);
         this.closeModal = this.closeModal.bind(this);
         this.onChange = this.onChange.bind(this);
@@ -157,7 +157,7 @@ class ProfileFollow extends Component {
                                                             Edit your profile
                                                         </h3>
                                                         <div className="form-group modal-form-item modal-flex">
-                                                            <img className="modal-form-profile-img modal-flex-left clearfix" src={this.props.auth ? this.props.auth.picture ? ('data:image/jpeg;base64,' + this.props.auth.picture) : "/default_profile_icon.png" : "/loading_circle.gif"} alt="" />
+                                                            <img className="modal-form-profile-img modal-flex-left clearfix" src={auth.picture ? auth.picture !== "Not Set" ? ('data:image/jpeg;base64,' + auth.picture) : "/default_profile_icon.png" : "/loading_circle.gif"} alt="" />
                                                             <form className="modal-form-input" action="#" onSubmit={this.submitPicture}>
                                                             <div  className="modal-input">
                                                             <label>Change your avatar: </label><input className=" btn" type="file" name="myPicture" id="myPicture" />
@@ -168,7 +168,7 @@ class ProfileFollow extends Component {
                                                         
                                                         <div className="form-group modal-form-item">
                                                             <label htmlFor="usr">Name:</label>
-                                                            <input className="form-control" type="text" ref={node => inputName = node} defaultValue={this.props.auth.name} id="txtName" />
+                                                            <input className="form-control" type="text" ref={node => inputName = node} defaultValue={auth.name} id="txtName" />
                                                         </div>
                                                         <div className="modal-form-btn-group">
                                                             <button className="btn btn-default" onClick={this.closeModal}>Cancel</button>

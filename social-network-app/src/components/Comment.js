@@ -47,7 +47,7 @@ class Comment extends Component {
                 }}>
                     <div className="form-group">
                         <label htmlFor="your_comment">
-                            <img src={this.props.auth.user ? this.props.auth.user.picture ? ('data:image/jpeg;base64,' + this.props.auth.user.picture) : "/default_profile_icon.png" : "/loading_circle.gif"} className="img-circle" alt="" />
+                            <img src={this.props.auth.user ? this.props.auth.user.picture !== "Not Set" ? ('data:image/jpeg;base64,' + this.props.auth.user.picture) : "/default_profile_icon.png" : "/loading_circle.gif"} className="img-circle" alt="" />
                         </label>
                         <input type="text" className="form-control" ref={node => inputComment = node} placeholder="Để lại bình luận của bạn" name="your_comment" />
                         <button type="submit" className="btn btn-primary form-control" name="comment_send" >Send</button>

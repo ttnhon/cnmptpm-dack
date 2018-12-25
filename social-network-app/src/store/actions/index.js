@@ -57,12 +57,14 @@ export const SetUserProfile = (key, page, result) => (dispatch, getState) => {
         }
         if (auth.picture) {
           auth.picture = Buffer.from(auth.picture).toString('base64');
+        }else{
+          auth.picture = "Not Set";
         }
         if(auth.name === undefined){
           auth.name = "No name";
         }
         auth.publicKey = key;
-        console.log(auth);
+        //console.log(auth);
         return dispatch({ type: types.SET_USER_PROFILE, payload: auth });
       } else {
         return dispatch(SetUserProfile(key, page + 1, auth))
@@ -140,6 +142,8 @@ export const GetProfile = (key, page, result) => (dispatch, getState) => {
       if (end) {
         if (auth.picture) {
           auth.picture = Buffer.from(auth.picture).toString('base64');
+        }else{
+          auth.picture = "Not Set";
         }
         if(auth.name === undefined){
           auth.name = "No name";
@@ -219,7 +223,7 @@ export const GetNewfeed = (key) => (dispatch, getState) => {
 
 export const GetFollowing = (key) => (dispatch, getState) => {
   getInfoFollowings(key).then(res => {
-    console.log(res);
+    //console.log(res);
     return dispatch({ type: types.GET_FOLLOWING, payload: res });
   });
 };

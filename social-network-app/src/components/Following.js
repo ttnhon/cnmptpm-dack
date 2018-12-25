@@ -50,7 +50,7 @@ class Following extends Component {
                   </div>
                 </div>
 
-                <div className="twPc-divStats">
+                {/* <div className="twPc-divStats">
                   <ul className="twPc-Arrange">
                     <li className="twPc-ArrangeSizeFit">
                       <a href={"/"} onClick={(e) => {
@@ -80,7 +80,7 @@ class Following extends Component {
                       </a>
                     </li>
                   </ul>
-                </div>
+                </div> */}
               </div>
             </div>
           )
