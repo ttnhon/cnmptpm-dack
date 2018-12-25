@@ -62,7 +62,7 @@ export const SetUserProfile = (key, page, result) => (dispatch, getState) => {
           auth.name = "No name";
         }
         auth.publicKey = key;
-        //console.log(auth);
+        console.log(auth);
         return dispatch({ type: types.SET_USER_PROFILE, payload: auth });
       } else {
         return dispatch(SetUserProfile(key, page + 1, auth))
@@ -206,17 +206,6 @@ export const GetInteract = (key, page, result) => (dispatch, getState) => {
 };
 
 export const LogIn = (key) => (dispatch, getState) => {
-  //console.log(key);
-  // axios.get('https://komodo.forest.network/tx_search?query="account=\'' + key + '\'"')
-  //   .then(res => {
-  //     var sequence = 0;
-  //     const txs = res.data.result.txs.map((tx, index) => {
-  //       let result = decode(Buffer.from(tx.tx, 'base64'));
-  //       if(result.account === key.publicKey) sequence++;
-  //       return result;
-  //     });
-  //   });
-  //dispatch(GetProfile(key.publicKey));
   dispatch(SetUserProfile(key.publicKey, 1, { sequence: 0 }));
   return dispatch({ type: types.SET_SECRET_KEY, payload: key.secretKey });
 };
@@ -230,7 +219,7 @@ export const GetNewfeed = (key) => (dispatch, getState) => {
 
 export const GetFollowing = (key) => (dispatch, getState) => {
   getInfoFollowings(key).then(res => {
-    //console.log(res);
+    console.log(res);
     return dispatch({ type: types.GET_FOLLOWING, payload: res });
   });
 };

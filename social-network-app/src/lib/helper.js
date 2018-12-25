@@ -117,12 +117,12 @@ var getFollowings = async (account, page = 1, arr_following = []) => {
     }
   });
   
-  if (arr_following.length > 0) {
-    arr_following = arr_following.map(value => (base32.encode(value)));
+  if(page * 30 >= res.result.total_count){
+    if (arr_following.length > 0) {
+      arr_following = arr_following.map(value => (base32.encode(value)));
+    }
+    return arr_following;
   }
-
-  if(page * 30 >= res.result.total_count)
-      return arr_following;
   return getFollowings(account, ++page, arr_following);
   
 };
