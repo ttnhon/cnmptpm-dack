@@ -41,7 +41,15 @@ class Header extends Component {
     return (
       <div className="navbar navbar-default navbar-static-top">
         <div className="container">
-          <div className="navbar-collapse navbar-collapse-1 collapse" aria-expanded="true">
+        <div className="navbar-header">
+        <button type="button" className="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span className="sr-only">Toggle navigation</span>
+        <span className="icon-bar"></span>
+        <span className="icon-bar"></span>
+        <span className="icon-bar"></span>
+      </button>
+        </div>
+          <div className="navbar-collapse collapse" id="bs-example-navbar-collapse-1" aria-expanded="true">
             <ul className="nav navbar-nav">
               <li>
                 <Link to="/"><span className="glyphicon glyphicon-home"></span> Home</Link>
@@ -110,7 +118,7 @@ class Header extends Component {
                   <div>
                     <Signup />
                     <div className="modal-close">
-                      <button className="btn btn-default btn-close-modal" onClick={this.closeModal}>Cancel</button>
+                      <button className="btn btn-default btn-close-modal" onClick={this.closeModal}>Exit</button>
                     </div>
                   </div>
                 </Popup>

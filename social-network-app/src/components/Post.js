@@ -10,6 +10,12 @@ import { AddSequence, AddNewfeed, AddTweet } from '../store/actions/index';
 
 
 class Post extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            isLoading: false
+        };
+    }
     render() {
         let auth = this.props.auth;
         let inputPost;
@@ -27,6 +33,7 @@ class Post extends Component {
                             <div className="btn-send-wrapper">
                                 <button type="button" className="btn btn-default" onClick={((e) => {
                                     if (!inputPost.value.trim()) return;
+                                    this.setState({ isLoading: true });
                                     let seq = auth.user.sequence;
                                     seq++;
                                     var acc = account.checkLogged();
@@ -40,10 +47,11 @@ class Post extends Component {
                                             if (res) {
                                                 if (res.data.result.check_tx.log) {
                                                     console.log(res.data.result.check_tx.log);
-                                                }else{
+                                                } else {
                                                     this.props.AddSequence();
                                                     var post = {
                                                         name: auth.user.name,
+                                                        img_url: auth.user.picture,
                                                         account: acc.publicKey(),
                                                         height: res.data.result.height,
                                                         content: { type: 1, text: text }
@@ -52,6 +60,7 @@ class Post extends Component {
                                                     this.props.AddTweet(post);
                                                 }
                                             }
+                                            this.setState({ isLoading: false });
                                         });
                                     });
                                     inputPost.value = "";
@@ -59,6 +68,7 @@ class Post extends Component {
                                     <span className="glyphicon glyphicon-send" aria-hidden="true"></span>
                                 </button>
                             </div>
+                            {this.state.isLoading ? <span className="text-loading-wrapper"><img className="text-loading" src="/loading_text.gif" alt="" /></span> : null}
                         </div>
                     </div>
                 </div>

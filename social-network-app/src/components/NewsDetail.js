@@ -6,6 +6,7 @@ import { GetProfile, GetInteract } from '../store/actions/index';
 import history from '../history';
 import Reaction from './Reaction';
 import Popup from "reactjs-popup";
+import Comment from './Comment';
 //import * as account from '../lib/account';
 
 class NewsDetail extends Component {
@@ -114,10 +115,10 @@ class NewsDetail extends Component {
                                 //console.log(reps[i]);
                                 hasRep = true;
                                 rep.push(<div className={"row one-news-comments"} key={i}>
-                                    <div className="col-md-2 img">
+                                    <div className="col-xs-3 col-sm-2 col-md-3 col-lg-2 img">
                                         <img src={reps[i].account.img_url === "Not Set" ? "/default_profile_icon.png" : ('data:image/jpeg;base64,' + reps[i].account.img_url)} className="img-circle" alt="" />
                                     </div>
-                                    <div className="col-md-10 comment-content">
+                                    <div className="col-xs-9 col-sm-10 col-md-9 col-lg-10 comment-content">
                                         <pre><strong className="name"><a className="nav-link-account" href="/" onClick={(e) => {
                                 e.preventDefault();
                                 history.push('/' + reply.account.account + '/tweets');
@@ -138,10 +139,10 @@ class NewsDetail extends Component {
                         }
                         rep = [(
                             <div className={!hasRep ? "row one-news-comments" : "row one-news-comments have-reply"} key={index}>
-                                <div className="col-md-2 img">
+                                <div className="col-xs-3 col-sm-2 col-md-2 col-lg-2 img">
                                     <img src={reply.account.img_url === "Not Set" ? "/default_profile_icon.png" : ('data:image/jpeg;base64,' + reply.account.img_url)} className="img-circle" alt="" />
                                 </div>
-                                <div className="col-md-10 comment-content">
+                                <div className="col-xs-9 col-sm-10 col-md-10 col-lg-10 comment-content">
                                     <pre><strong className="name"><a className="nav-link-account" href="/" onClick={(e) => {
                                 e.preventDefault();
                                 history.push('/' + reply.account.account + '/tweets');
@@ -207,26 +208,22 @@ class NewsDetail extends Component {
         return (
             <div>
                 <Header />
-                <div className="container-fluid one-news-detail">
+                <div className="container one-news-detail">
                     <div className="row one-news-header">
-                        <div className="col-md-2 img-responsive">
-                            <img src={this.props.auth ? this.props.auth.picture ? ('data:image/jpeg;base64,' + this.props.auth.picture) : "/default_profile_icon.png" : "/loading_circle.gif"} className="img-circle" alt="" />
+                        <div className="col-xs-2 col-sm-2 col-md-3 col-lg-2 img-responsive">
+                            <img src={this.props.auth.picture ? this.props.auth.picture ? ('data:image/jpeg;base64,' + this.props.auth.picture) : "/default_profile_icon.png" : "/loading_circle.gif"} className="img-circle" alt="" />
                         </div>
-                        <div className="col-md-7 news-owner-name">
-                            <h4><strong><a className="nav-link-account" href="/" onClick={(e) => {
+                        <div className="col-xs-10 col-sm-10 col-md-9 col-lg-10 news-owner-name">
+                            <h4><strong>{this.props.auth.name ? <a className="nav-link-account" href="/" onClick={(e) => {
                                 e.preventDefault();
                                 history.push('/' + this.props.auth.publicKey + '/tweets');
-                            }}>{this.props.auth.name}</a></strong></h4>
-                        </div>
-                        <div className="col-md-3 news-status">
-                            {/* <button type="button" className="btn btn-primary">Follow</button> */}
-                            {/* <button type="button" class="btn btn-danger">Bỏ theo dõi</button> */}
+                            }}>{this.props.auth.name}</a> : <span className="text-loading-wrapper"><img className="text-loading" src="/loading_text.gif" alt="" /></span>}</strong></h4>
                         </div>
                     </div> {/* end one-news-header */}
                     <div className="row one-news-content">
                         <div className="text">
                             {error ? <h4>{error}</h4> : null}
-                            <h4>{tweet ? tweet.content ? tweet.content.text : null : null}</h4>
+                            <h4>{tweet ? tweet.content ? tweet.content.text : null : <span className="text-loading-wrapper"><img className="text-loading" src="/loading_text.gif" alt="" /></span>}</h4>
                         </div>
                         <div className="imgs">
                             {/* truong hop co 1 anh */}
@@ -266,7 +263,7 @@ class NewsDetail extends Component {
                             <li><button><span className="glyphicon glyphicon-retweet"></span><span></span></button></li>
                             <li><div className="popup-react"><Popup
                                 trigger={<button><span className="glyphicon glyphicon-heart-empty"></span></button>}
-                                position="right center"
+                                position="bottom center"
                                 on="hover"
                             >
                                 <Reaction yourReact={yourReact} hash={hash} />
@@ -274,16 +271,8 @@ class NewsDetail extends Component {
                             <li><button><span className="glyphicon glyphicon-envelope"></span></button></li>
                         </ul>
                     </div> {/* end one-new-status */}
-                    <div className="row one-news-reply">
-                        <form className="form-inline" action="/">
-                            <div className="form-group">
-                                <label htmlFor="email">
-                                    <img src={this.props.auth.user ? this.props.auth.user.picture ? ('data:image/jpeg;base64,' + this.props.auth.user.picture) : "/default_profile_icon.png" : "/loading_circle.gif"} className="img-circle" alt="" />
-                                </label>
-                                <input type="text" className="form-control" placeholder="Để lại bình luận của bạn" name="your_comment" />
-                            </div>
-                        </form>
-                    </div> {/* end one-new-reply */}
+                    <Comment hash={hash} />
+                    {/* end one-new-reply */}
                     {replies === null ? replies ? null : <div className="img-loading-wrapper"><img className="img-loading" src="/loading.gif" alt="" /></div> : replies}
                 </div>
             </div>

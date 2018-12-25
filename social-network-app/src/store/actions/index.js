@@ -58,6 +58,9 @@ export const SetUserProfile = (key, page, result) => (dispatch, getState) => {
         if (auth.picture) {
           auth.picture = Buffer.from(auth.picture).toString('base64');
         }
+        if(auth.name === undefined){
+          auth.name = "No name";
+        }
         auth.publicKey = key;
         //console.log(auth);
         return dispatch({ type: types.SET_USER_PROFILE, payload: auth });
@@ -137,6 +140,9 @@ export const GetProfile = (key, page, result) => (dispatch, getState) => {
       if (end) {
         if (auth.picture) {
           auth.picture = Buffer.from(auth.picture).toString('base64');
+        }
+        if(auth.name === undefined){
+          auth.name = "No name";
         }
         //console.log(auth);
         dispatch({ type: types.GET_POST, payload: auth.tweets });

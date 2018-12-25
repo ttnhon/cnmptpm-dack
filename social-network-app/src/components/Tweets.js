@@ -80,6 +80,7 @@ class Tweets extends Component {
                     </div>
                 );
             })
+            if(tweets.length <= 0) media = "noMedia";
         }
         return (
             <div className="profile-tweets">
@@ -94,7 +95,7 @@ class Tweets extends Component {
                         </div>
                     </div>}
                     <div className="panel-body">
-                        {media}
+                        {media ? media ==="noMedia" ? null : media : <div className="img-loading-wrapper"><img className="img-loading" src="/loading.gif" alt="" /></div>}
                     </div>
                     <div className="panel-footer">
                         <div className="media">
