@@ -101,3 +101,7 @@ ul.twPc-Arrange {
     outline: none;
 
 }
+
+code{
+    word-break: break-word;
+}

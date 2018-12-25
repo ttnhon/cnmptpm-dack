@@ -146,3 +146,15 @@
 .modal-btn-tweet .form-post .media .media-body .btn-send-wrapper{
     float: right;
 }
+
+@media (max-width: 767px) {
+    .navbar-default .navbar-right {
+        display: block;
+    }
+    .navbar-form{
+        overflow: auto;
+    }
+}
+.text-loading-wrapper .text-loading{
+    height: 19px;
+}

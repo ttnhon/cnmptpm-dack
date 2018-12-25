@@ -54,7 +54,6 @@
 
 .news-owner-name {
     padding: 0;
-    margin-left: -20px;
 }
 
 .one-news-status {
@@ -68,18 +67,22 @@
 i.nickname {
     padding-right: 40px;
 }
+.one-news-reply .form-group{
+    width: 100%;
+    text-align: center;
+}
 
 .one-news-reply label {
     padding: 0px 16px;
 }
 
-.one-news-reply input {
-    width: 544px !important;
-}
-
 .one-news-comments {
     padding: 10px 0px;
     border-bottom: 1px solid gainsboro;
+}
+
+.one-news-comments .img{
+    text-align: center;
 }
 
 .one-news-comments.have-reply {
@@ -166,7 +169,16 @@ ul.associate li button:hover {
 	.modal-dialog {
 	    max-width: 50%;
 	    margin: 1.75rem auto;
-	}
+    }
+}
+
+@media (max-width: 767px) {
+    .one-news-detail{
+        width: auto;
+    }
+    .one-news-reply input {
+        width: 100%;
+    }
 }
 
 .nav-link-account{
@@ -205,6 +217,7 @@ ul.associate li button:hover {
 
 .popup-react .popup-content{
     width: auto!important;
+    min-width: 324px;
 }
 
 .rection-case{

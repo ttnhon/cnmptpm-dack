@@ -20,14 +20,14 @@ class Profile extends Component {
     }
     render() {
         //console.log(this.props);
-        let auth = this.props.auth === {} ? undefined : this.props.auth;
+        let auth = this.props.auth;
         let value = "";
-        let id = auth.publicKey;
+        let id = null;
         if (this.props.match.params.value) {
             value = this.props.match.params.value;
         }
-        //console.log(id);
-        if(auth.publicKey){
+        //console.log(auth);
+        if (auth.publicKey) {
             if (this.props.match.params.id !== auth.publicKey) {
                 id = this.props.match.params.id;
                 this.props.GetProfile(id, 1, { balance: 0, sequence: 0, tweets: [], interact: [] });
@@ -50,27 +50,27 @@ class Profile extends Component {
         return (
             <div>
                 <Header />
-                <ProfileFollow value={value} id={id} />
+                <ProfileFollow value={value} id={auth.publicKey} />
                 <div className="container">
                     <div className="row">
                         <div className="col-sm-3 profile-info">
                             <div className="profile-canopy-header">
                                 <div className="container">
                                     <div className="profile-canopy-avatar">
-                                        <img src={this.props.auth ? this.props.auth.picture ? ('data:image/jpeg;base64,' + this.props.auth.picture) : "/default_profile_icon.png" : "/loading_circle.gif"} alt="" />
+                                        <img src={auth ? auth.picture ? ('data:image/jpeg;base64,' + auth.picture) : "/default_profile_icon.png" : "/loading_circle.gif"} alt="" />
                                     </div>
                                 </div>
                             </div>
                             <div className="panel panel-default">
                                 <div className="panel-body">
                                     <h2 className="profile-info-name">
-                                        <Link to={"/"+id+"/tweets"}>{auth.name ? auth.name : "No name"}</Link>
+                                        <Link to={"/" + id + "/tweets"}>{auth.name ? auth.name : <span className="text-loading-wrapper"><img className="text-loading" src="/loading_text.gif" alt="" /></span>}</Link>
                                     </h2>
                                     <h5 className="profile-info-bio">
-                                        <span>Balance: {auth.balance}</span>
+                                        <span>Balance: {auth.balance ? auth.balance : <span className="text-loading-wrapper"><img className="text-loading" src="/loading_text.gif" alt="" /></span>}</span>
                                     </h5>
                                     <h5 className="profile-info-bio">
-                                        <span>Sequence: {auth.sequence}</span>
+                                        <span>Sequence: {auth.sequence ? auth.sequence : <span className="text-loading-wrapper"><img className="text-loading" src="/loading_text.gif" alt="" /></span>}</span>
                                     </h5>
                                 </div>
                             </div>

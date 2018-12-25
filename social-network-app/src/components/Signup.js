@@ -12,7 +12,7 @@ import { doTransaction } from '../lib/helper';
 class Signup extends Component {
     constructor(props) {
         super(props)
-        this.state = { isClick: false, key: null };
+        this.state = { isClick: false, key: null, error: undefined, succeed: undefined, isLoading: false };
     }
     BtnClick(e) {
         const { Keypair } = require('stellar-base');
@@ -22,8 +22,9 @@ class Signup extends Component {
     }
     NextClick(e) {
         //console.log("next");
+        this.setState({isLoading: true});
         const key = account.checkLogged();
-        if(key === false) return;
+        if (key === false) return;
         var tx = {
             version: 1,
             account: new Buffer(35),
@@ -37,15 +38,18 @@ class Signup extends Component {
         };
         var secretKey = key.secret();
         //const txs = '0x' + encode(tx).toString('hex');
-        doTransaction(tx, secretKey).then(res=>{
-            if(res){
+        doTransaction(tx, secretKey).then(res => {
+            if (res) {
                 if (res.data.result.check_tx.log) {
                     console.log(res.data.result.check_tx.log);
-                }else{
+                    this.setState({error: res.data.result.check_tx.log});
+                } else {
                     this.props.AddSequence();
                     console.log(res);
+                    this.setState({succeed: "Succeess! Your account had been created."});
                 }
             }
+            this.setState({isLoading: false});
         });
     }
     render() {
@@ -56,22 +60,30 @@ class Signup extends Component {
                 </div>
                 <div className="account" id="Acc">
                     {this.state.key ?
-                        <div> <div className="key">
-                            <div className="public-key">
-                                <span>Public key: </span>
-                                <code>{this.state.key.public}</code>
+                        <div>
+                            <div className="key">
+                                <div className="public-key">
+                                    <span>Public key: </span>
+                                    <code>{this.state.key.public}</code>
+                                </div>
+                                <div className="secret-key">
+                                    <span>Secret key: </span>
+                                    <code>{this.state.key.secret}</code>
+                                </div>
                             </div>
-                            <div className="secret-key">
-                                <span>Secret key: </span>
-                                <code>{this.state.key.secret}</code>
-                            </div>
-                        </div>
                             <span>Remember to save your secret key to login!</span>
                             <div className="btn-next">
-                                <button onClick={this.NextClick.bind(this)} className="btn btn-primary">Next</button>
+                                <button onClick={this.NextClick.bind(this)} className="btn btn-primary">Signup</button>
                             </div>
                         </div>
                         : null}
+                        {this.state.isLoading ? <div className="img-loading-wrapper"><img className="img-loading" src="/loading.gif" alt="" /></div> : null}
+                    {this.state.error ? <div className="alert alert-danger fade in error-log">
+                    <strong>{this.state.error ? this.state.error : null}</strong>
+                    </div> : null}
+                    {this.state.succeed ? <div className="alert alert-success fade in error-log">
+                    <strong>{this.state.succeed ? this.state.succeed : null}</strong>
+                    </div> : null}
                 </div>
             </div>
         )
