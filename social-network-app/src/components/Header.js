@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { SetUserProfile } from "../store/actions/index";
 import { connect } from 'react-redux';
-import { Redirect } from 'react-router-dom';
+import { Redirect, Link } from 'react-router-dom';
 import * as account from './../lib/account.js';
 import '../assets/css/Header.css';
 import { logout } from '../lib/account';
@@ -44,7 +44,7 @@ class Header extends Component {
           <div className="navbar-collapse navbar-collapse-1 collapse" aria-expanded="true">
             <ul className="nav navbar-nav">
               <li>
-                <a href="/"><span className="glyphicon glyphicon-home"></span> Home</a>
+                <Link to="/"><span className="glyphicon glyphicon-home"></span> Home</Link>
               </li>
               <li>
                 <a href="#fake"><span className="glyphicon glyphicon-bell"></span> Notifications</a>
@@ -72,9 +72,9 @@ class Header extends Component {
                 <button className="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img className="img-circle" src={this.props.auth.user ? this.props.auth.user.picture ? ('data:image/jpeg;base64,' + this.props.auth.user.picture) : "/default_profile_icon.png" : "/loading_circle.gif"} alt="" /></button>
                 <ul className="dropdown-menu">
                   <li className="menu-user-acc">
-                    <a href={"/" + key.publicKey() + "/tweets"}>
+                    <Link to={"/" + key.publicKey() + "/tweets"}>
                       <h4>{this.props.auth.user ? this.props.auth.user.name ? this.props.auth.user.name : "No name" : "No name"}</h4>
-                    </a>
+                    </Link>
                   </li>
                   <li role="separator" className="divider"></li>
                   <li className="menu-user-profile"><a href={"/" + key.publicKey() + "/tweets"}>Profile</a></li>

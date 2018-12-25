@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import '../assets/css/Profile.css';
 import Header from './Header';
 import ProfileFollow from './ProfileFollow';
@@ -63,7 +64,7 @@ class Profile extends Component {
                             <div className="panel panel-default">
                                 <div className="panel-body">
                                     <h2 className="profile-info-name">
-                                        <a href={"/"+id+"/tweets"}>{auth.name ? auth.name : "No name"}</a>
+                                        <Link to={"/"+id+"/tweets"}>{auth.name ? auth.name : "No name"}</Link>
                                     </h2>
                                     <h5 className="profile-info-bio">
                                         <span>Balance: {auth.balance}</span>
