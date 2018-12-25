@@ -57,14 +57,14 @@ class Profile extends Component {
                             <div className="profile-canopy-header">
                                 <div className="container">
                                     <div className="profile-canopy-avatar">
-                                        <img src={auth ? auth.picture ? ('data:image/jpeg;base64,' + auth.picture) : "/default_profile_icon.png" : "/loading_circle.gif"} alt="" />
+                                        <img src={auth.picture ? auth.picture !=="Not Set" ? ('data:image/jpeg;base64,' + auth.picture) : "/default_profile_icon.png" : "/loading_circle.gif"} alt="" />
                                     </div>
                                 </div>
                             </div>
                             <div className="panel panel-default">
                                 <div className="panel-body">
                                     <h2 className="profile-info-name">
-                                        <Link to={"/" + id + "/tweets"}>{auth.name ? auth.name : <span className="text-loading-wrapper"><img className="text-loading" src="/loading_text.gif" alt="" /></span>}</Link>
+                                        <Link to={"/" + auth.publicKey + "/tweets"}>{auth.name ? auth.name : <span className="text-loading-wrapper"><img className="text-loading" src="/loading_text.gif" alt="" /></span>}</Link>
                                     </h2>
                                     <h5 className="profile-info-bio">
                                         <span>Balance: {auth.balance ? auth.balance : <span className="text-loading-wrapper"><img className="text-loading" src="/loading_text.gif" alt="" /></span>}</span>
