@@ -1,0 +1,17 @@
+p.image.is-64x64 img {
+    height: 80px;
+    float: left;
+    border-radius: 15px;
+    margin-right: 5px;
+}
+
+figure.media-left {
+    float: left;
+}
+
+.container.payment-history {
+    width: 30%;
+    background-color: white;
+    padding: 10px 15px;
+    border-radius: 15px;
+}

@@ -89,6 +89,8 @@ class Header extends Component {
                   <li role="separator" className="divider"></li>
                   <li className="menu-user-profile"><a href='/payment'>Send Money</a></li>
                   <li role="separator" className="divider"></li>
+                  <li className="menu-user-profile"><a href='/payment-history'>Payment History</a></li>
+                  <li role="separator" className="divider"></li>
                   <li className="menu-user-logout"><a href="#fake" onClick={(e) => {
                     e.preventDefault();
                     this.props.logout();
