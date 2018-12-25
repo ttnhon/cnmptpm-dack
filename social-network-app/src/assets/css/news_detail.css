@@ -177,7 +177,13 @@ ul.associate li button:hover {
         width: auto;
     }
     .one-news-reply input {
-        width: 100%;
+        width: 100%!important;
+    }
+}
+
+@media (min-width: 767px) {
+    .one-news-reply input {
+        width: 50%!important;
     }
 }
 
