@@ -5,7 +5,6 @@ const axios = require('axios');
 const vstruct = require('varstruct');
 const request = require('request');
 
-
 var sendMoney = async (public_key, secret_key, receiver_account, sequence, amount = 100, memo = '') => {
   var tx = {
     version: 1,
@@ -205,6 +204,7 @@ var getPosts = async (account, info, page = 1, list_post = []) => {
       one_post['account'] = account;
       one_post['content'] = PlainTextContent.decode(one_transaction.params.content);
       one_post['height'] = tx.height;
+      one_post['hash'] = tx.hash;
 
       list_post.push(one_post);
     }
