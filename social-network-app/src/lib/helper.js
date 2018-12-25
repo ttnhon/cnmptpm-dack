@@ -13,14 +13,14 @@ var sendMoney = async (public_key, secret_key, receiver_account, sequence, amoun
       address: receiver_account,
       amount: amount
     },
-    account: public_key,
+    account: new Buffer(35),
     sequence: sequence,
     memo: Buffer.alloc(0), //Buffer.alloc(0),
     signature: new Buffer(64)
   };
-  sign(tx, secret_key);
-  const txs = '0x' + encode(tx).toString('hex');
-  return await txs;
+  
+
+  return await tx;
 }; 
 
 var updateName = async (secret_key, sequence, newName, memo = '') => {

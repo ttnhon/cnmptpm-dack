@@ -4,7 +4,7 @@ import '../assets/css/Following.css';
 import * as account from '../lib/account';
 import Header from './Header'
 import { postPlainText, doTransaction } from '../lib/helper';
-import { AddSequence, AddNewfeed, AddTweet } from '../store/actions/index';
+import { SendMoney } from '../store/actions/index';
 
 
 class Payment extends Component {
@@ -34,7 +34,27 @@ class Payment extends Component {
     handleSubmit(e) {
         e.preventDefault();
         console.log('click nut gui');
-        
+        const user = this.props.user;
+        const my_balance = user.balance;
+        //chuan bi du lieu
+        let public_key = user.publicKey;
+        let secret_key = account.checkLogged().secret();
+        console.log(secret_key);
+        let receiver_account = this.state.account;
+        let sequence = user.sequence + 1;
+        let amount = this.state.amount;
+        let memo = '';
+
+        if (Number(amount) <= 0 ) {
+            console.log('So tien gui phai lon hon 0');
+            return;
+        }
+        if(Number(amount) > my_balance )
+        {
+            console.log('So du khong du de thuc hien');
+            return;
+        }
+        this.props.sendMoney(public_key, secret_key, receiver_account, sequence, amount);
     }
 
     render() {
@@ -61,7 +81,7 @@ class Payment extends Component {
                         </div>                    
                         </div>
                         <div className="panel-body">
-                        <form role="form" id="payment-form">
+                        <div role="form" id="payment-form">
                             <div className="row">
                             <div className="col-xs-12">
                                 <div className="form-group">
@@ -90,7 +110,7 @@ class Payment extends Component {
                             </div>
                             <div className="row">
                             <div className="col-xs-12">
-                                <button onChange={this.handleSubmit} className="btn btn-success btn-lg btn-block">Submit</button>
+                                <button onClick={this.handleSubmit} className="btn btn-success btn-lg btn-block">Submit</button>
                             </div>
                             </div>
                             <div className="row" style={{display: 'none'}}>
@@ -98,7 +118,7 @@ class Payment extends Component {
                                 <p className="payment-errors" />
                             </div>
                             </div>
-                        </form>
+                        </div>
                         </div>
                     </div>            
                     {/* CREDIT CARD FORM ENDS HERE */}
@@ -117,9 +137,9 @@ const mapStatetoProps = (state) => {
   };
   
 const mapDispatchToProps = (dispatch) => {
-// return {
-//     GetProfile: (key) => dispatch(GetProfile(key))
-// }
+return {
+    sendMoney: (public_key, secret_key, receiver_account, sequence, amount) => dispatch(SendMoney(public_key, secret_key, receiver_account, sequence, amount))
+}
 };
 
 export default connect(mapStatetoProps, mapDispatchToProps)(Payment);
