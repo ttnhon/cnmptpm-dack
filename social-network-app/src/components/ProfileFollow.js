@@ -60,6 +60,7 @@ class ProfileFollow extends Component {
                     this.props.editProfile(profile);
                     this.setState({ error: undefined, succeed: "Change picture succeess" })
                 }
+
                 this.setState({ isLoading: false });
             });
         }

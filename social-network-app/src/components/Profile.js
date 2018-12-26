@@ -77,8 +77,12 @@ class Profile extends Component {
                                         <span>Balance: {auth.balance ? (auth.balance * 1.0 / 100000000.0).toFixed(8) + " TRE" : <span className="text-loading-wrapper"><img className="text-loading" src="/loading_text.gif" alt="" /></span>}</span>
                                     </h5>
                                     <h5 className="profile-info-bio">
+                                        <span>Energy: 39757 OXY</span>
+                                    </h5>
+                                    <h5 className="profile-info-bio">
                                         <span>Sequence: {auth.sequence ? auth.sequence : <span className="text-loading-wrapper"><img className="text-loading" src="/loading_text.gif" alt="" /></span>}</span>
                                     </h5>
+                                    
                                 </div>
                             </div>
                         </div>
