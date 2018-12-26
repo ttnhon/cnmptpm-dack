@@ -185,26 +185,64 @@ var getPosts = async (account, info, page = 1, list_post = []) => {
   ]);
   var result = await axios('https://'+server+'.forest.network/tx_search?query="account=\'' + account + '\'"&page="'+page+'"');
   const res = result.data;
-  // var name = 'No name';
-  // res.result.txs.map((tx) => {
-  //   let one_transaction = decode(Buffer.from(tx.tx, 'base64'));
-  //   if (one_transaction.operation == 'update_account' && one_transaction.params.key == 'name') {
-  //     name = one_transaction.params.value.toString('utf-8');
-  //   }
-  // });
+  
   res.result.txs.map((tx) => {
     let one_transaction = decode(Buffer.from(tx.tx, 'base64'));
-    if (one_transaction.operation == 'post') {
-      let one_post = [];
-      one_post['name'] = info['name'];
-      one_post['img_url'] = info['img_url'];
-      one_post['account'] = account;
-      one_post['content'] = PlainTextContent.decode(one_transaction.params.content);
-      one_post['height'] = tx.height;
-      one_post['hash'] = tx.hash;
-
-      list_post.push(one_post);
-    }
+    let content = '';
+    switch (one_transaction.operation) {
+      case 'post':
+        content = {
+          key: 'post',
+          value: PlainTextContent.decode(one_transaction.params.content)
+        };
+        break;
+      case 'payment':
+        content = {
+          key: 'payment',
+          value: {
+            address: one_transaction.params.address,
+            amount: one_transaction.params.amount
+          }
+        };
+        break;
+      case 'update_account':
+        switch ( one_transaction.params.key) {
+          case 'name':
+            content = {
+              key: 'update_account',
+              value: {
+                key: 'name',
+                value: one_transaction.params.value.toString('utf-8')
+              }
+            };
+            break;
+          
+          case 'image':
+          content = {
+            key: 'update_account',
+            value: {
+              key: 'image',
+              value: Buffer.from(one_transaction.params.value).toString('base64')
+            }
+          };
+          break;
+        
+          default:
+            break;
+        }
+        break;
+        
+      default:
+        break;
+    } 
+    let one_post = [];
+    one_post['name'] = info['name'];
+    one_post['img_url'] = info['img_url'];
+    one_post['account'] = account;
+    one_post['content'] = content;
+    one_post['height'] = tx.height;
+    one_post['hash'] = tx.hash;
+    list_post.push(one_post);
   });
 
   if(page * 30 >= res.result.total_count)
