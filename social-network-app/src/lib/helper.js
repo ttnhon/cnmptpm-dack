@@ -39,8 +39,8 @@ var updateName = async (secret_key, sequence, newName, memo = '') => {
   };
   sign(tx, secret_key);
   const txs = '0x' + encode(tx).toString('hex');
-  const res = await axios('https://'+server+'.forest.network/broadcast_tx_commit?tx=' + txs);
-  return res;
+  return await axios('https://'+server+'.forest.network/broadcast_tx_commit?tx=' + txs);
+  //return res;
 }
 var updatePicture = async (secret_key, sequence, str, memo = '') => {
   var buff = Buffer.from(str, "base64");
