@@ -188,7 +188,7 @@ var getPosts = async (account, info, page = 1, list_post = []) => {
   
   res.result.txs.map((tx) => {
     let one_transaction = decode(Buffer.from(tx.tx, 'base64'));
-    let content = '';
+    let content = null;
     switch (one_transaction.operation) {
       case 'post':
         content = {
@@ -235,14 +235,16 @@ var getPosts = async (account, info, page = 1, list_post = []) => {
       default:
         break;
     } 
-    let one_post = [];
-    one_post['name'] = info['name'];
-    one_post['img_url'] = info['img_url'];
-    one_post['account'] = account;
-    one_post['content'] = content;
-    one_post['height'] = tx.height;
-    one_post['hash'] = tx.hash;
-    list_post.push(one_post);
+    if(content){
+      let one_post = [];
+      one_post['name'] = info['name'];
+      one_post['img_url'] = info['img_url'];
+      one_post['account'] = account;
+      one_post['content'] = content;
+      one_post['height'] = tx.height;
+      one_post['hash'] = tx.hash;
+      list_post.push(one_post);
+    }
   });
 
   if(page * 30 >= res.result.total_count)
