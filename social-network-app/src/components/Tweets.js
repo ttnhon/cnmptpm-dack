@@ -6,42 +6,6 @@ import Post from './Post';
 import * as account from '../lib/account';
 
 class Tweets extends Component {
-    getTime(time) {
-        let unit = "m";
-        let now = new Date();
-        let t = null;
-        t = Math.floor((now - time) / 60000);
-        if (t >= 60) {
-            t = Math.floor(t / 60);
-            unit = "h";
-            if (t >= 24) {
-                t = Math.floor(t / 24);
-                if (t > 1) {
-                    unit = "d";
-                    if (t >= 30) {
-                        t = Math.floor(t / 30);
-                        if (t > 1) {
-                            unit = "m";
-                            if (t > 12) {
-                                t = Math.floor(t / 12);
-                                if (t > 1) {
-                                    unit = "y";
-                                } else {
-                                    unit = "y";
-                                }
-                            }
-                        } else {
-                            unit = "m";
-                        }
-                    }
-                } else {
-                    unit = "d";
-                }
-            }
-        }
-        return t + " " + unit;
-    }
-
     ClickTweet(hash) {
         history.push('/' + this.props.auth.publicKey + '/tweets/' + hash);
     }
@@ -50,15 +14,16 @@ class Tweets extends Component {
         let tweets = this.props.tweets;
         let media = null;
         let isUser = account.checkLogged().publicKey() === this.props.auth.publicKey;
-        //console.log(tweets);
+        console.log(tweets);
         if (tweets) {
             media = tweets.map((tweet, index) => {
-                //let time = this.getTime(tweet.date);
+                let time = tweet.time;
+                //let date = time.toLocaleDateString();
                 return (
                     <div className="media" href="#toDetail" key={index} onClick={(e)=>{
                         e.preventDefault();
                         let event = e.nativeEvent;
-                        console.log(event.toElement.id === "toAcc");
+                        //console.log(event.toElement.id === "toAcc");
                         if(!(event.toElement.id === "toAcc")){
                             this.ClickTweet(tweet.hash);
                         }
@@ -73,7 +38,7 @@ class Tweets extends Component {
                                         <span id="toAcc" >{this.props.auth ? this.props.auth.name ? this.props.auth.name : "No name" : null}</span>
                                     </span>
                                     <div className="user-time">
-                                        <span id="toAcc">{tweet.height}</span>
+                                        <span id="toAcc">{time ? time.toLocaleString() : null}</span>
                                     </div>
                                 </Link>
                             </div>

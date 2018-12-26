@@ -29,9 +29,9 @@ class PaymentHistory extends Component {
                     <div className="row">
                         <div className="col-xs-12 col-md-12">
                             {/* one history */}
-                            {payments? 
-                                payments.map((one_payment) => (
-                                    <div>
+                            {payments ? 
+                                payments.map((one_payment, index) => (
+                                    <div key={index}>
                                     <article className="media">
                                         <figure className="media-left">
                                             <p className="image is-64x64"><img src={one_payment.sender.img_url ? one_payment.sender.img_url !== "Not Set" ?  'data:image/jpeg;base64,' + one_payment.sender.img_url : "/default_profile_icon.png" : "/loading_circle.gif"}></img></p>

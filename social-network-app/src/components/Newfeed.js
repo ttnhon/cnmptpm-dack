@@ -7,42 +7,6 @@ import Post from './Post';
 import { Link } from 'react-router-dom';
 
 class Newfeed extends Component {
-    getTime(time) {
-        let unit = "m";
-        let now = new Date();
-        let t = null;
-        t = Math.floor((now - time) / 60000);
-        if (t >= 60) {
-            t = Math.floor(t / 60);
-            unit = "h";
-            if (t >= 24) {
-                t = Math.floor(t / 24);
-                if (t > 1) {
-                    unit = "d";
-                    if (t >= 30) {
-                        t = Math.floor(t / 30);
-                        if (t > 1) {
-                            unit = "m";
-                            if (t > 12) {
-                                t = Math.floor(t / 12);
-                                if (t > 1) {
-                                    unit = "y";
-                                } else {
-                                    unit = "y";
-                                }
-                            }
-                        } else {
-                            unit = "m";
-                        }
-                    }
-                } else {
-                    unit = "d";
-                }
-            }
-        }
-        return t + " " + unit;
-    }
-
     ClickTweet(acc, hash) {
         history.push('/' + acc + '/tweets/' + hash);
     }
@@ -63,7 +27,7 @@ class Newfeed extends Component {
         let media = null;
         if (tweets) {
             media = tweets.map((tweet, index) => {
-                //let time = this.getTime(tweet.date);
+                let time = tweet.time;
                 return (
                     <div className="media" href="#toDetail" key={index} onClick={(e) => {
                         e.preventDefault();
@@ -85,7 +49,7 @@ class Newfeed extends Component {
                                         <span>{tweet.name ? tweet.name : null}</span>
                                     </span>
                                     <div className="user-time">
-                                        <span>{tweet.height}</span>
+                                        <span>{time ? time.toLocaleString() : null}</span>
                                     </div>
                                 </Link>
                             </div>

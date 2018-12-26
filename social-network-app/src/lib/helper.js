@@ -102,6 +102,11 @@ var getName = async (account) => {
 
 }
 
+var getTimeBlock = async (account, height) => {
+  var result = await axios('https://'+server+'.forest.network/block?height=' + height);
+  return result;
+};
+
 var getFollowings = async (account, page = 1, arr_following = []) => {
   const Followings = vstruct([
     { name: 'addresses', type: vstruct.VarArray(vstruct.UInt16BE, vstruct.Buffer(35)) },
@@ -469,4 +474,4 @@ var doTransaction = async (tx, secret_key) => {
   return res;
 };
 
-export { sendMoney, updateName, updatePicture, getFollowings, getPosts, getNewFeed, follow, unFollow, calcBalance, doTransaction, getInfoFollowings, postPlainText, getFullInfo, doComment, doReact, getPaymentHistoryAndInfo };
+export { sendMoney, updateName, updatePicture, getFollowings, getPosts, getNewFeed, follow, unFollow, calcBalance, doTransaction, getInfoFollowings, postPlainText, getFullInfo, doComment, doReact, getPaymentHistoryAndInfo, getTimeBlock };

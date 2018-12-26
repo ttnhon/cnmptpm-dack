@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import '../assets/css/profile.css';
+import '../assets/css/Profile.css';
 import Header from './Header';
 import ProfileFollow from './ProfileFollow';
 import Tweets from './Tweets';

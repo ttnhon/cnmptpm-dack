@@ -34,6 +34,8 @@ class Post extends Component {
                                 <button type="button" className="btn btn-default" onClick={((e) => {
                                     if (!inputPost.value.trim()) return;
                                     this.setState({ isLoading: true });
+                                    var date = new Date();
+                                    //console.log(date);
                                     let seq = auth.user.sequence;
                                     seq++;
                                     var acc = account.checkLogged();
@@ -54,7 +56,8 @@ class Post extends Component {
                                                         img_url: auth.user.picture,
                                                         account: acc.publicKey(),
                                                         height: res.data.result.height,
-                                                        content: { type: 1, text: text }
+                                                        content: { type: 1, text: text },
+                                                        time: date
                                                     };
                                                     this.props.AddNewfeed(post);
                                                     this.props.AddTweet(post);

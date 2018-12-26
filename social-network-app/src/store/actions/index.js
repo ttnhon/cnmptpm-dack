@@ -1,7 +1,7 @@
 import * as types from "./types";
 import { decode } from '../../lib/index';
 import axios from 'axios';
-import { sendMoney, getNewFeed, getInfoFollowings, doTransaction, unFollow, follow, getFullInfo, getPaymentHistoryAndInfo } from '../../lib/helper';
+import { sendMoney, getNewFeed, getInfoFollowings, doTransaction, unFollow, follow, getFullInfo, getPaymentHistoryAndInfo, getTimeBlock } from '../../lib/helper';
 import * as account from '../../lib/account';
 import server from '../../lib/server'
 const vstruct = require('varstruct');
@@ -78,7 +78,7 @@ export const EditProfile = (profile) => (dispatch, getState) => {
 
 export const GetProfile = (key, page, result) => (dispatch, getState) => {
   axios.get('https://' + server + '.forest.network/tx_search?query="account=\'' + key + '\'"&page="' + page + '"')
-    .then(res => {
+    .then(async res => {
       //console.log(res);
       let end = false;
       //console.log(page);
@@ -159,11 +159,28 @@ export const GetProfile = (key, page, result) => (dispatch, getState) => {
         //console.log(auth);
         dispatch(EditProfile({ name: auth.name, balance: auth.balance, sequence: auth.sequence, picture: auth.picture, followings: auth.followings }));
         //dispatch(GetFollowing(key));
+        await dispatch(GetTimePost(key, auth.tweets));
         return dispatch({ type: types.GET_POST, payload: auth.tweets });
       }
       return dispatch(GetProfile(key, page + 1, auth));
     });
 };
+
+export const GetTimePost = (acc, tweets) => async (dispatch, getState) => {
+  if (tweets) {
+    if (tweets.length > 0) {
+      for (let i = 0; i < tweets.length; i++) {
+        let height = tweets[i].height;
+        await getTimeBlock(acc, height).then(res => {
+          let time = res.data.result.block.header.time;
+          let date = new Date(time);
+          date.setTime(date.getTime()+(7*60*60*1000));
+          tweets[i].time = date
+        });
+      }
+    }
+  }
+}
 
 export const GetInteract = (acc, page, result) => (dispatch, getState) => {
   axios.get('https://' + server + '.forest.network/tx_search?query="account=\'' + acc.key + '\'"&page="' + page + '"')
@@ -246,9 +263,13 @@ export const LogIn = (key) => (dispatch, getState) => {
 };
 
 export const GetNewfeed = (key) => (dispatch, getState) => {
-  getNewFeed(key).then(res => {
+  getNewFeed(key).then(async res => {
     //console.log(res);
-    return dispatch({ type: types.GET_NEWFEED, payload: res });
+    var newFeed = res;
+    if(res){
+      await dispatch(GetTimePost(key, newFeed));
+    }
+    return dispatch({ type: types.GET_NEWFEED, payload: newFeed });
   });
 };
 
@@ -315,8 +336,8 @@ export const AddInteractInfo = () => async (dispatch, getState) => {
   let list = getState().auth.interact;
   if (list) {
     for (let i = 0; i < list.length; i++) {
-      if(list[i].interact){
-        for(let j = 0; j < list[i].interact.length; j++){
+      if (list[i].interact) {
+        for (let j = 0; j < list[i].interact.length; j++) {
           await getFullInfo(list[i].interact[j].account).then(res => {
             list[i].interact[j].account = res;
           })
