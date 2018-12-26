@@ -2,6 +2,7 @@ import { createStore, applyMiddleware, combineReducers } from "redux";
 import auth from './reducers/auth';
 import followingReducer from './reducers/followingReducer';
 import followersReducer from './reducers/followersReducer';
+import paymentReducer from './reducers/paymentReducer'
 import thunk from 'redux-thunk';
 
 export default () => {
@@ -9,7 +10,8 @@ export default () => {
     const rootReducer = combineReducers({
         auth: auth,
         following: followingReducer,
-        followers: followersReducer
+        followers: followersReducer,
+        payments: paymentReducer
       })
 
     // Create store with reducers and initial state

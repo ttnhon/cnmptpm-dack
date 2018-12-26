@@ -1,7 +1,7 @@
 import * as types from "./types";
 import { decode } from '../../lib/index';
 import axios from 'axios';
-import { sendMoney, getNewFeed, getInfoFollowings, doTransaction, unFollow, follow, getFullInfo } from '../../lib/helper';
+import { sendMoney, getNewFeed, getInfoFollowings, doTransaction, unFollow, follow, getFullInfo, getPaymentHistoryAndInfo } from '../../lib/helper';
 import * as account from '../../lib/account';
 import server from '../../lib/server'
 const vstruct = require('varstruct');
@@ -343,4 +343,9 @@ export const SendMoney = (public_key, secret_key, receiver_account, sequence, am
   var send_money = await sendMoney(public_key, secret_key, receiver_account, sequence, amount, memo);
   var doTrans = await doTransaction(send_money, secret_key);
   return dispatch({ type: types.SEND_MONEY, payload: doTrans ? doTrans : 'That bai roi nhe' });
+}
+
+export const GetPaymentHistory = (key) => async (dispatch, getState) => {
+  var payments = await getPaymentHistoryAndInfo(key);
+  return dispatch({ type: types.GET_PAYMENT_HISTORY, payload: payments ? payments : 'That bai roi nhe' });
 }

@@ -108,7 +108,6 @@ var getFollowings = async (account, page = 1, arr_following = []) => {
   ]);
   var result = await axios('https://'+server+'.forest.network/tx_search?query="account=\'' + account + '\'"&page="'+page+'"');
   const res = result.data;
-  console.log('thuc hien get following');
 
   res.result.txs.map((tx) => {
     let one_transaction = decode(Buffer.from(tx.tx, 'base64'));
@@ -130,7 +129,6 @@ var getFollowings = async (account, page = 1, arr_following = []) => {
 var getFullInfo = async (account, page = 1, info = []) => {
   var result = await axios('https://'+server+'.forest.network/tx_search?query="account=\'' + account + '\'"&page="'+page+'"');
   const res = result.data;
-  console.log('thuc hien get fullinfo');
 
   res.result.txs.map((tx) => {
     let one_transaction = decode(Buffer.from(tx.tx, 'base64'));
@@ -187,7 +185,6 @@ var getPosts = async (account, info, page = 1, list_post = []) => {
   ]);
   var result = await axios('https://'+server+'.forest.network/tx_search?query="account=\'' + account + '\'"&page="'+page+'"');
   const res = result.data;
-  console.log('thuc hien get post');
   // var name = 'No name';
   // res.result.txs.map((tx) => {
   //   let one_transaction = decode(Buffer.from(tx.tx, 'base64'));
@@ -215,39 +212,47 @@ var getPosts = async (account, info, page = 1, list_post = []) => {
   return getPosts(account, info, ++page, list_post);
 };
 
-var getPaymentHistory = async (account, info, page = 1, list_payment = []) => {
+var getPaymentHistory = async (account, page = 1, list_payment = []) => {
   
   var result = await axios('https://'+server+'.forest.network/tx_search?query="account=\'' + account + '\'"&page="'+page+'"');
   const res = result.data;
-  console.log('thuc hien get payment history');
   res.result.txs.map((tx) => {
     let one_transaction = decode(Buffer.from(tx.tx, 'base64'));
     if (one_transaction.operation == 'payment') {
       let one_payment = [];
-      one_payment['sender'] = one_transaction.address;
+      one_payment['sender'] = one_transaction.account;
       one_payment['receiver'] = one_transaction.params.address;
       one_payment['amount'] = one_transaction.params.amount;
-
+      
       list_payment.push(one_payment);
     }
   });
-
+  
   if(page * 30 >= res.result.total_count)
       return list_payment;
-  return getPaymentHistory(account, info, ++page, list_payment);
+  return getPaymentHistory(account, ++page, list_payment);
 };
 
+var findUser = (user, users_info) =>{
+  
+  for (let index = 0; index < users_info.length; index++) {
+    const element = users_info[index];
+    if (user === element['account']) {
+      return index;
+    }
+  }
+  return -1;
+}
 var getPaymentHistoryAndInfo = async(account) =>{
   //get payments
-  let payments = await getPaymentHistory(account);
-  let users_account = [];
-
+  var payments = await getPaymentHistory(account);
+  var users_account = [];
   //get account to get info
-  payments.map(async (one_payment) => {
-    if (users_account.indexOf(one_payment['sender']) !== -1) {
+  payments.map((one_payment) => {
+    if (users_account.indexOf(one_payment['sender']) === -1) {
       users_account.push(one_payment['sender']);
     }
-    if (users_account.indexOf(one_payment['receiver']) !== -1) {
+    if (users_account.indexOf(one_payment['receiver']) === -1) {
       users_account.push(one_payment['receiver']);
     }
   });
@@ -259,14 +264,31 @@ var getPaymentHistoryAndInfo = async(account) =>{
     users_info.push(info);
   }));
 
+  console.log(users_info);
+  let payment_and_info = []
   //merge array to show
-  for (let index = 0; index < payments.length; index++) {
-    let one_payment = payments[index];
-    payments[index]['sender'] = users_info[users_account.indexOf(payments[index]['sender'])];
-    payments[index]['receiver'] = users_info[users_account.indexOf(payments[index]['receiver'])];
-  }
+  payments.map((one_payment) =>{
+    let sender = one_payment['sender'];
+    let sender_pos = findUser(sender, users_info);
+    let receiver = one_payment['receiver'];
+    let receiver_pos = findUser(receiver, users_info);
 
-  return payments;
+    let _one = [];
+    _one['amount'] = one_payment['amount'];
+    _one['sender'] = users_info[sender_pos];
+    _one['receiver'] = users_info[receiver_pos];
+
+    if(_one['sender']['account'] === account){
+      _one['sender']['name'] = 'You'
+    }
+    if(_one['receiver']['account'] === account){
+      _one['receiver']['name'] = 'You'
+    }
+
+    payment_and_info.push(_one);
+  })
+  console.log(payment_and_info)
+  return payment_and_info;
 }
 
 var getNewFeed = async (account) => {
@@ -298,7 +320,6 @@ var getNewFeed = async (account) => {
 
 /* Update account FOLLOWINGS Transaction */
 var follow = async (my_account, add_account, sequence) => {
-  console.log('thuc hien follow');
   const Followings = vstruct([
     { name: 'addresses', type: vstruct.VarArray(vstruct.UInt16BE, vstruct.Buffer(35)) },
   ]);
@@ -328,7 +349,6 @@ var follow = async (my_account, add_account, sequence) => {
 }
 
 var unFollow = async (my_account, remove_account, sequence) => {
-  console.log('thuc hien unfollow');
   const Followings = vstruct([
     { name: 'addresses', type: vstruct.VarArray(vstruct.UInt16BE, vstruct.Buffer(35)) },
   ]);
