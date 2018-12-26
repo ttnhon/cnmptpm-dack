@@ -6,6 +6,28 @@ import history from '../history';
 import * as account from '../lib/account';
 
 class Following extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+        page: 1
+    }
+    window.onscroll = () => {
+        //if is loading getout
+        if (this.props.following) {
+            //get out if end of page
+            if (this.state.page >= Math.floor(this.props.following.length / 10)) {
+
+                return;
+            }
+            if (
+                window.innerHeight + document.documentElement.scrollTop
+                === document.documentElement.offsetHeight
+            ) {
+                this.setState({ page: this.state.page + 1 });
+            }
+        }
+    }
+}
   componentWillMount() {
     if (this.props.following === undefined || this.props.following === null) {
       const params = history.location.pathname.split("/");
@@ -17,11 +39,12 @@ class Following extends Component {
     history.push('/' + key + '/' + value);
   }
   render() {
-    const users = this.props.following;
+    var users = this.props.following;
     const isUser = account.checkLogged().publicKey() === this.props.auth.publicKey;
     //console.log(users);
     let media;
     if (users) {
+      users = users.slice(0, (this.state.page * 10));
       media = users.map((user, index) => {
         return (
           <div key={index} className="twPc-div">

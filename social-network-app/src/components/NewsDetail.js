@@ -16,8 +16,8 @@ class NewsDetail extends Component {
         if (this.props.match.params.id && this.props.match.params.hash) {
             id = this.props.match.params.id;
             hash = this.props.match.params.hash;
-            this.props.GetProfile(id, 1, { balance: 0, sequence: 0, tweets: [] });
-            this.props.GetInteract({key : id, hash: hash}, 1, []);
+            this.props.GetProfile({key: id, hash: hash}, 1, { balance: 0, sequence: 0, tweets: [] });
+            this.props.GetInteract({ key: id, hash: hash }, 1, []);
         }
     }
     render() {
@@ -39,21 +39,27 @@ class NewsDetail extends Component {
         let reps = [];
         let reacts;
         let yourReact = "none";
-        //console.log(interacts);
-        if (tweets && hash) {
-            let index = null;
-            for (let i = 0; i < tweets.length; i++) {
-                if (tweets[i].hash === hash) {
-                    index = i;
-                    break;
-                }
-            }
-            if (index !== null) {
-                tweet = tweets[index];
-            } else {
-                error = "Tweet not found";
-            }
+        let Content = [];
+        let time;
+        if(tweets){
+            tweet = tweets[0];
+            time = tweet.time;
         }
+        //console.log(interacts);
+        // if (tweets && hash) {
+        //     let index = null;
+        //     for (let i = 0; i < tweets.length; i++) {
+        //         if (tweets[i].hash === hash) {
+        //             index = i;
+        //             break;
+        //         }
+        //     }
+        //     if (index !== null) {
+        //         tweet = tweets[index];
+        //     } else {
+        //         error = "Tweet not found";
+        //     }
+        // }
         if (tweet && interact && hash) {
             // for (let i = 0; i < interacts.length; i++) {
             //     if (interacts[i].skip) continue;
@@ -140,6 +146,14 @@ class NewsDetail extends Component {
                             for (let i = 0; i < reply.interact.length; i++) {
                                 //console.log(reply.interact[i]);
                                 if (reply.interact[i].content.type === 1) {
+                                    let content = [];
+                                    let text = reply.interact[i].content.text.split(/(\r\n|\n|\r)/gm);
+                                    console.log(text);
+                                    text.map((element, index) => {
+                                        //console.log(element);
+                                        if (element === '\n') return [];
+                                        content.push(<span key={index}>{element}<br /></span>);
+                                    });
                                     hasRep = true;
                                     rep.push(<div className={"row one-news-comments reply-margin"} key={reply.interact[i].hash + "_" + i}>
                                         <div className="col-xs-3 col-sm-2 col-md-3 col-lg-2 img">
@@ -151,17 +165,17 @@ class NewsDetail extends Component {
                                                 history.push('/' + reply.account.account + '/tweets');
                                             }}>{reply.interact[i].account.name ? reply.interact[i].account.name : ""}</a></strong><i className="time"> {reply.interact[i].date ? reply.interact[i].date.toLocaleString() : "time"}</i></pre>
                                             <div className="content">
-                                                <h4>{reply.interact[i].content.text}</h4>
+                                                <h4>{content}</h4>
                                             </div>
                                             <ul className="associate">
                                                 <li><button onClick={(e) => {
-                                            var x = document.getElementById(reply.hash);
-                                            if (x.style.display === "none") {
-                                                x.style.display = "block";
-                                            } else {
-                                                x.style.display = "none";
-                                            }
-                                        }}><i className="far fa-comment"></i><span></span></button></li>
+                                                    var x = document.getElementById(reply.hash);
+                                                    if (x.style.display === "none") {
+                                                        x.style.display = "block";
+                                                    } else {
+                                                        x.style.display = "none";
+                                                    }
+                                                }}><i className="far fa-comment"></i><span></span></button></li>
                                                 {/* <li><button><span className="glyphicon glyphicon-heart-empty"></span><span></span></button></li> */}
                                             </ul>
                                         </div>
@@ -238,6 +252,15 @@ class NewsDetail extends Component {
                             );
                         })
 
+                        let conten = [];
+                        let text = reply.content.text.split(/(\r\n|\n|\r)/gm);
+                        //console.log(text);
+                        text.map((element, index) => {
+                            //console.log(element);
+                            if (element === '\n') return [];
+                            conten.push(<span key={index}>{element}<br /></span>);
+                        });
+
                         rep = [(
                             <div className={!hasRep ? "row one-news-comments" : "row one-news-comments have-reply"} key={index}>
                                 <div className="col-xs-3 col-sm-2 col-md-2 col-lg-2 img">
@@ -249,7 +272,7 @@ class NewsDetail extends Component {
                                         history.push('/' + reply.account.account + '/tweets');
                                     }}>{reply.account.name ? reply.account.name : ""}</a></strong><i className="time"> {reply.date ? reply.date.toLocaleString() : "time"}</i></pre>
                                     <div className="content">
-                                        <h4>{reply.content.text}</h4>
+                                        <h4>{conten}</h4>
                                     </div>
                                     <ul className="stats col-xs-9 col-sm-10 col-md-10 col-lg-10">
                                         <li>React: <div className="rection-case">
@@ -275,9 +298,9 @@ class NewsDetail extends Component {
                                     </ul>
                                 </div>
                             </div>
-                        )].concat(rep, <div id={reply.hash} key={reply.hash+"_reply"} style={{ display: "none" }} className="one-news-comments col-xs-12 comment-reply">
-                        <Comment hash={reply.hash} />
-                    </div>);
+                        )].concat(rep, <div id={reply.hash} key={reply.hash + "_reply"} style={{ display: "none" }} className="one-news-comments col-xs-12 comment-reply">
+                            <Comment hash={reply.hash} />
+                        </div>);
                         //console.log(rep);
                         return rep;
                     })
@@ -321,7 +344,17 @@ class NewsDetail extends Component {
                         </Popup>
                     </div>
                 );
-            })
+            });
+
+            if (tweet.content) {
+                let text = tweet.content.text.split(/(\r\n|\n|\r)/gm);
+                //console.log(text);
+                text.map((element, index) => {
+                    //console.log(element);
+                    if (element === '\n') return [];
+                    Content.push(<span key={index}>{element}<br /></span>);
+                });
+            }
         }
         //console.log(comments);
         return (
@@ -342,7 +375,7 @@ class NewsDetail extends Component {
                     <div className="row one-news-content">
                         <div className="text">
                             {error ? <h4>{error}</h4> : null}
-                            <h4>{tweet ? tweet.content ? tweet.content.text : null : <span className="text-loading-wrapper"><img className="text-loading" src="/loading_text.gif" alt="" /></span>}</h4>
+                            <h4>{tweet ? Content.length > 0 ? Content : null : <span className="text-loading-wrapper"><img className="text-loading" src="/loading_text.gif" alt="" /></span>}</h4>
                         </div>
                         <div className="imgs">
                             {/* truong hop co 1 anh */}
@@ -369,7 +402,7 @@ class NewsDetail extends Component {
                     </div> {/* end one-new-content */}
                     <div className="row one-news-status">
                         <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12 post-time">
-                            <p>{tweet ? tweet.date ? tweet.date.toLocaleString() : tweet.height ? tweet.height : "time" : "time"}</p>
+                            <p>{tweet ? time ? time.toLocaleString() : null : "time"}</p>
                         </div>
                         <ul className="stats col-xs-12 col-sm-12 col-md-12 col-lg-12">
                             <li>React: <div className="rection-case">

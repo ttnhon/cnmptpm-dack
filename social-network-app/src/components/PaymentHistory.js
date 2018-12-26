@@ -8,17 +8,41 @@ import '../assets/css/payment_history.css'
 
 
 class PaymentHistory extends Component {
-
+    constructor(props) {
+        super(props);
+        this.state = {
+            page: 1
+        }
+        window.onscroll = () => {
+            //if is loading getout
+            if (this.props.payments) {
+                //get out if end of page
+                if (this.state.page >= Math.floor(this.props.payments.length / 10)) {
+    
+                    return;
+                }
+                if (
+                    window.innerHeight + document.documentElement.scrollTop
+                    === document.documentElement.offsetHeight
+                ) {
+                    this.setState({ page: this.state.page + 1 });
+                }
+            }
+        }
+    }
     componentWillMount() {
-        console.log(this.props.payments)
+        //console.log(this.props.payments)
         if (this.props.payments === undefined || this.props.payments === null) {
             let key = account.checkLogged().publicKey();
             this.props.getPaymentHistory(key);
         }
     }
     render() {
-        const payments = this.props.payments;
-        console.log(payments);
+        var payments = this.props.payments;
+        if(payments){
+            payments = payments.slice(0, (this.state.page * 10));
+        }
+        //console.log(payments);
         
         return (
             <div>
@@ -29,7 +53,7 @@ class PaymentHistory extends Component {
                     <div className="row">
                         <div className="col-xs-12 col-md-12">
                             {/* one history */}
-                            {payments ? 
+                            {payments ? payments.length > 0 ?
                                 payments.map((one_payment, index) => (
                                     <div key={index}>
                                     <article className="media">
@@ -60,6 +84,7 @@ class PaymentHistory extends Component {
                                 ))
                                 :
                                 <h2>Nothing to show</h2>
+                                : <div className="img-loading-wrapper"><img className="img-loading" src="/loading.gif" alt="" /></div>
                             }
                         </div>          
                     </div>

@@ -194,6 +194,7 @@ var getPosts = async (account, info, page = 1, list_post = []) => {
   res.result.txs.map((tx) => {
     let one_transaction = decode(Buffer.from(tx.tx, 'base64'));
     let content = null;
+    if (account !== one_transaction.account) return content;
     switch (one_transaction.operation) {
       case 'post':
         content = {
@@ -222,7 +223,7 @@ var getPosts = async (account, info, page = 1, list_post = []) => {
             };
             break;
           
-          case 'image':
+          case 'picture':
           content = {
             key: 'update_account',
             value: {

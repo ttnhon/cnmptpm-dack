@@ -76,8 +76,14 @@ export default (state = initState, action) => {
             interact: state.interact ? state.interact.concat(action.payload) : action.payload
         };
         case types.SEND_MONEY:
-            console.log(action.payload);
-            return state;
+            //console.log(action.payload);
+            return {
+                ...state,
+                user: {...state.user,
+                    sequence: state.user.sequence + 1,
+                    balance: state.user.balance - action.payload
+                }
+            };
         case types.SET_DEFAULT:
             return initState;
         case types.LOGOUT:

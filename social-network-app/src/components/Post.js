@@ -59,7 +59,15 @@ class Post extends Component {
                                                         content: { type: 1, text: text },
                                                         time: date
                                                     };
-                                                    this.props.AddNewfeed(post);
+                                                    var newfeed = {
+                                                        name: auth.user.name,
+                                                        img_url: auth.user.picture,
+                                                        account: acc.publicKey(),
+                                                        height: res.data.result.height,
+                                                        content: {key: 'post', value: { type: 1, text: text }},
+                                                        time: date
+                                                    };
+                                                    this.props.AddNewfeed(newfeed);
                                                     this.props.AddTweet(post);
                                                 }
                                             }

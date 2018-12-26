@@ -33,13 +33,13 @@ class Payment extends Component {
 
     handleSubmit(e) {
         e.preventDefault();
-        console.log('click nut gui');
+        //console.log('click nut gui');
         const user = this.props.user;
         const my_balance = user.balance;
         //chuan bi du lieu
         let public_key = user.publicKey;
         let secret_key = account.checkLogged().secret();
-        console.log(secret_key);
+        //console.log(secret_key);
         let receiver_account = this.state.account;
         let sequence = user.sequence + 1;
         let amount = this.state.amount;
@@ -60,11 +60,11 @@ class Payment extends Component {
     render() {
         const user = this.props.user;
         if (user) {
-                console.log(user);
+                //console.log(user);
         }
         return (
             <div>
-            <Header></Header>
+            <Header />
             <div className="container payment">
                 <div className="row">
                     {/* You can make it whatever width you want. I'm making it full width
@@ -131,6 +131,7 @@ class Payment extends Component {
 }
 
 const mapStatetoProps = (state) => {
+    console.log(state);
     return {
       user: state.auth.user
     }
