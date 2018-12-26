@@ -1,7 +1,7 @@
 import * as types from "./types";
 import { decode } from '../../lib/index';
 import axios from 'axios';
-import { sendMoney, getNewFeed, getInfoFollowings, doTransaction, unFollow, follow, getFullInfo, getPaymentHistoryAndInfo } from '../../lib/helper';
+import { sendMoney, getNewFeed, getInfoFollowings, doTransaction, unFollow, follow, getFullInfo, getPaymentHistoryAndInfo, getTimeBlock } from '../../lib/helper';
 import * as account from '../../lib/account';
 import server from '../../lib/server'
 const vstruct = require('varstruct');
@@ -76,9 +76,9 @@ export const EditProfile = (profile) => (dispatch, getState) => {
   return dispatch({ type: types.EDIT_PROFILE, payload: profile });
 };
 
-export const GetProfile = (key, page, result) => (dispatch, getState) => {
-  axios.get('https://' + server + '.forest.network/tx_search?query="account=\'' + key + '\'"&page="' + page + '"')
-    .then(res => {
+export const GetProfile = (acc, page, result) => (dispatch, getState) => {
+  axios.get('https://' + server + '.forest.network/tx_search?query="account=\'' + acc.key + '\'"&page="' + page + '"')
+    .then(async res => {
       //console.log(res);
       let end = false;
       //console.log(page);
@@ -94,7 +94,7 @@ export const GetProfile = (key, page, result) => (dispatch, getState) => {
       //console.log(auth);
       for (let i = 0; i < txs.length; i++) {
         //console.log(txs[i]);
-        if (key === txs[i].account) auth.sequence++;
+        if (acc.key === txs[i].account) auth.sequence++;
         switch (txs[i].operation) {
           case "update_account":
             switch (txs[i].params.key) {
@@ -115,7 +115,7 @@ export const GetProfile = (key, page, result) => (dispatch, getState) => {
             }
             break;
           case "payment":
-            if (key === txs[i].account) {
+            if (acc.key === txs[i].account) {
               auth.balance = auth.balance - txs[i].params.amount;
             } else {
               auth.balance = auth.balance + txs[i].params.amount;
@@ -124,6 +124,11 @@ export const GetProfile = (key, page, result) => (dispatch, getState) => {
           case "post":
             try {
               //console.log(txs[i].params);
+              if(acc.hash){
+                if(!(res.data.result.txs[i].hash === acc.hash)){
+                  continue;
+                }
+              }
               const PlainTextContent = vstruct([
                 { name: 'type', type: vstruct.UInt8 },
                 { name: 'text', type: vstruct.VarString(vstruct.UInt16BE) },
@@ -142,7 +147,7 @@ export const GetProfile = (key, page, result) => (dispatch, getState) => {
         }
       }
       //var posts = getPosts(key);
-      dispatch({ type: types.SET_PUBLIC_KEY, payload: key });
+      dispatch({ type: types.SET_PUBLIC_KEY, payload: acc.key });
       if (end) {
         if (auth.picture) {
           auth.picture = Buffer.from(auth.picture).toString('base64');
@@ -159,11 +164,28 @@ export const GetProfile = (key, page, result) => (dispatch, getState) => {
         //console.log(auth);
         dispatch(EditProfile({ name: auth.name, balance: auth.balance, sequence: auth.sequence, picture: auth.picture, followings: auth.followings }));
         //dispatch(GetFollowing(key));
+        await dispatch(GetTimePost(acc.key, auth.tweets));
         return dispatch({ type: types.GET_POST, payload: auth.tweets });
       }
-      return dispatch(GetProfile(key, page + 1, auth));
+      return dispatch(GetProfile(acc, page + 1, auth));
     });
 };
+
+export const GetTimePost = (acc, tweets) => async (dispatch, getState) => {
+  if (tweets) {
+    if (tweets.length > 0) {
+      for (let i = 0; i < tweets.length; i++) {
+        let height = tweets[i].height;
+        await getTimeBlock(acc, height).then(res => {
+          let time = res.data.result.block.header.time;
+          let date = new Date(time);
+          date.setTime(date.getTime()+(7*60*60*1000));
+          tweets[i].time = date
+        });
+      }
+    }
+  }
+}
 
 export const GetInteract = (acc, page, result) => (dispatch, getState) => {
   axios.get('https://' + server + '.forest.network/tx_search?query="account=\'' + acc.key + '\'"&page="' + page + '"')
@@ -246,9 +268,13 @@ export const LogIn = (key) => (dispatch, getState) => {
 };
 
 export const GetNewfeed = (key) => (dispatch, getState) => {
-  getNewFeed(key).then(res => {
-    //console.log(res);
-    return dispatch({ type: types.GET_NEWFEED, payload: res });
+  getNewFeed(key).then(async res => {
+    console.log(res);
+    var newFeed = res;
+    if(res){
+      await dispatch(GetTimePost(key, newFeed));
+    }
+    return dispatch({ type: types.GET_NEWFEED, payload: newFeed });
   });
 };
 
@@ -315,8 +341,8 @@ export const AddInteractInfo = () => async (dispatch, getState) => {
   let list = getState().auth.interact;
   if (list) {
     for (let i = 0; i < list.length; i++) {
-      if(list[i].interact){
-        for(let j = 0; j < list[i].interact.length; j++){
+      if (list[i].interact) {
+        for (let j = 0; j < list[i].interact.length; j++) {
           await getFullInfo(list[i].interact[j].account).then(res => {
             list[i].interact[j].account = res;
           })
@@ -342,7 +368,7 @@ export const AddInteract = (interact) => (dispatch, getState) => {
 export const SendMoney = (public_key, secret_key, receiver_account, sequence, amount, memo = '') => async (dispatch, getState) => {
   var send_money = await sendMoney(public_key, secret_key, receiver_account, sequence, amount, memo);
   var doTrans = await doTransaction(send_money, secret_key);
-  return dispatch({ type: types.SEND_MONEY, payload: doTrans ? doTrans : 'That bai roi nhe' });
+  return dispatch({ type: types.SEND_MONEY, payload: doTrans ? amount : 'That bai roi nhe' });
 }
 
 export const GetPaymentHistory = (key) => async (dispatch, getState) => {

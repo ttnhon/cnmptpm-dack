@@ -39,8 +39,8 @@ var updateName = async (secret_key, sequence, newName, memo = '') => {
   };
   sign(tx, secret_key);
   const txs = '0x' + encode(tx).toString('hex');
-  const res = await axios('https://'+server+'.forest.network/broadcast_tx_commit?tx=' + txs);
-  return res;
+  return await axios('https://'+server+'.forest.network/broadcast_tx_commit?tx=' + txs);
+  //return res;
 }
 var updatePicture = async (secret_key, sequence, str, memo = '') => {
   var buff = Buffer.from(str, "base64");
@@ -101,6 +101,11 @@ var getName = async (account) => {
   return name;
 
 }
+
+var getTimeBlock = async (account, height) => {
+  var result = await axios('https://'+server+'.forest.network/block?height=' + height);
+  return result;
+};
 
 var getFollowings = async (account, page = 1, arr_following = []) => {
   const Followings = vstruct([
@@ -189,6 +194,7 @@ var getPosts = async (account, info, page = 1, list_post = []) => {
   res.result.txs.map((tx) => {
     let one_transaction = decode(Buffer.from(tx.tx, 'base64'));
     let content = null;
+    if (account !== one_transaction.account) return content;
     switch (one_transaction.operation) {
       case 'post':
         content = {
@@ -217,7 +223,7 @@ var getPosts = async (account, info, page = 1, list_post = []) => {
             };
             break;
           
-          case 'image':
+          case 'picture':
           content = {
             key: 'update_account',
             value: {
@@ -525,4 +531,4 @@ var doTransaction = async (tx, secret_key) => {
   return res;
 };
 
-export { sendMoney, updateName, updatePicture, getFollowings, getPosts, getNewFeed, follow, unFollow, calcBalance, doTransaction, getInfoFollowings, postPlainText, getFullInfo, doComment, doReact, getPaymentHistoryAndInfo };
+export { sendMoney, updateName, updatePicture, getFollowings, getPosts, getNewFeed, follow, unFollow, calcBalance, doTransaction, getInfoFollowings, postPlainText, getFullInfo, doComment, doReact, getPaymentHistoryAndInfo, getTimeBlock };

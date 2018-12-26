@@ -85,11 +85,11 @@ class Header extends Component {
                     </Link>
                   </li>
                   <li role="separator" className="divider"></li>
-                  <li className="menu-user-profile"><a href={"/" + key.publicKey() + "/tweets"}>Profile</a></li>
+                  <li className="menu-user-profile"><Link to={"/" + key.publicKey() + "/tweets"}>Profile</Link></li>
                   <li role="separator" className="divider"></li>
-                  <li className="menu-user-profile"><a href='/payment'>Send Money</a></li>
+                  <li className="menu-user-profile"><Link to='/payment'>Send Money</Link></li>
                   <li role="separator" className="divider"></li>
-                  <li className="menu-user-profile"><a href='/payment-history'>Payment History</a></li>
+                  <li className="menu-user-profile"><Link to='/payment-history'>Payment History</Link></li>
                   <li role="separator" className="divider"></li>
                   <li className="menu-user-logout"><a href="#fake" onClick={(e) => {
                     e.preventDefault();

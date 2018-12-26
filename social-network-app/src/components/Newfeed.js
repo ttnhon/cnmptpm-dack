@@ -7,42 +7,28 @@ import Post from './Post';
 import { Link } from 'react-router-dom';
 
 class Newfeed extends Component {
-    getTime(time) {
-        let unit = "m";
-        let now = new Date();
-        let t = null;
-        t = Math.floor((now - time) / 60000);
-        if (t >= 60) {
-            t = Math.floor(t / 60);
-            unit = "h";
-            if (t >= 24) {
-                t = Math.floor(t / 24);
-                if (t > 1) {
-                    unit = "d";
-                    if (t >= 30) {
-                        t = Math.floor(t / 30);
-                        if (t > 1) {
-                            unit = "m";
-                            if (t > 12) {
-                                t = Math.floor(t / 12);
-                                if (t > 1) {
-                                    unit = "y";
-                                } else {
-                                    unit = "y";
-                                }
-                            }
-                        } else {
-                            unit = "m";
-                        }
-                    }
-                } else {
-                    unit = "d";
+    constructor(props) {
+        super(props);
+        this.state = {
+            page: 1
+        }
+        window.onscroll = () => {
+            //if is loading getout
+            if (this.props.newfeed) {
+                //get out if end of page
+                if (this.state.page >= Math.floor(this.props.newfeed.length / 10)) {
+
+                    return;
+                }
+                if (
+                    window.innerHeight + document.documentElement.scrollTop
+                    === document.documentElement.offsetHeight
+                ) {
+                    this.setState({ page: this.state.page + 1 });
                 }
             }
         }
-        return t + " " + unit;
     }
-
     ClickTweet(acc, hash) {
         history.push('/' + acc + '/tweets/' + hash);
     }
@@ -62,21 +48,46 @@ class Newfeed extends Component {
         //console.log(tweets);
         let media = null;
         if (tweets) {
+            tweets = tweets.slice(0, (this.state.page * 10));
             media = tweets.map((tweet, index) => {
-                //let time = this.getTime(tweet.date);
+                let time = tweet.time;
+                let content;
+                switch (tweet.content.key) {
+                    case "post":
+                        content = [];
+                        let text = tweet.content.value.text.split(/(\r\n|\n|\r)/gm);
+                        text.map((element, index) => {
+                            //console.log(element);
+                            if (element === '\n') return [];
+                            content.push(<span key={index}>{element}<br /></span>);
+                        });
+
+                        break;
+                    case "update_account":
+                        if (tweet.content.value.key === "name") {
+                            content = <span>Updated name to <strong>{tweet.content.value.value}</strong></span>;
+                        } else {
+                            content = <span>Updated picture to <img className="newfeed-img" src={'data:image/jpeg;base64,' + tweet.content.value.value} /></span>;
+                        }
+                        break;
+                    case "payment":
+                        content = <span>Sent <strong>{tweet.content.value.amount * 1.0 / 100000000} TRE</strong> to <Link style={{ wordBreak: "break-all" }} to={'/' + tweet.content.value.address + '/tweets'}>{tweet.content.value.address}</Link></span>
+                        break;
+                    default:
+                        break;
+                }
                 return (
-                    <div className="media" href="#toDetail" key={index} onClick={(e) => {
+                    <div className="media" href="/" key={index} onClick={(e) => {
                         e.preventDefault();
-                        let event = e.nativeEvent;
-                        let uri = event.toElement.baseURI;
-                        if(!(uri === window.location.href)){
+                        if (tweet.content.key !== "post") return;
+                        if (!(history.pathname === '/' + tweet.account + '/tweets')) {
                             this.ClickTweet(tweet.account, tweet.hash);
-                        }else{
+                        } else {
 
                         }
-                        }}>
+                    }}>
                         <Link className="media-left" to={'/' + tweet.account + '/tweets'}>
-                            <img alt={tweet.img_url} className="media-object img-circle" src={tweet.img_url ? tweet.img_url !== "Not Set" ?  'data:image/jpeg;base64,' + tweet.img_url : "/default_profile_icon.png" : "/loading_circle.gif"} />
+                            <img alt={tweet.img_url} className="media-object img-circle" src={tweet.img_url ? tweet.img_url !== "Not Set" ? 'data:image/jpeg;base64,' + tweet.img_url : "/default_profile_icon.png" : "/loading_circle.gif"} />
                         </Link>
                         <div className="media-body">
                             <div className="profile-tweets-user-header">
@@ -85,11 +96,11 @@ class Newfeed extends Component {
                                         <span>{tweet.name ? tweet.name : null}</span>
                                     </span>
                                     <div className="user-time">
-                                        <span>{tweet.height}</span>
+                                        <span>{time ? time.toLocaleString() : null}</span>
                                     </div>
                                 </Link>
                             </div>
-                            <p>{tweet.content.text}</p>
+                            <p>{content ? content : null}</p>
                             {/* <ul className="nav nav-pills nav-pills-custom">
                                 <li><a href="#fake"><i className="far fa-comment"></i></a></li>
                                 <li><a href="#fake"><span className="glyphicon glyphicon-retweet"></span></a></li>
@@ -100,7 +111,7 @@ class Newfeed extends Component {
                     </div>
                 );
             })
-            if(tweets.length === 0){
+            if (tweets.length === 0) {
                 media = undefined;
             }
         }

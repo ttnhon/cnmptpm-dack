@@ -49,16 +49,16 @@ class ProfileFollow extends Component {
             const str = fr.result; //Url cua cai file
             const binary = str.split(',')[1];
             var res = updatePicture(secretKey, seq, binary).then(res=>{
-                if(res.error){
-                    this.setState({error: res.error, succeed: undefined});
-                }else{
-                    let profile = {
-                        picture: binary,
-                        sequence: seq
-                    };
-                    this.props.editProfile(profile);
-                    this.setState({error: undefined, succeed: res.succeed})
-                }
+                // if(res.error){
+                //     this.setState({error: res.error, succeed: undefined});
+                // }else{
+                //     let profile = {
+                //         picture: binary,
+                //         sequence: seq
+                //     };
+                //     this.props.editProfile(profile);
+                //     this.setState({error: undefined, succeed: res.succeed})
+                // }
                 this.setState({ isLoading: false });
             });
         }
