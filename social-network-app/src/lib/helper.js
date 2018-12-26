@@ -337,8 +337,17 @@ var getNewFeed = async (account) => {
     return false;
 
   var all_posts = [];
+  var list_info_users = [];
   await Promise.all(followings.map(async (one_account) => {
-    let info = await getFullInfo(one_account);
+    let info = null;
+    if(list_info_users.length < 1 || findUser(one_account, list_info_users) === -1)
+    {
+      info = await getFullInfo(one_account);
+      list_info_users.push(info);
+    }
+    else{
+      info = list_info_users[findUser(one_account, list_info_users)];
+    }
     let posts = await getPosts(one_account, info);
     if (posts.length > 0) {
       posts.map(one_post => {
@@ -347,7 +356,14 @@ var getNewFeed = async (account) => {
     }
   }));
   //get user post
-  let info_user = await getFullInfo(account);
+  let info_user = null;
+  if(list_info_users.length < 1 || findUser(account, list_info_users) === -1)
+  {
+    info_user = await getFullInfo(account);
+  }
+  else{
+    info_user = list_info_users[findUser(account, list_info_users)];
+  }
   let User_posts = await getPosts(account, info_user);
   if (User_posts.length > 0) {
     User_posts.map(one_post => {
