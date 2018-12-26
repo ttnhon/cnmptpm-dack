@@ -81,7 +81,8 @@ export default (state = initState, action) => {
                 ...state,
                 user: {...state.user,
                     sequence: state.user.sequence + 1,
-                    balance: state.user.balance - action.payload
+                    balance: state.user.balance - action.payload,
+                    numberReceive: state.user.balance.numberReceive + 1
                 }
             };
         case types.SET_DEFAULT:

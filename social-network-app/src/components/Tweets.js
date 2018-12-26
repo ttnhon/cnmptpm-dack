@@ -72,7 +72,7 @@ class Tweets extends Component {
                                         <span id="toAcc" >{this.props.auth ? this.props.auth.name ? this.props.auth.name : "No name" : null}</span>
                                     </span>
                                     <div className="user-time">
-                                        <span id="toAcc">{time ? time.toLocaleString() : null}</span>
+                                        <span id="toAcc">{time ? time.toString().replace(" +0700", "") : null}</span>
                                     </div>
                                 </Link>
                             </div>

@@ -71,7 +71,7 @@ class Newfeed extends Component {
                         }
                         break;
                     case "payment":
-                        content = <span>Sent <strong>{tweet.content.value.amount * 1.0 / 100000000} TRE</strong> to <Link style={{ wordBreak: "break-all" }} to={'/' + tweet.content.value.address + '/tweets'}>{tweet.content.value.address}</Link></span>
+                        content = <span>Sent <strong>{(tweet.content.value.amount * 1.0/ 100000000.0).toFixed(8)} TRE</strong> to <Link style={{ wordBreak: "break-all" }} to={'/' + tweet.content.value.address + '/tweets'}>{tweet.content.value.address}</Link></span>
                         break;
                     default:
                         break;
@@ -96,7 +96,7 @@ class Newfeed extends Component {
                                         <span>{tweet.name ? tweet.name : null}</span>
                                     </span>
                                     <div className="user-time">
-                                        <span>{time ? time.toLocaleString() : null}</span>
+                                        <span>{time ? time.toString().replace(" +0700", "") : null}</span>
                                     </div>
                                 </Link>
                             </div>

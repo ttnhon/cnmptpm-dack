@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Popup from "reactjs-popup";
 //import DatePicker from 'react-date-picker';
-import { EditProfile, Follow } from '../store/actions/index';
+import { EditProfile, Follow, GetFollowing } from '../store/actions/index';
 import history from '../history';
 import * as account from '../lib/account';
 import { updateName, updatePicture } from './../lib/helper';
@@ -48,16 +48,17 @@ class ProfileFollow extends Component {
             this.setState({ isLoading: true, error: undefined, succeed: undefined });
             const str = fr.result; //Url cua cai file
             const binary = str.split(',')[1];
-            var res = updatePicture(secretKey, seq, binary).then(res=>{
-                if(res.error){
-                    this.setState({error: res.error, succeed: undefined});
-                }else{
+            updatePicture(secretKey, seq, binary).then(res => {
+                //console.log(res);
+                if (res.data.result.check_tx.log) {
+                    this.setState({ error: res.data.result.check_tx.log, succeed: undefined });
+                } else {
                     let profile = {
                         picture: binary,
                         sequence: seq
                     };
                     this.props.editProfile(profile);
-                    this.setState({error: undefined, succeed: res.succeed})
+                    this.setState({ error: undefined, succeed: "Change picture succeess" })
                 }
                 this.setState({ isLoading: false });
             });
@@ -74,7 +75,8 @@ class ProfileFollow extends Component {
         let value = this.props.value;
         let id = this.props.id;
         let inputName;
-        let isUser = account.checkLogged().publicKey() === auth.publicKey;
+        let key = account.checkLogged().publicKey();
+        let isUser = key === auth.publicKey;
         let isFollow = null;
         if (!isUser) {
             //console.log(auth.user);
@@ -109,6 +111,13 @@ class ProfileFollow extends Component {
                                         <li className={value === "following" ? "profile-nav-item active" : "profile-nav-item"}>
                                             <a href="#link" onClick={(e) => {
                                                 e.preventDefault();
+                                                if (auth) {
+                                                    if (auth.following) {
+                                                        if (auth.following.users) {
+                                                            this.props.GetFollowing(key);
+                                                        }
+                                                    }
+                                                }
                                                 this.linkClick(id, "following");
                                             }}>
                                                 <span className="profile-nav-label">Following</span>
@@ -188,6 +197,9 @@ class ProfileFollow extends Component {
                                                                 if (!inputName.value.trim()) {
                                                                     return;
                                                                 }
+                                                                if(inputName.value === auth.name){
+                                                                    return;
+                                                                }
                                                                 this.setState({ isLoading: true, error: undefined, succeed: undefined });
                                                                 //console.log(inputName.value);
 
@@ -195,10 +207,10 @@ class ProfileFollow extends Component {
                                                                 seq++;
                                                                 const secretKey = account.checkLogged().secret();
                                                                 let name = inputName.value;
-                                                                updateName(secretKey, seq, name).then(res=>{
+                                                                updateName(secretKey, seq, name).then(res => {
                                                                     if (res) {
                                                                         if (res.data.result.check_tx.log) {
-                                                                            this.setState({error: res.data.result.check_tx.log, succeed: undefined})
+                                                                            this.setState({ error: res.data.result.check_tx.log, succeed: undefined })
                                                                             alert(res.data.result.check_tx.log);
                                                                         } else {
                                                                             let profile = {
@@ -206,10 +218,10 @@ class ProfileFollow extends Component {
                                                                                 sequence: seq
                                                                             };
                                                                             this.props.editProfile(profile);
-                                                                            this.setState({error: undefined, succeed: "Change name succeess"})
+                                                                            this.setState({ error: undefined, succeed: "Change name succeess" })
                                                                         }
-                                                                    //this.closeModal();
-                                                                    this.setState({ isLoading: false });
+                                                                        //this.closeModal();
+                                                                        this.setState({ isLoading: false });
                                                                     }
                                                                 })
                                                             }
@@ -246,7 +258,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = (dispatch) => {
     return {
         editProfile: (profile) => dispatch(EditProfile(profile)),
-        follow: (key, isFollow) => dispatch(Follow(key, isFollow))
+        follow: (key, isFollow) => dispatch(Follow(key, isFollow)),
+        GetFollowing: (key) => dispatch(GetFollowing(key))
     }
 };
 

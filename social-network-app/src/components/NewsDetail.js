@@ -270,7 +270,7 @@ class NewsDetail extends Component {
                                     <pre><strong className="name"><a className="nav-link-account" href="/" onClick={(e) => {
                                         e.preventDefault();
                                         history.push('/' + reply.account.account + '/tweets');
-                                    }}>{reply.account.name ? reply.account.name : ""}</a></strong><i className="time"> {reply.date ? reply.date.toLocaleString() : "time"}</i></pre>
+                                    }}>{reply.account.name ? reply.account.name : ""}</a></strong><i className="time"> {reply.time ? reply.time.toString().replace(" +0700", "") : "time"}</i></pre>
                                     <div className="content">
                                         <h4>{conten}</h4>
                                     </div>
@@ -402,7 +402,7 @@ class NewsDetail extends Component {
                     </div> {/* end one-new-content */}
                     <div className="row one-news-status">
                         <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12 post-time">
-                            <p>{tweet ? time ? time.toLocaleString() : null : "time"}</p>
+                            <p>{tweet ? time ? time.toString().replace(" +0700", "") : null : "time"}</p>
                         </div>
                         <ul className="stats col-xs-12 col-sm-12 col-md-12 col-lg-12">
                             <li>React: <div className="rection-case">

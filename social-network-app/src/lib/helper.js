@@ -76,14 +76,23 @@ var updatePicture = async (secret_key, sequence, str, memo = '') => {
       })
   };
 
-  await request(options, (error, response, body) => {
-      if (error) {
-          return {error: 'An error has occurred: ' + error};
-      } else {
-          return {succeed: 'Change avatar success', response: body};
-      }
-  });
+  var res = await axios.post('https://komodo.forest.network/', {
+        "jsonrpc": "2.0",
+        "id": 1,
+        "method": "broadcast_tx_commit",
+        "params": [`${param}`]
+    });
+  //var result = await request(options);
+  return res;
 
+  // await request(options, (error, response, body) => {
+  //     if (error) {
+  //         result = {error: 'An error has occurred: ' + error};
+  //     } else {
+  //         result = {succeed: 'Change avatar success', response: body};
+  //     }
+  // });
+  // return result;
 }
 
 var getName = async (account) => {

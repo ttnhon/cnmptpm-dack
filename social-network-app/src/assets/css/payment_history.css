@@ -3,6 +3,7 @@ p.image.is-64x64 img {
     float: left;
     border-radius: 15px;
     margin-right: 5px;
+    max-width: 80px;
 }
 
 figure.media-left {

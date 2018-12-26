@@ -6,7 +6,7 @@ const initState = {
 const paymentReducer = (state = initState, action) => {
 	switch (action.type) {
         case types.GET_PAYMENT_HISTORY:
-        console.log(action.payload)
+        //console.log(action.payload)
             return {
                 histories: action.payload
             };

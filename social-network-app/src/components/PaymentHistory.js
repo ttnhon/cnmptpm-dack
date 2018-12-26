@@ -40,6 +40,7 @@ class PaymentHistory extends Component {
     render() {
         var payments = this.props.payments;
         if(payments){
+            account.setItemLocal("numberReceive", payments.length);
             payments = payments.slice(0, (this.state.page * 10));
         }
         //console.log(payments);
@@ -96,7 +97,8 @@ class PaymentHistory extends Component {
 
 const mapStatetoProps = (state) => {
     return {
-        payments: state.payments.histories
+        user: state.auth.user,
+        payments: state.payments.histories ? state.payments.histories.reverse() : undefined
     }
   };
   

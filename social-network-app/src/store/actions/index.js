@@ -13,6 +13,7 @@ export const LogOut = () => (dispatch, getState) => {
 export const SetUserProfile = (key, page, result) => (dispatch, getState) => {
   axios.get('https://' + server + '.forest.network/tx_search?query="account=\'' + key + '\'"&page="' + page + '"')
     .then(res => {
+      //console.log(page);
       //console.log(res);
       let end = false;
       if (page * 30 >= res.data.result.total_count) end = true;
@@ -21,7 +22,9 @@ export const SetUserProfile = (key, page, result) => (dispatch, getState) => {
       });
       //console.log(txs);
       var auth = result;
-      auth.balance = 0;
+      if (res.data.result.total_count == 0) auth.isRedirect = true;
+      else auth.isRedirect = false;
+      //auth.balance = 0;
       for (let i = 0; i < txs.length; i++) {
         if (key === txs[i].account) {
           //console.log(i);
@@ -41,13 +44,15 @@ export const SetUserProfile = (key, page, result) => (dispatch, getState) => {
             auth.picture = txs[i].params.value;
           };
         }
-
         if (txs[i].operation === "payment") {
+          //console.log(txs[i].params);
+          auth.numberReceive++;
           if (key === txs[i].account) {
             auth.balance = auth.balance - txs[i].params.amount;
           } else {
             auth.balance = auth.balance + txs[i].params.amount;
           }
+          //console.log(auth.balance);
         }
       }
       if (end) {
@@ -64,7 +69,26 @@ export const SetUserProfile = (key, page, result) => (dispatch, getState) => {
           auth.name = "No name";
         }
         auth.publicKey = key;
-        //console.log(auth);
+        
+        let isFirst = account.getItemLocal('isLoadNotification');
+        if(isFirst === 'false'){
+          account.setItemLocal("numberReceive", auth.numberReceive);
+          account.setItemLocal('isLoadNotification', true);
+        }
+
+        // let number = account.getItemLocal("numberReceive");
+        // if(number !== auth.numberReceive.toString()){
+        //   if(auth.Notification){
+        //     auth.Notification = {...auth.Notification,
+        //       payment: true
+        //     };
+        //   }else{
+        //     auth.Notification = {};
+        //     auth.Notification.payment = true;
+        //   }
+        // }
+        // console.log(auth.numberReceive);
+        // console.log(number);
         return dispatch({ type: types.SET_USER_PROFILE, payload: auth });
       } else {
         return dispatch(SetUserProfile(key, page + 1, auth))
@@ -124,8 +148,8 @@ export const GetProfile = (acc, page, result) => (dispatch, getState) => {
           case "post":
             try {
               //console.log(txs[i].params);
-              if(acc.hash){
-                if(!(res.data.result.txs[i].hash === acc.hash)){
+              if (acc.hash) {
+                if (!(res.data.result.txs[i].hash === acc.hash)) {
                   continue;
                 }
               }
@@ -176,12 +200,17 @@ export const GetTimePost = (acc, tweets) => async (dispatch, getState) => {
     if (tweets.length > 0) {
       for (let i = 0; i < tweets.length; i++) {
         let height = tweets[i].height;
-        await getTimeBlock(acc, height).then(res => {
-          let time = res.data.result.block.header.time;
-          let date = new Date(time);
-          date.setTime(date.getTime()+(7*60*60*1000));
-          tweets[i].time = date
-        });
+        if(height){
+          await getTimeBlock(acc, height).then(res => {
+            //console.log(res.data.result.block.data.txs[0].length);
+            const moment = require('moment-timezone');
+            let time = res.data.result.block.header.time;
+            let date = new Date(time);
+            var format = 'YYYY/MM/DD HH:mm:ss ZZ';
+            //date.setTime(date.getTime() + (7 * 60 * 60 * 1000));
+            tweets[i].time = moment(date, format).tz("Asia/Saigon").format(format);
+          });
+        }
       }
     }
   }
@@ -189,7 +218,7 @@ export const GetTimePost = (acc, tweets) => async (dispatch, getState) => {
 
 export const GetInteract = (acc, page, result) => (dispatch, getState) => {
   axios.get('https://' + server + '.forest.network/tx_search?query="account=\'' + acc.key + '\'"&page="' + page + '"')
-    .then(res => {
+    .then(async res => {
       //console.log(res);
       let end = false;
       if (page * 30 >= res.data.result.total_count) end = true;
@@ -223,7 +252,7 @@ export const GetInteract = (acc, page, result) => (dispatch, getState) => {
             } else {
               content = ReactContent.decode(txs[i].params.content);
             }
-            one_interact = { object: txs[i].params.object, content: content, account: txs[i].account, hash: res.data.result.txs[i].hash };
+            one_interact = { object: txs[i].params.object, content: content, account: txs[i].account, hash: res.data.result.txs[i].hash, height: res.data.result.txs[i].height };
             interact = interact.concat([one_interact]);
             break;
           default:
@@ -254,6 +283,7 @@ export const GetInteract = (acc, page, result) => (dispatch, getState) => {
             }
           }
         }
+        await dispatch(GetTimePost(acc.key, res));
         //console.log(res);
         dispatch({ type: types.GET_INTERACT, payload: res });
         return dispatch(AddInteractInfo());
@@ -271,7 +301,7 @@ export const GetNewfeed = (key) => (dispatch, getState) => {
   getNewFeed(key).then(async res => {
     console.log(res);
     var newFeed = res;
-    if(res){
+    if (res) {
       await dispatch(GetTimePost(key, newFeed));
     }
     return dispatch({ type: types.GET_NEWFEED, payload: newFeed });
@@ -368,7 +398,14 @@ export const AddInteract = (interact) => (dispatch, getState) => {
 export const SendMoney = (public_key, secret_key, receiver_account, sequence, amount, memo = '') => async (dispatch, getState) => {
   var send_money = await sendMoney(public_key, secret_key, receiver_account, sequence, amount, memo);
   var doTrans = await doTransaction(send_money, secret_key);
-  return dispatch({ type: types.SEND_MONEY, payload: doTrans ? amount : 'That bai roi nhe' });
+  if (doTrans.data.result.check_tx.log) {
+    alert('Gửi không thành công');
+    return;
+  } else {
+    dispatch({ type: types.SEND_MONEY, payload: amount });
+    alert('Gửi thành công');
+    return;
+  }
 }
 
 export const GetPaymentHistory = (key) => async (dispatch, getState) => {

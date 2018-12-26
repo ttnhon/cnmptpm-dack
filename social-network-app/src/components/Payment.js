@@ -12,18 +12,12 @@ class Payment extends Component {
         super(props);
         this.state = {
             account: '',
-            amout: 0
+            amount: 0
         }
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
     
-    handleChange(event) {
-        let state_name = event.target.name;
-        let state_value = event.target.value;
-
-        this.setState({ [state_name]: state_value });
-    }
     handleChange(event) {
         let state_name = event.target.name;
         let state_value = event.target.value;
@@ -45,16 +39,32 @@ class Payment extends Component {
         let amount = this.state.amount;
         let memo = '';
 
+        
+        if (receiver_account === '') {
+            alert('Chưa nhập public key');
+            return;
+        }
+
+        try {
+            const { Keypair } = require('stellar-base');
+            const key = Keypair.fromPublicKey(receiver_account);
+        } catch (error) {
+            alert('Key không hợp');
+            return;
+        }
+        
         if (Number(amount) <= 0 ) {
-            console.log('So tien gui phai lon hon 0');
+            alert('So tien gui phai lon hon 0');
             return;
         }
         if(Number(amount) > my_balance )
         {
-            console.log('So du khong du de thuc hien');
+            alert('So du khong du de thuc hien');
             return;
         }
-        this.props.sendMoney(public_key, secret_key, receiver_account, sequence, amount);
+        console.log(amount);
+        console.log(receiver_account);
+        this.props.sendMoney(public_key, secret_key, receiver_account, sequence, Number(amount));
     }
 
     render() {
@@ -85,7 +95,7 @@ class Payment extends Component {
                             <div className="row">
                             <div className="col-xs-12">
                                 <div className="form-group">
-                                <label htmlFor="cardNumber">CARD NUMBER</label>
+                                <label htmlFor="cardNumber">PUBLIC KEY</label>
                                 <div className="input-group">
                                     <input type="tel" value = {this.state.account} onChange={this.handleChange} className="form-control" name="account" placeholder="Valid Card Number" autoComplete="cc-number" required autoFocus />
                                     <span className="input-group-addon"><i className="fa fa-credit-card" /></span>
@@ -101,10 +111,10 @@ class Payment extends Component {
                                         <label htmlFor="couponCode">AMOUNT:</label>
                                     </div>
                                     <div className="col-xs-5">
-                                    <label htmlFor="payment-balance"><small>{user?'balance: '+ user.balance:'balance: '+ 0}</small></label>
+                                    <label htmlFor="payment-balance"><small>{user ? 'balance: '+ user.balance  + ' CEL' : 'balance: ' + 0 + ' CEL'}</small></label>
                                     </div>
                                 </div>
-                                <input type="number" value = {this.state.amout} onChange={this.handleChange} className="form-control" name="amout" />
+                                <input type="number" value = {this.state.amount} onChange={this.handleChange} className="form-control" name="amount" />
                                 </div>
                             </div>                        
                             </div>

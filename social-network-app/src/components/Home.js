@@ -29,6 +29,7 @@ class Home extends Component {
 }
 
 const mapStatetoProps = (state) => {
+  //console.log(state);
   return {
     tweets: state.auth.tweets
   }

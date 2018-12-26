@@ -8,6 +8,7 @@ import Tweets from './Tweets';
 import Following from './Following';
 import Error from './Error';
 import { GetProfile, SetDefaultState } from '../store/actions/index';
+import history from '../history';
 
 class Profile extends Component {
     componentWillMount() {
@@ -15,7 +16,7 @@ class Profile extends Component {
 
         if (this.props.match.params.id) {
             id = this.props.match.params.id;
-            this.props.GetProfile({key: id}, 1, { balance: 0, sequence: 0, tweets: [] });
+            this.props.GetProfile({ key: id }, 1, { balance: 0, sequence: 0, tweets: [] });
         }
     }
     render() {
@@ -31,7 +32,14 @@ class Profile extends Component {
                 //console.log("get info");
                 let id = this.props.match.params.id;
                 this.props.SetDefaultState();
-                this.props.GetProfile({key: id}, 1, { balance: 0, sequence: 0, tweets: [], interact: [] });
+                this.props.GetProfile({ key: id }, 1, { balance: 0, sequence: 0, tweets: [], interact: [] });
+            }
+        }
+        if (auth.user) {
+            if (this.props.auth.user.isRedirect) {
+                this.props.logout();
+                this.props.setUserPro({ type: "SET_USER_PROFILE", payload: { isRedirect: false } });
+                history.push('/error');
             }
         }
         let page = null;
@@ -56,7 +64,7 @@ class Profile extends Component {
                             <div className="profile-canopy-header">
                                 <div className="container">
                                     <div className="profile-canopy-avatar">
-                                        <img src={auth.picture ? auth.picture !=="Not Set" ? ('data:image/jpeg;base64,' + auth.picture) : "/default_profile_icon.png" : "/loading_circle.gif"} alt="" />
+                                        <img src={auth.picture ? auth.picture !== "Not Set" ? ('data:image/jpeg;base64,' + auth.picture) : "/default_profile_icon.png" : "/loading_circle.gif"} alt="" />
                                     </div>
                                 </div>
                             </div>
@@ -66,7 +74,7 @@ class Profile extends Component {
                                         <Link to={"/" + auth.publicKey + "/tweets"}>{auth.name ? auth.name : <span className="text-loading-wrapper"><img className="text-loading" src="/loading_text.gif" alt="" /></span>}</Link>
                                     </h2>
                                     <h5 className="profile-info-bio">
-                                        <span>Balance: {auth.balance ? auth.balance * 1.0 / 100000000 + " TRE" : <span className="text-loading-wrapper"><img className="text-loading" src="/loading_text.gif" alt="" /></span>}</span>
+                                        <span>Balance: {auth.balance ? (auth.balance * 1.0 / 100000000.0).toFixed(8) + " TRE" : <span className="text-loading-wrapper"><img className="text-loading" src="/loading_text.gif" alt="" /></span>}</span>
                                     </h5>
                                     <h5 className="profile-info-bio">
                                         <span>Sequence: {auth.sequence ? auth.sequence : <span className="text-loading-wrapper"><img className="text-loading" src="/loading_text.gif" alt="" /></span>}</span>

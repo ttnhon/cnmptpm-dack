@@ -9,6 +9,7 @@ import history from '../history';
 import Popup from "reactjs-popup";
 import Signup from './Signup';
 import Post from './Post';
+import {SetDefaultState, GetNewfeed} from '../store/actions/index';
 
 class Header extends Component {
   constructor(props) {
@@ -25,40 +26,68 @@ class Header extends Component {
   closeModal() {
     this.setState({ open: false });
   }
-  render() {
-    let inputSearch;
+  componentWillMount() {
     const key = account.checkLogged();
-    //console.log(key);
     if (key === false) {
       console.log(key);
       return <Redirect to={"/login"} />
     } else {
       if (this.props.auth.user === undefined || this.props.auth.user === null) {
         //console.log(this.props.auth.user);
-        this.props.SetUserProfile(key.publicKey(), 1, { sequence: 0 });
+        this.props.SetUserProfile(key.publicKey(), 1, { sequence: 0, balance: 0, numberReceive: 0 });
       }
     }
+  }
+  render() {
+    let inputSearch;
+    let HasNotification;
+    const key = account.checkLogged();
+    if (key === false) {
+      //console.log(key);
+      return <Redirect to={"/login"} />
+    }
+    if(this.props.auth.user){
+      let number = account.getItemLocal("numberReceive");
+      HasNotification = number !== this.props.auth.user.numberReceive.toString();
+      //console.log(number);
+    }
+    
     return (
       <div className="navbar navbar-default navbar-static-top">
         <div className="container">
-        <div className="navbar-header">
-        <button type="button" className="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-        <span className="sr-only">Toggle navigation</span>
-        <span className="icon-bar"></span>
-        <span className="icon-bar"></span>
-        <span className="icon-bar"></span>
-      </button>
-        </div>
+          <div className="navbar-header">
+            <button type="button" className="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+              <span className="sr-only">Toggle navigation</span>
+              <span className="icon-bar"></span>
+              <span className="icon-bar"></span>
+              <span className="icon-bar"></span>
+            </button>
+          </div>
           <div className="navbar-collapse collapse" id="bs-example-navbar-collapse-1" aria-expanded="true">
             <ul className="nav navbar-nav">
               <li>
-                <Link to="/"><span className="glyphicon glyphicon-home"></span> Home</Link>
+                <Link onClick={(e)=>{
+                  if(this.props.user){
+                    if(this.props.user.newfeed){
+                      this.props.GetNewfeed(key.publicKey());
+                    }
+                  }
+                  
+                }} to="/"><span className="glyphicon glyphicon-home"></span> Home</Link>
               </li>
-              <li>
-                <a href="#fake"><span className="glyphicon glyphicon-bell"></span> Notifications</a>
-              </li>
-              <li>
-                <a href="#fake"><span className="glyphicon glyphicon-envelope"></span> Messages</a>
+              <li className="notification">
+                {HasNotification ? <span className="attention"><i className="fas fa-exclamation"></i></span> : null}
+                <div className="btn-group">
+                  <button type="button" className="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span className="glyphicon glyphicon-bell"></span> Notifications <span className="caret"></span>
+                  </button>
+                  <ul className="dropdown-menu">
+                    {HasNotification ?
+                      [<li key={"li_1"}><Link to="/payment-history">Bạn có giao dịch mới</Link></li>,
+                      <li role="separator" className="divider"key={"li_3"}></li>]
+                      : <li>Không có thông báo mới</li>}
+                  </ul>
+                </div>
               </li>
             </ul>
             <div className="navbar-form navbar-right">
@@ -102,11 +131,11 @@ class Header extends Component {
               <Popup trigger={<button className="btn btn-primary" aria-label="Left Align">
                 Tweet
               </button>} position="left center"
-              modal={true}>
-              <div className="modal-btn-tweet">
+                modal={true}>
+                <div className="modal-btn-tweet">
                   <h3>Tweet what you want to say</h3>
-                <Post />
-              </div>
+                  <Post />
+                </div>
               </Popup>
               <div className="form-signup">
                 <a href={"/"} onClick={((e) => {
@@ -141,7 +170,10 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = (dispatch) => ({
   logout: () => logout(),
-  SetUserProfile: (key, page, result) => dispatch(SetUserProfile(key, page, result))
+  SetUserProfile: (key, page, result) => dispatch(SetUserProfile(key, page, result)),
+  setUserPro: (profile) => dispatch(profile),
+  GetNewfeed: (key) => dispatch(GetNewfeed(key)),
+  SetDefaultState: () => dispatch(SetDefaultState())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Header);
