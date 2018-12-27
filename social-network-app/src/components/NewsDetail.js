@@ -16,7 +16,7 @@ class NewsDetail extends Component {
         if (this.props.match.params.id && this.props.match.params.hash) {
             id = this.props.match.params.id;
             hash = this.props.match.params.hash;
-            this.props.GetProfile({key: id, hash: hash}, 1, { balance: 0, sequence: 0, tweets: [] });
+            this.props.GetProfile({key: id, hash: hash}, 1, { balance: 0, sequence: 0, tweets: [], diff: 0 });
             this.props.GetInteract({ key: id, hash: hash }, 1, []);
         }
     }

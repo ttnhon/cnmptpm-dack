@@ -83,8 +83,9 @@ class Header extends Component {
                   </button>
                   <ul className="dropdown-menu">
                     {HasNotification ?
-                      [<li key={"li_1"}><Link to="/payment-history">Bạn có giao dịch mới</Link></li>,
-                      <li role="separator" className="divider"key={"li_3"}></li>]
+                      <li><Link onClick={(e)=>{
+                        account.setItemLocal("numberReceive", this.props.auth.user.numberReceive);
+                      }} to="/payment-history">Bạn có giao dịch mới</Link></li>
                       : <li>Không có thông báo mới</li>}
                   </ul>
                 </div>

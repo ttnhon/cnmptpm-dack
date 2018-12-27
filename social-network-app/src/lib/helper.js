@@ -111,7 +111,7 @@ var getName = async (account) => {
 
 }
 
-var getTimeBlock = async (account, height) => {
+var getTimeBlock = async (height) => {
   var result = await axios('https://'+server+'.forest.network/block?height=' + height);
   return result;
 };

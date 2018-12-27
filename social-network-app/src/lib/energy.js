@@ -30,25 +30,25 @@ var getBlockInfo = async (height) => {
   var result = await axios('https://'+server+'.forest.network/block?height='+height);
   return result.data;
 }
-var getHeight = async (acc) => {
-  var h=0;
-  return await getMaxPage().then(async (max) => {
-    var result = await axios('https://'+server+'.forest.network/tx_search?query=%22account=%27'+acc+'%27%22&page='+max);
-    const res = result.data;
-    if(res.result.total_count === 0)
-  		return 0;
-    var a = res.result.txs.slice(0).reverse().map((tx) => {
-      var t = decode(Buffer.from(tx.tx, 'base64'));
-      var height = tx.height;
-      if(t.account===acc) {
-        return height;
-      }
-    });
-    return a[0];
-  })
-}
+// var getHeight = async (acc) => {
+//   var h=0;
+//   return await getMaxPage().then(async (max) => {
+//     var result = await axios('https://'+server+'.forest.network/tx_search?query=%22account=%27'+acc+'%27%22&page='+max);
+//     const res = result.data;
+//     if(res.result.total_count === 0)
+//   		return 0;
+//     var a = res.result.txs.slice(0).reverse().map((tx) => {
+//       var t = decode(Buffer.from(tx.tx, 'base64'));
+//       var height = tx.height;
+//       if(t.account===acc) {
+//         return height;
+//       }
+//     });
+//     return a[0];
+//   })
+// }
 
 var getUsedEnergy = (tx) => {
 	return tx.length/4*3;
 }
-export { getBandwidthLimit, getHeight, getMaxPage, getBlockInfo, getUsedEnergy }
+export { getBandwidthLimit, getMaxPage, getBlockInfo, getUsedEnergy, BANDWIDTH_PERIOD }
