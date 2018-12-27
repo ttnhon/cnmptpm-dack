@@ -16,7 +16,7 @@ class Profile extends Component {
 
         if (this.props.match.params.id) {
             id = this.props.match.params.id;
-            this.props.GetProfile({ key: id }, 1, { balance: 0, sequence: 0, tweets: [] });
+            this.props.GetProfile({ key: id }, 1, { balance: 0, sequence: 0, tweets: [], diff: 0 });
         }
     }
     render() {
@@ -32,7 +32,7 @@ class Profile extends Component {
                 //console.log("get info");
                 let id = this.props.match.params.id;
                 this.props.SetDefaultState();
-                this.props.GetProfile({ key: id }, 1, { balance: 0, sequence: 0, tweets: [], interact: [] });
+                this.props.GetProfile({ key: id }, 1, { balance: 0, sequence: 0, tweets: [], interact: [], diff: 0 });
             }
         }
         if (auth.user) {

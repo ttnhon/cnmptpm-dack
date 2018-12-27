@@ -3,7 +3,8 @@ import { decode } from '../../lib/index';
 import axios from 'axios';
 import { sendMoney, getNewFeed, getInfoFollowings, doTransaction, unFollow, follow, getFullInfo, getPaymentHistoryAndInfo, getTimeBlock } from '../../lib/helper';
 import * as account from '../../lib/account';
-import server from '../../lib/server'
+import server from '../../lib/server';
+import {getBandwidthLimit, BANDWIDTH_PERIOD, getBlockInfo} from '../../lib/energy'
 const vstruct = require('varstruct');
 
 export const LogOut = () => (dispatch, getState) => {
@@ -29,6 +30,7 @@ export const SetUserProfile = (key, page, result) => (dispatch, getState) => {
         if (key === txs[i].account) {
           //console.log(i);
           auth.sequence++;
+
         }
         if (txs[i].operation === "update_account") {
           if (txs[i].params.key === "name") {
@@ -118,7 +120,15 @@ export const GetProfile = (acc, page, result) => (dispatch, getState) => {
       //console.log(auth);
       for (let i = 0; i < txs.length; i++) {
         //console.log(txs[i]);
-        if (acc.key === txs[i].account) auth.sequence++;
+        if (acc.key === txs[i].account) {
+          auth.sequence++;
+          //tính diff cho acc
+          let blockInfo = await getTimeBlock(res.data.result.txs[i].height);
+          console.log(blockInfo);
+          const moment = require('moment');
+          let blockTime = moment(blockInfo.data.result.block.header.time).unix();
+          auth.diff = auth.diff + blockTime >= BANDWIDTH_PERIOD ? BANDWIDTH_PERIOD : auth.diff + blockTime;
+        }
         switch (txs[i].operation) {
           case "update_account":
             switch (txs[i].params.key) {
@@ -201,7 +211,7 @@ export const GetTimePost = (acc, tweets) => async (dispatch, getState) => {
       for (let i = 0; i < tweets.length; i++) {
         let height = tweets[i].height;
         if(height){
-          await getTimeBlock(acc, height).then(res => {
+          await getTimeBlock(height).then(res => {
             //console.log(res.data.result.block.data.txs[0].length);
             const moment = require('moment-timezone');
             let time = res.data.result.block.header.time;
