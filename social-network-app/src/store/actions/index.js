@@ -132,7 +132,7 @@ export const GetProfile = (acc, page, result) => (dispatch, getState) => {
           // }else{
           //   let diff = blockTime - auth.diff;
           //   auth.diff =  diff >= BANDWIDTH_PERIOD ? BANDWIDTH_PERIOD : auth.diff + blockTime;
-          }
+          //}
         }
         switch (txs[i].operation) {
           case "update_account":
