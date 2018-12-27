@@ -1,0 +1,171 @@
+.navbar-default {
+    border-bottom: 1px solid rgba(0,0,0,0.25);
+    margin-bottom: 0;
+}
+.navbar-default .navbar-nav li{
+    padding: 0;
+}
+.navbar-default .navbar-nav a {
+    font-weight: 700;
+    transition: all .15s ease-in-out;
+    border-bottom: 3px solid transparent;
+    outline: none;
+}
+
+.navbar-default .navbar-nav a:hover{
+    color: #1DA1F2!important;
+    border-bottom: 3px solid #1c94e0;
+}
+
+.form-control-nav{
+	background-color:#f5f8fa;
+    border: lightgrey solid 1px;
+    border-radius:15px;
+    outline: none;
+}
+
+.form-control-nav:focus{
+    box-shadow: 0 0 3px 1px #1da1f2;
+}
+
+.navbar-default .navbar-collapse, .navbar-default{
+    background-color: white;
+}
+
+.navbar-default .navbar-right{
+    display: flex;
+    align-items: center;
+}
+
+.navbar-default .navbar-right .user-dropdown{
+    margin-left: 20px;
+}
+
+.navbar-default .navbar-right .user-dropdown .dropdown-toggle{
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+}
+
+.navbar-default .navbar-right .user-dropdown .dropdown-toggle img{
+    height: 32px;
+}
+
+.navbar-default .navbar-right .user-dropdown .menu-user-acc h4{
+    font-weight: 700;
+}
+
+.navbar-default .navbar-right .user-dropdown .menu-user-acc h5{
+    color: #657786;
+}
+
+.navbar-default .navbar-right .btn-primary:focus {
+    
+    background-color: #1da1f2;
+    border-color: transparent;
+    outline: none;
+    box-shadow: 0 0 7px 1px #1da1f2;
+}
+
+.navbar-default .navbar-right .btn-primary{
+    font-weight: 700;
+    background-color: #4AB3F4;
+    border: 1px solid #4AB3F4;
+    border-radius: 100px;
+    margin-left: 20px;
+    transition: all .15s ease-in-out;
+}
+
+.navbar-default .navbar-right .btn-primary:hover{
+    background-color: #1da1f2;
+}
+
+.navbar-default .navbar-right .form-submit{
+    text-align: center;
+}
+
+.navbar-default .navbar-right .form-signup{
+    text-align: center;
+    font-size: 15px;
+    margin-left: 10px;
+}
+
+.navbar-default .navbar-right .modal-close{
+    margin-bottom: 30px;
+    padding: 0 20px;
+    text-align: right;
+}
+
+.sign-up{
+    padding: 30px 20px 0 20px;
+}
+.sign-up .account{
+    min-height: 127px;
+}
+.sign-up .key{
+    margin: 10px 0;
+}
+.sign-up .key div{
+    padding: 5px 20px;
+    text-align: left;
+}
+
+.btn-search{
+    margin-left: 0!important;
+}
+
+.btn-search .form-control-feedback{
+    position: relative;
+    height: auto;
+    width: auto;
+    line-height: 11px;
+}
+
+.modal-btn-tweet{
+    padding: 0 20px 30px 20px;
+}
+
+.modal-btn-tweet .form-post{
+    padding: 0;
+}
+.modal-btn-tweet .form-post .media .media-left{
+    padding: 0;
+    vertical-align: middle;
+}
+
+.modal-btn-tweet .form-post .media .media-left img {
+    height: 32px;
+    border-radius: 50%;
+}
+
+.modal-btn-tweet .form-post .media .media-body .text-input-wrapper textarea{
+    width: 100%;
+}
+
+.modal-btn-tweet .form-post .media .media-body .btn-send-wrapper{
+    float: right;
+}
+
+@media (max-width: 767px) {
+    .navbar-default .navbar-right {
+        display: block;
+    }
+    .navbar-form{
+        overflow: auto;
+    }
+}
+.text-loading-wrapper .text-loading{
+    height: 19px;
+}
+
+.notification{
+    padding-top: 9px!important;
+}
+
+.attention{
+    position: absolute;
+    color: red;
+    font-size: 20px;
+    right: -10px;
+}

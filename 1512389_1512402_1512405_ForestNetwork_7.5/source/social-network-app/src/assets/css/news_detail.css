@@ -1,0 +1,267 @@
+
+.one-news-detail {
+    width: 50%;
+    background-color: #fff;
+    border-radius: 8px;
+}
+
+.comment-content .content, .comment-content .associate {
+    padding-left: 9px;
+}
+
+.one-news-detail pre {
+    background-color: transparent;
+    border: navajowhite;
+}
+
+.one-news-content .imgs .col-md-6, .one-news-content .imgs .col-md-9, .one-news-content .imgs .col-md-3, .one-news-content .imgs img {
+    padding: 0 1px;
+    float: left;
+    margin-bottom: 2px;
+}
+
+.one-news-content .text h4 {
+    margin: 0px 0px 5px;
+}
+
+.news-status{
+    text-align: right;
+}
+
+.news-status button.btn.btn-primary {
+    border-radius: 60px;
+    padding: 10px 15px;
+    font-weight: 700;
+    font-size: 15px;
+}
+
+.news-status button.btn.btn-primary:focus{
+    outline: none;
+}
+
+.one-news-content {
+    padding-left: 13px;
+}
+
+.one-news-content .text, .one-news-content .imgs, .one-news-content .videos {
+    margin-bottom: 10px;
+    margin-left: 25px;
+}
+
+.comment-content {
+    padding: 0;
+    margin-left: -13px;
+}
+
+.news-owner-name {
+    padding: 0;
+}
+
+.one-news-status {
+    margin-top: 10px;
+    border-bottom: 1px solid gainsboro;
+}
+
+.one-news-detail p {
+    margin: 0;
+}
+
+i.nickname {
+    padding-right: 40px;
+}
+.one-news-reply .form-group{
+    width: 100%;
+    text-align: left;
+}
+
+.one-news-reply label {
+    padding: 0px 16px;
+}
+
+.one-news-comments {
+    padding: 10px 0px;
+    border-bottom: 1px solid gainsboro;
+}
+
+.one-news-comments .img{
+    text-align: center;
+}
+
+.one-news-comments.have-reply {
+    border: none;
+    position: relative;
+}
+
+.one-news-comments.have-reply .img::after {
+    content: "";
+    position: absolute;
+    border: 2px solid #abeaff;
+    top: 57px;
+    left: 41px;
+    height: 159%;
+    z-index: 1;
+}
+.one-news-reply {padding: 10px 0px;background-color: #f5f8fa;}
+
+.one-news-detail .img-responsive img {
+    height: 57px;
+}
+
+.one-news-detail .img img {
+    height: 57px;
+}
+
+.one-news-reply img{
+    height: 57px;
+}
+
+.one-news-content .imgs img.img-fluid {
+    border-radius: 10px;
+}
+
+.one-news-detail ul {
+    list-style: none;
+    display: inline-flex;
+    margin: 5px 0px;
+}
+
+ul.associate li button {
+    border: none;
+    background: none;
+    cursor: pointer;
+}
+
+ul.associate li button:hover {
+    color: #72c7e8;
+}
+
+.one-news-detail ul li {
+    margin: 0px;
+    padding: 10px 40px 10px 0px;
+}
+
+
+.stats li {
+    border-top: 1px solid #e6ecf0;
+    border-bottom: 1px solid #e6ecf0;
+    padding: 10px 10px 10px 0px;
+}
+
+.news-owner-name h4 {
+    margin-bottom: 3px;
+    padding-top: 5px;
+}
+
+.news-owner-name p {
+    margin: 0px;
+}
+
+.row.one-news-header {
+    padding: 20px 0px;
+}
+
+.comment-content h4 {
+    font-size: 18px;
+}
+@media (min-width: 576px) {
+	.modal-dialog {
+	    max-width: 50%;
+	    margin: 1.75rem auto;
+    }
+}
+
+@media (max-width: 767px) {
+    .one-news-detail{
+        width: auto;
+    }
+    .one-news-reply input {
+        width: 100%!important;
+    }
+}
+
+@media (min-width: 767px) {
+    .one-news-reply input {
+        width: 50%!important;
+    }
+}
+
+.nav-link-account{
+    color: black;
+}
+.img-loading-wrapper{
+    text-align: center;
+}
+.img-loading-wrapper .img-loading{
+    height: 100px;
+}
+
+.rection-tooltip{
+    display: inline-flex;
+}
+
+.rection-tooltip .react-wrapper .number{
+    position: relative;
+    right: 9px;
+    font-weight: 500;
+    cursor: default;
+}
+
+.rection-tooltip .react-wrapper button:focus{
+    outline: none;
+}
+
+.rection-tooltip .react-wrapper img{
+    height: 30px;
+    opacity: 0.5;
+    transition: all .15s ease-in-out;
+}
+.rection-tooltip .react-wrapper img:hover{
+    opacity: 1;
+}
+
+.popup-react .popup-content{
+    width: auto!important;
+}
+
+.rection-case .popup-content{
+    min-width: auto;
+    max-height: 200px;
+    overflow: auto;
+}
+
+.rection-case{
+    display: inline-flex;
+}
+
+.rection-case .react-wrapper .number{
+    position: relative;
+    right: 5px;
+    font-weight: 500;
+    cursor: default;
+}
+
+.rection-case .react-wrapper button{
+    border: none;
+    background: none;
+}
+
+.rection-case .react-wrapper button:focus{
+    outline: none;
+}
+
+.rection-case .react-wrapper img{
+    height: 20px;
+}
+
+.associate button:focus{
+    outline: none;
+}
+
+.comment-reply{
+    padding: 0;
+    padding-left: 13%;
+}
+
+.reply-margin{
+    padding-left: 13%;
+}
