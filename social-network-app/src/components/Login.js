@@ -7,7 +7,9 @@ import { LogIn } from '../store/actions/index';
 import history from '../history';
 //import Popup from "reactjs-popup";
 //import Signup from './Signup';
+import server from '../lib/server';
 import * as account from '../lib/account';
+import axios from 'axios';
 class Login extends Component {
     constructor(props) {
         super(props);
@@ -31,12 +33,20 @@ class Login extends Component {
         try {
             const key = Keypair.fromSecret(this.state.secretKey);
             //console.log(key.publicKey());
-            this.props.logIn({ publicKey: key.publicKey(), secretKey: this.state.secretKey });
+            axios.get('https://' + server + '.forest.network/tx_search?query="account=\'' + key.publicKey() + '\'"')
+                .then(async res => {
+                    if (res.data.result.total_count <= 0) {
+                        alert('Tài khoản không tồn tại');
+                    }
+                    else {
+                        this.props.logIn({ publicKey: key.publicKey(), secretKey: this.state.secretKey });
 
-            account.login(this.state.secretKey);
-            history.push("/" + key.publicKey() + "/tweets");
+                        account.login(this.state.secretKey);
+                        history.push("/" + key.publicKey() + "/tweets");
+                    }
+                });
         } catch (err) {
-            this.setState({error: "Invalid secret key"});
+            this.setState({ error: "Invalid secret key" });
             console.log(err);
         }
     }
@@ -51,7 +61,7 @@ class Login extends Component {
                     <div className="row">
                         <div className="col-md-6 login-sec">
                             <h2 className="text-center">Login Now</h2>
-                            <form className="login-form" onSubmit={this.handleSubmit}>
+                            <form autoComplete="off" className="login-form" onSubmit={this.handleSubmit}>
                                 <div className="form-group">
                                     <label htmlFor="exampleInputEmail1" className="text-uppercase">Secret key</label>
                                     <input type="text" name='secretKey' value={this.state.secretKey} onChange={this.handleChange} className="form-control" placeholder="" />
@@ -61,8 +71,8 @@ class Login extends Component {
                                 </div>
                             </form>
                             {this.state.error ? <div className="alert alert-danger fade in  error-log">
-                                    <strong>{this.state.error ? this.state.error : null}</strong>
-                                </div> : null}
+                                <strong>{this.state.error ? this.state.error : null}</strong>
+                            </div> : null}
                             <div className="copy-text">Created with <i className="fa fa-heart" /> by <a href="/">N2P</a></div>
                         </div>
                         <div className="col-md-6 banner-sec">

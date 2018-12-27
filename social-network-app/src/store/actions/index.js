@@ -453,3 +453,7 @@ export const GetPaymentHistory = (key) => async (dispatch, getState) => {
   var payments = await getPaymentHistoryAndInfo(key);
   return dispatch({ type: types.GET_PAYMENT_HISTORY, payload: payments ? payments : 'That bai roi nhe' });
 }
+
+export const SetDefaultHomeState = () => (dispatch, getState) => {
+  return dispatch({ type: types.SET_DEFAULT_HOME });
+}

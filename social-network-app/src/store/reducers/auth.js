@@ -87,6 +87,11 @@ export default (state = initState, action) => {
             };
         case types.SET_DEFAULT:
             return initState;
+        case types.SET_DEFAULT_HOME:
+            return{
+                ...state,
+                newfeed: undefined
+            }
         case types.LOGOUT:
             return initState;
         default:

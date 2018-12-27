@@ -9,7 +9,7 @@ import history from '../history';
 import Popup from "reactjs-popup";
 import Signup from './Signup';
 import Post from './Post';
-import {SetDefaultState, GetNewfeed} from '../store/actions/index';
+import {SetDefaultState, GetNewfeed, SetDefaultHomeState} from '../store/actions/index';
 
 class Header extends Component {
   constructor(props) {
@@ -45,6 +45,11 @@ class Header extends Component {
     if (key === false) {
       //console.log(key);
       return <Redirect to={"/login"} />
+    }else{
+      if (this.props.auth.user === undefined || this.props.auth.user === null) {
+        //console.log(this.props.auth.user);
+        this.props.SetUserProfile(key.publicKey(), 1, { sequence: 0, balance: 0, numberReceive: 0 });
+      }
     }
     if(this.props.auth.user){
       let number = account.getItemLocal("numberReceive");
@@ -70,7 +75,8 @@ class Header extends Component {
                 <Link onClick={(e)=>{
                   if(this.props.user){
                     if(this.props.user.newfeed){
-                      this.props.GetNewfeed(key.publicKey());
+                      //this.props.SetDefaultHomeState();
+                      //this.props.GetNewfeed(key.publicKey());
                     }
                   }
                   
@@ -129,6 +135,7 @@ class Header extends Component {
                   <li className="menu-user-logout"><a href="#fake" onClick={(e) => {
                     e.preventDefault();
                     this.props.logout();
+                    this.props.SetDefaultState();
                     history.push('/login');
                   }
                   }>Log out</a></li>
@@ -179,7 +186,8 @@ const mapDispatchToProps = (dispatch) => ({
   SetUserProfile: (key, page, result) => dispatch(SetUserProfile(key, page, result)),
   setUserPro: (profile) => dispatch(profile),
   GetNewfeed: (key) => dispatch(GetNewfeed(key)),
-  SetDefaultState: () => dispatch(SetDefaultState())
+  SetDefaultState: () => dispatch(SetDefaultState()),
+  SetDefaultHomeState: () => dispatch(SetDefaultHomeState())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Header);

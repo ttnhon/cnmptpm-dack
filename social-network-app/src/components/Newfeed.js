@@ -12,24 +12,25 @@ class Newfeed extends Component {
         this.state = {
             page: 1,
             get_page: 1,
-            isLoading: false
+            isLoading: false,
+            isLoaded: false
         }
         window.onscroll = async () => {
             //if is loading getout
             if (this.props.newfeed) {
                 //get out if end of page
-                
+
                 if (
                     window.innerHeight + document.documentElement.scrollTop
                     === document.documentElement.offsetHeight
                 ) {
                     if (this.state.page > Math.floor(this.props.newfeed.length / 10)) {
-                        if(!this.state.isLoading){
+                        if (!this.state.isLoading) {
                             await this.setState({ isLoading: true });
                             //console.log('scrolling...')
                             let key = account.checkLogged().publicKey();
                             await this.props.GetNewfeed(key, this.state.get_page + 1);
-                            await this.setState({get_page: this.state.get_page + 1, isLoading: false });
+                            await this.setState({ get_page: this.state.get_page + 1, isLoading: false });
                             //console.log('scrolled.')
                         }
                         return;
@@ -46,13 +47,20 @@ class Newfeed extends Component {
     componentWillMount() {
         if (this.props.newfeed === undefined || this.props.newfeed === null) {
             let key = account.checkLogged().publicKey();
-            var get_gage = 1;
-            this.props.GetNewfeed(key, get_gage);
+            var get_page = 1;
+            this.props.GetNewfeed(key, get_page);
         }
     }
 
     render() {
-        //console.log(this.props);
+        // if (this.props.newfeed === undefined || this.props.newfeed === null) {
+        //     this.setState({
+        //         page: 1,
+        //         get_page: 1,
+        //         isLoading: false
+        //     });
+        // }
+        console.log(this.props);
         const auth = this.props.auth;
         //console.log(auth);
         let tweets = this.props.newfeed;
@@ -82,7 +90,7 @@ class Newfeed extends Component {
                         }
                         break;
                     case "payment":
-                        content = <span>Sent <strong>{(tweet.content.value.amount * 1.0/ 100000000.0).toFixed(8)} TRE</strong> to <Link style={{ wordBreak: "break-all" }} to={'/' + tweet.content.value.address + '/tweets'}>{tweet.content.value.address}</Link></span>
+                        content = <span>Sent <strong>{(tweet.content.value.amount * 1.0 / 100000000.0).toFixed(8)} TRE</strong> to <Link style={{ wordBreak: "break-all" }} to={'/' + tweet.content.value.address + '/tweets'}>{tweet.content.value.address}</Link></span>
                         break;
                     default:
                         break;
