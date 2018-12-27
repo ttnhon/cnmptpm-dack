@@ -123,11 +123,16 @@ export const GetProfile = (acc, page, result) => (dispatch, getState) => {
         if (acc.key === txs[i].account) {
           auth.sequence++;
           //tính diff cho acc
-          let blockInfo = await getTimeBlock(res.data.result.txs[i].height);
-          console.log(blockInfo);
-          const moment = require('moment');
-          let blockTime = moment(blockInfo.data.result.block.header.time).unix();
-          auth.diff = auth.diff + blockTime >= BANDWIDTH_PERIOD ? BANDWIDTH_PERIOD : auth.diff + blockTime;
+          // let blockInfo = await getTimeBlock(res.data.result.txs[i].height);
+          // console.log(blockInfo);
+          // const moment = require('moment');
+          // let blockTime = moment(blockInfo.data.result.block.header.time).unix();
+          // if(auth.diff){
+          //   auth.diff = blockTime;
+          // }else{
+          //   let diff = blockTime - auth.diff;
+          //   auth.diff =  diff >= BANDWIDTH_PERIOD ? BANDWIDTH_PERIOD : auth.diff + blockTime;
+          }
         }
         switch (txs[i].operation) {
           case "update_account":
