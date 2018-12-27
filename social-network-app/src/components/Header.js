@@ -29,7 +29,7 @@ class Header extends Component {
   componentWillMount() {
     const key = account.checkLogged();
     if (key === false) {
-      console.log(key);
+      //console.log(key);
       return <Redirect to={"/login"} />
     } else {
       if (this.props.auth.user === undefined || this.props.auth.user === null) {
@@ -48,8 +48,9 @@ class Header extends Component {
     }
     if(this.props.auth.user){
       let number = account.getItemLocal("numberReceive");
-      HasNotification = number !== this.props.auth.user.numberReceive.toString();
-      //console.log(number);
+      if(this.props.auth.user.numberReceive){
+        HasNotification = number !== this.props.auth.user.numberReceive.toString();
+      }
     }
     
     return (
@@ -84,7 +85,11 @@ class Header extends Component {
                   <ul className="dropdown-menu">
                     {HasNotification ?
                       <li><Link onClick={(e)=>{
-                        account.setItemLocal("numberReceive", this.props.auth.user.numberReceive);
+                        if(this.props.auth.user){
+                          if(this.props.auth.user.numberReceive){
+                            account.setItemLocal("numberReceive", this.props.auth.user.numberReceive);
+                          }
+                        }
                       }} to="/payment-history">Bạn có giao dịch mới</Link></li>
                       : <li>Không có thông báo mới</li>}
                   </ul>

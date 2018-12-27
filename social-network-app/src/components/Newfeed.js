@@ -10,20 +10,30 @@ class Newfeed extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            page: 1
+            page: 1,
+            get_page: 1,
+            isLoading: false
         }
-        window.onscroll = () => {
+        window.onscroll = async () => {
             //if is loading getout
             if (this.props.newfeed) {
                 //get out if end of page
-                if (this.state.page >= Math.floor(this.props.newfeed.length / 10)) {
-
-                    return;
-                }
+                
                 if (
                     window.innerHeight + document.documentElement.scrollTop
                     === document.documentElement.offsetHeight
                 ) {
+                    if (this.state.page > Math.floor(this.props.newfeed.length / 10)) {
+                        if(!this.state.isLoading){
+                            await this.setState({ isLoading: true });
+                            //console.log('scrolling...')
+                            let key = account.checkLogged().publicKey();
+                            await this.props.GetNewfeed(key, this.state.get_page + 1);
+                            await this.setState({get_page: this.state.get_page + 1, isLoading: false });
+                            //console.log('scrolled.')
+                        }
+                        return;
+                    }
                     this.setState({ page: this.state.page + 1 });
                 }
             }
@@ -36,7 +46,8 @@ class Newfeed extends Component {
     componentWillMount() {
         if (this.props.newfeed === undefined || this.props.newfeed === null) {
             let key = account.checkLogged().publicKey();
-            this.props.GetNewfeed(key);
+            var get_gage = 1;
+            this.props.GetNewfeed(key, get_gage);
         }
     }
 
@@ -121,6 +132,7 @@ class Newfeed extends Component {
                     <Post />
                     <div className="panel-body">
                         {media === null ? media ? null : <div className="img-loading-wrapper"><img className="img-loading" src="/loading.gif" alt="" /></div> : media}
+                        {this.state.isLoading ? <div className="img-loading-wrapper"><img className="img-loading" src="/loading.gif" alt="" /></div> : null}
                     </div>
                     <div className="panel-footer">
                         <div className="media">
@@ -144,7 +156,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        GetNewfeed: (key) => dispatch(GetNewfeed(key))
+        GetNewfeed: (key, get_page) => dispatch(GetNewfeed(key, get_page))
     }
 };
 

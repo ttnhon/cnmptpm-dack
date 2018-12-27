@@ -74,6 +74,7 @@ export const SetUserProfile = (key, page, result) => (dispatch, getState) => {
         
         let isFirst = account.getItemLocal('isLoadNotification');
         if(isFirst === 'false'){
+          console.log(auth.numberReceive);
           account.setItemLocal("numberReceive", auth.numberReceive);
           account.setItemLocal('isLoadNotification', true);
         }
@@ -129,10 +130,15 @@ export const GetProfile = (acc, page, result) => (dispatch, getState) => {
           // let blockTime = moment(blockInfo.data.result.block.header.time).unix();
           // if(auth.diff){
           //   auth.diff = blockTime;
+          //   auth.bandwidth = res.data.result.txs[i].tx.length;
           // }else{
           //   let diff = blockTime - auth.diff;
-          //   auth.diff =  diff >= BANDWIDTH_PERIOD ? BANDWIDTH_PERIOD : auth.diff + blockTime;
-          }
+          //   if(diff >= BANDWIDTH_PERIOD){
+          //     auth.diff = BANDWIDTH_PERIOD;
+          //     auth.bandwidth = Math.ceil(Math.max(0, (BANDWIDTH_PERIOD - diff) / BANDWIDTH_PERIOD) * account.bandwidth + txSize);
+          //   }
+          //   auth.diff =  diff >= BANDWIDTH_PERIOD ? BANDWIDTH_PERIOD : blockTime;
+          // }
         }
         switch (txs[i].operation) {
           case "update_account":
@@ -200,6 +206,7 @@ export const GetProfile = (acc, page, result) => (dispatch, getState) => {
         if (auth.name === undefined) {
           auth.name = "No name";
         }
+        //auth.bandwitdh = Math.ceil(Math.max(0, (BANDWIDTH_PERIOD - diff) / BANDWIDTH_PERIOD) * account.bandwidth + txSize);
         //console.log(auth);
         dispatch(EditProfile({ name: auth.name, balance: auth.balance, sequence: auth.sequence, picture: auth.picture, followings: auth.followings }));
         //dispatch(GetFollowing(key));
@@ -209,6 +216,27 @@ export const GetProfile = (acc, page, result) => (dispatch, getState) => {
       return dispatch(GetProfile(acc, page + 1, auth));
     });
 };
+
+// export const GetTimeNewfeed = (page) => async (dispatch, getState) => {
+//   if (tweets) {
+//     if (tweets.length > 0) {
+//       for (let i = 0; i < tweets.length; i++) {
+//         let height = tweets[i].height;
+//         if(height){
+//           await getTimeBlock(height).then(res => {
+//             //console.log(res.data.result.block.data.txs[0].length);
+//             const moment = require('moment-timezone');
+//             let time = res.data.result.block.header.time;
+//             let date = new Date(time);
+//             var format = 'YYYY/MM/DD HH:mm:ss ZZ';
+//             //date.setTime(date.getTime() + (7 * 60 * 60 * 1000));
+//             tweets[i].time = moment(date, format).tz("Asia/Saigon").format(format);
+//           });
+//         }
+//       }
+//     }
+//   }
+// }
 
 export const GetTimePost = (acc, tweets) => async (dispatch, getState) => {
   if (tweets) {
@@ -312,15 +340,13 @@ export const LogIn = (key) => (dispatch, getState) => {
   return dispatch({ type: types.SET_SECRET_KEY, payload: key.secretKey });
 };
 
-export const GetNewfeed = (key) => (dispatch, getState) => {
-  getNewFeed(key).then(async res => {
-    console.log(res);
-    var newFeed = res;
-    if (res) {
-      await dispatch(GetTimePost(key, newFeed));
-    }
-    return dispatch({ type: types.GET_NEWFEED, payload: newFeed });
-  });
+export const GetNewfeed = (key, get_page) => async (dispatch, getState) => {
+  var newfeed = await getNewFeed(key, get_page);
+  //console.log(res);
+  if (newfeed) {
+    await dispatch(GetTimePost(key, newfeed));
+  }
+  return dispatch({ type: types.GET_NEWFEED, payload: newfeed });
 };
 
 export const GetFollowing = (key) => (dispatch, getState) => {

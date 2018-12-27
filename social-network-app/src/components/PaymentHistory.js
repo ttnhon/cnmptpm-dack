@@ -40,7 +40,9 @@ class PaymentHistory extends Component {
     render() {
         var payments = this.props.payments;
         if(payments){
-            account.setItemLocal("numberReceive", payments.length);
+            if(this.props.user){
+                account.setItemLocal("numberReceive", payments.length);
+            }
             payments = payments.slice(0, (this.state.page * 10));
         }
         //console.log(payments);

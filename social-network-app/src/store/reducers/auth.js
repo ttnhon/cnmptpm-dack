@@ -63,7 +63,7 @@ export default (state = initState, action) => {
         case types.GET_NEWFEED:
         return {
             ...state,
-            newfeed: action.payload
+            newfeed: state.newfeed ?  state.newfeed.concat(action.payload) : action.payload
         };
         case types.GET_INTERACT:
         return {

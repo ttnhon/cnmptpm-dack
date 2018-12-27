@@ -74,13 +74,13 @@ class Profile extends Component {
                                         <Link to={"/" + auth.publicKey + "/tweets"}>{auth.name ? auth.name : <span className="text-loading-wrapper"><img className="text-loading" src="/loading_text.gif" alt="" /></span>}</Link>
                                     </h2>
                                     <h5 className="profile-info-bio">
-                                        <span>Balance: {auth.balance ? (auth.balance * 1.0 / 100000000.0).toFixed(8) + " TRE" : <span className="text-loading-wrapper"><img className="text-loading" src="/loading_text.gif" alt="" /></span>}</span>
+                                        <span>Balance: {auth.balance  ? (auth.balance * 1.0 / 100000000.0).toFixed(8) + " TRE" : 0  }</span>
                                     </h5>
                                     <h5 className="profile-info-bio">
-                                        <span>Energy: 39757 OXY</span>
+                                        <span>Energy: {auth.balance ? '39757 OXY' : 0}</span>
                                     </h5>
                                     <h5 className="profile-info-bio">
-                                        <span>Sequence: {auth.sequence ? auth.sequence : <span className="text-loading-wrapper"><img className="text-loading" src="/loading_text.gif" alt="" /></span>}</span>
+                                        <span>Sequence: {auth.sequence ? auth.sequence : 0}</span>
                                     </h5>
                                     
                                 </div>
